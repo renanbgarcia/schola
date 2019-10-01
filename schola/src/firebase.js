@@ -1,4 +1,6 @@
 import * as firebase from 'firebase';
+import "firebase/auth";
+
 const config = {
     apiKey: "AIzaSyA9OFDrEAa8_Cs7d2gkhE1IsXQxPM1xCHo",
     authDomain: "schola-ff449.firebaseapp.com",
@@ -12,3 +14,5 @@ const config = {
 firebase.initializeApp(config);
 // const databaseRef = firebase.database().ref();
 // export const todosRef = databaseRef.child("todos")
+
+export default firebase

@@ -1,13 +1,13 @@
 import { GET_USER } from '../actions/types';
 
 const initialState = {
-    currentUser: { nome: 'nada'}
+    currentUser: 'Jonas C'
   };
 
 function getUserReducer(state = initialState, action) {
     if (action.type === GET_USER) {
-        Object.assign({}, state, {
-            currentUser: action.payload.nome
+        return Object.assign({}, state, {
+            currentUser: action.nome
           })
       }
     return state;

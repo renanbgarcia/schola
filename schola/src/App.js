@@ -1,52 +1,68 @@
 import React from 'react';
 import axios from 'axios';
-import logo from './logo.svg';
 
 import './App.css';
 import { getUser } from './actions/actions';
+import { userSignedIn } from './actions/authAction';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+
+import firebase from './firebase';
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    // Não chame this.setState() aqui!
+    this.handleSignIn = this.handleSignIn.bind(this);
+  }
 
-  // constructor(props) {
-  //   super(props);
-  //   this.props = props;
-  // }
+  handleSignUp() {
+    axios.post('http://localhost:3000/signup', {
+      email: 'ada@test.com',
+      password: '123456',
+      displayName: "Joninha"
+    });
+  }
 
-  // handleSignUp() {
-  //   axios.post('http://localhost:3000/signup', {email: 'jonas@test.com', password: '123456' });
-  // }
+  handleSignIn() {
+    // axios.post('http://localhost:3000/signin', {email: 'jonas@test.com', password: '123456' });
+    console.log(this.props);
+    firebase.auth().signInWithEmailAndPassword('ada@test.com', '123456')
+    .then((res) => {
+      console.log(this.props);
+      firebase.auth().onAuthStateChanged(user => {
+        this.props.signIn(user);
+      })
+    })
+  }
 
-  // handleSignIn() {
-  //   axios.post('http://localhost:3000/signin', {email: 'jonas@test.com', password: '123456' });
-  // }
-
-  teste(store) {
-    store.dispatch(getUser("Elias doidao"));
-    console.log(store.getState());
+  testeDB() {
+    axios.post('http://localhost:3000/savedata');
   }
 
   render() {
-    const { nomedouser } = this.props;
-    console.log(nomedouser)
+    const { nomedouser, user } = this.props;
+    console.log(user);
 
     return (
       <div className="App">
         <button onClick={this.handleSignUp}>SignUp</button>
-        <button onClick={this.handleSignIn}>SignIn</button>
-        <button onClick={this.teste}>Teste</button>
+        <button onClick={this.handleSignIn}>HandleSignIn</button>
+        <button onClick={this.testeDB}>DB</button>
         <h4>{nomedouser}</h4>
+        <h4>{user}</h4>
       </div>
     );
   }
 }
 
-const mapStateToProps = store => ({
-  nomedouser: store.userState.nome
+const mapStateToProps = (store) => ({
+  nomedouser: store.getUser.currentUser,
+  user: store.authReducer.currentUser
 });
 
-// const mapDispatchToProps = dispatch =>
-//   bindActionCreators({ getUser }, dispatch);
+const mapDispatchToProps = dispatch => ({
+  getUserName: name => dispatch(getUser(name)),
+  signIn: (user) => dispatch(userSignedIn(user))
+})
 
-export default connect(mapStateToProps/*, mapDispatchToProps*/)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
