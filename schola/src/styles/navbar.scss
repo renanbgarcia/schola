@@ -1,0 +1,19 @@
+nav {
+    display: flex;
+    background-color: rgb(122, 122, 122);
+    color: #fff;
+    height: 65px;
+    align-items: center;
+    .nav-wrapper {
+        display: flex;
+        justify-content: flex-end;
+        width: $main-content-width;
+        ul {
+            display: flex;
+            flex-direction: row;
+            li {
+                margin-right: 15px;
+            }
+        }
+    }
+}

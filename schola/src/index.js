@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './styles/reset.css';
+import './styles/index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
@@ -15,15 +16,16 @@ import firebase from "./firebase";
 const createStoreWithFirebase = compose(reactReduxFirebase(firebase))(
   createStore
 );
+
 const store = createStoreWithFirebase(
   reducers,
-  {},
+  { isLogged: false },
   applyMiddleware(reduxThunk)
 );
 
 ReactDOM.render(
     <Provider store={store}>
-        <App />
+      <App />
     </Provider>,
     document.getElementById('root'));
 

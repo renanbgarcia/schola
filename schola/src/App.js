@@ -1,17 +1,23 @@
 import React from 'react';
 import axios from 'axios';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 import './App.css';
 import { getUser } from './actions/actions';
 import { userSignedIn } from './actions/authAction';
 import { connect } from 'react-redux';
 
+import Login from './components/Login';
+import Signup from './components/Signup';
+import Navbar from './components/Navbar';
+
+
+
 import firebase from './firebase';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    // Não chame this.setState() aqui!
     this.handleSignIn = this.handleSignIn.bind(this);
   }
 
@@ -24,7 +30,6 @@ class App extends React.Component {
   }
 
   handleSignIn() {
-    // axios.post('http://localhost:3000/signin', {email: 'jonas@test.com', password: '123456' });
     console.log(this.props);
     firebase.auth().signInWithEmailAndPassword('ada@test.com', '123456')
     .then((res) => {
@@ -40,16 +45,26 @@ class App extends React.Component {
   }
 
   render() {
-    const { nomedouser, user } = this.props;
-    console.log(user);
+    const { nomedouser, user, isLogged } = this.props;
 
     return (
       <div className="App">
-        <button onClick={this.handleSignUp}>SignUp</button>
+        <Router>
+          <Navbar/>
+          <div className="Content">
+            <button><Link to='/login'>Login</Link></button>
+            <button><Link to='/signup'>Signup</Link></button>
+            <Route path='/login' component={Login}/>
+            <Route path='/signup' component={Signup}/>
+          </div>
+        </Router>
+        {/* <button onClick={this.handleSignUp}>SignUp</button>
         <button onClick={this.handleSignIn}>HandleSignIn</button>
-        <button onClick={this.testeDB}>DB</button>
-        <h4>{nomedouser}</h4>
-        <h4>{user}</h4>
+        <button onClick={this.testeDB}>DB</button> */}
+
+        {/* <h4>{nomedouser}</h4>
+        <h4>{user} is {isLogged ? 'logged' : 'not logged'}</h4> */}
+
       </div>
     );
   }
@@ -57,7 +72,8 @@ class App extends React.Component {
 
 const mapStateToProps = (store) => ({
   nomedouser: store.getUser.currentUser,
-  user: store.authReducer.currentUser
+  user: store.authReducer.currentUser,
+  isLogged: store.authReducer.isLogged
 });
 
 const mapDispatchToProps = dispatch => ({
