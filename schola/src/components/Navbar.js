@@ -1,17 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 class Navbar extends React.Component {
     render() {
 
-        const { isLogged} = this.props;
+        const { isLogged, user } = this.props;
+        console.log(user)
 
         return (
             <nav>
                 <div className="nav-wrapper">
+                    { isLogged? <span>{user}</span> : '' }
                     <ul>
                         <li>Home</li>
-                        { isLogged? '' : <><li>Login</li><li>Signup</li></> }
+                        { isLogged? '' : <>
+                            <Link to="/login"><li>Login</li></Link>
+                            <Link to="/signup"><li>Signup</li></Link>
+                        </> }
                     </ul>
                 </div>
             </nav>
@@ -20,7 +26,8 @@ class Navbar extends React.Component {
 }
 
 const mapStateToProps = (store) => ({
-    isLogged: store.authReducer.isLogged
-})
+    isLogged: store.authReducer.isLogged,
+    user: store.authReducer.currentUser,
+});
 
 export default connect(mapStateToProps)(Navbar)

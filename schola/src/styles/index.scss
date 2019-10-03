@@ -14,10 +14,11 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
 
 @import 'variables';
 @import 'navbar';
+@import 'login';
 
 @media (min-width: 750px) {
-    .Content {
-        
-        width: $main-content-width;
-    }
+  .Content {
+    width: $main-content-width;
+    background-color: rgb(255, 255, 255);
+  }
 }

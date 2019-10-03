@@ -14,14 +14,23 @@ nav {
   background-color: #7a7a7a;
   color: #fff;
   height: 65px;
+  width: 100%;
   align-items: center;
+  justify-content: center;
 }
 nav .nav-wrapper {
   display: flex;
   justify-content: flex-end;
   width: 80%;
 }
+nav .nav-wrapper a {
+  color: #fff;
+}
+nav .nav-wrapper a:hover {
+  color: #ff7aff;
+}
 nav .nav-wrapper ul {
+  list-style: none;
   display: flex;
   flex-direction: row;
 }
@@ -29,9 +38,25 @@ nav .nav-wrapper ul li {
   margin-right: 15px;
 }
 
+.login-form {
+  max-width: 450px;
+  margin-top: calc(100vh/6);
+}
+@media (min-width: 800px) {
+  .login-form {
+    min-width: 450px;
+  }
+}
+
+.row-center {
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 @media (min-width: 750px) {
   .Content {
     width: 80%;
+    background-color: white;
   }
 }
 

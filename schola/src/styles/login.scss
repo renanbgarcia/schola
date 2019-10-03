@@ -1,0 +1,12 @@
+.login-form {
+    max-width: 450px;
+    margin-top: calc(100vh/6);
+    @media (min-width: 800px) {
+        min-width: 450px;
+    }
+}
+
+.row-center {
+    justify-content: center;
+    flex-wrap: wrap;
+}

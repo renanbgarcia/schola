@@ -3,12 +3,21 @@ nav {
     background-color: rgb(122, 122, 122);
     color: #fff;
     height: 65px;
+    width: 100%;
     align-items: center;
+    justify-content: center;
     .nav-wrapper {
         display: flex;
         justify-content: flex-end;
         width: $main-content-width;
+        a {
+            color: #fff;
+            &:hover {
+                color: rgb(255, 122, 255);
+            }
+        }
         ul {
+            list-style: none;
             display: flex;
             flex-direction: row;
             li {

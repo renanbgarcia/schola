@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { createBrowserHistory } from 'history';
 
 import './App.css';
 import { getUser } from './actions/actions';
@@ -11,33 +12,11 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Navbar from './components/Navbar';
 
-
-
-import firebase from './firebase';
+let history = createBrowserHistory()
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.handleSignIn = this.handleSignIn.bind(this);
-  }
-
-  handleSignUp() {
-    axios.post('http://localhost:3000/signup', {
-      email: 'ada@test.com',
-      password: '123456',
-      displayName: "Joninha"
-    });
-  }
-
-  handleSignIn() {
-    console.log(this.props);
-    firebase.auth().signInWithEmailAndPassword('ada@test.com', '123456')
-    .then((res) => {
-      console.log(this.props);
-      firebase.auth().onAuthStateChanged(user => {
-        this.props.signIn(user);
-      })
-    })
   }
 
   testeDB() {
@@ -45,26 +24,18 @@ class App extends React.Component {
   }
 
   render() {
-    const { nomedouser, user, isLogged } = this.props;
+    //const { } = this.props;
 
     return (
       <div className="App">
-        <Router>
+        <Router history={history}>
           <Navbar/>
-          <div className="Content">
-            <button><Link to='/login'>Login</Link></button>
-            <button><Link to='/signup'>Signup</Link></button>
+          <div className="Content container">
             <Route path='/login' component={Login}/>
             <Route path='/signup' component={Signup}/>
           </div>
         </Router>
-        {/* <button onClick={this.handleSignUp}>SignUp</button>
-        <button onClick={this.handleSignIn}>HandleSignIn</button>
-        <button onClick={this.testeDB}>DB</button> */}
-
-        {/* <h4>{nomedouser}</h4>
-        <h4>{user} is {isLogged ? 'logged' : 'not logged'}</h4> */}
-
+        <div id="alert-area" className="alert-area"></div>
       </div>
     );
   }
