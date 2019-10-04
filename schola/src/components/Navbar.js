@@ -1,8 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import firebase from '../firebase';
+
+import { userSignedOut } from '../actions/authAction';
 
 class Navbar extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.doLogout = this.doLogout.bind(this);
+    }
+
+    doLogout() {
+        firebase.auth().signOut().then(() => {
+            this.props.signOut();
+        });
+    }
+
     render() {
 
         const { isLogged, user } = this.props;
@@ -13,11 +28,13 @@ class Navbar extends React.Component {
                 <div className="nav-wrapper">
                     { isLogged? <span>{user}</span> : '' }
                     <ul>
-                        <li>Home</li>
-                        { isLogged? '' : <>
+                        { isLogged?
+                            <button onClick={this.doLogout}><li>Logout</li></button> :
+                            <>
                             <Link to="/login"><li>Login</li></Link>
                             <Link to="/signup"><li>Signup</li></Link>
-                        </> }
+                            </>
+                        }
                     </ul>
                 </div>
             </nav>
@@ -30,4 +47,8 @@ const mapStateToProps = (store) => ({
     user: store.authReducer.currentUser,
 });
 
-export default connect(mapStateToProps)(Navbar)
+const mapDispatchToProps = (dispatch) => ({
+    signOut: () => dispatch(userSignedOut()),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar)

@@ -36,14 +36,15 @@ class Signup extends React.Component {
     handleSubmit() {
         axios.post(`${config.API_URL}/signup`, {
             email: this.state.emailInput,
-            password: this.passInput,
+            password: this.state.passInput,
             displayName: this.state.nameInput
         })
         .then(res => {
             if (res.status === 200) {
-                alertbox.show('Usuário criado!')
+                console.log(res);
                 this.props.history.push('/login');
             }
+            alertbox.show(res.data.message);
         })
     }
 

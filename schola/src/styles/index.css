@@ -9,6 +9,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
+/*!
+ * Milligram-scss v1.3.0
+ * https://milligram.github.io
+ *
+ * Copyright (c) 2017 CJ Patoilo
+ * Licensed under the MIT license
+ */
 nav {
   display: flex;
   background-color: #7a7a7a;
@@ -27,7 +34,7 @@ nav .nav-wrapper a {
   color: #fff;
 }
 nav .nav-wrapper a:hover {
-  color: #ff7aff;
+  color: #e1e1e1;
 }
 nav .nav-wrapper ul {
   list-style: none;

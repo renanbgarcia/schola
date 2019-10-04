@@ -1,18 +1,25 @@
-import { SIGNIN_SUCCESS } from '../actions/types';
+import { SIGNIN_SUCCESS, SIGNOUT_SUCCESS } from '../actions/types';
 
 const initialState = {
     currentUser: 'Loading'
   };
 
-function userSignedIn(state = initialState, action) {
+function authReducer(state = initialState, action) {
     if (action.type === SIGNIN_SUCCESS) {
-        console.log(action.user);
-        return Object.assign({}, state, {
-            currentUser: action.user.email,
-            isLogged: true
-        })
-      }
+      console.log(action.user);
+      return Object.assign({}, state, {
+          currentUser: action.user.email,
+          isLogged: true
+      })
+    }
+    else if (action.type === SIGNOUT_SUCCESS) {
+      console.log(action.user);
+      return Object.assign({}, state, {
+          currentUser: action.user,
+          isLogged: false
+      })
+    }
     return state;
 };
 
-export default userSignedIn;
+export default authReducer;
