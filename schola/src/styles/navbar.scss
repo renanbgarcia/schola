@@ -10,6 +10,7 @@ nav {
         display: flex;
         justify-content: flex-end;
         width: $main-content-width;
+        align-items: center;
         a {
             color: #fff;
             &:hover {
@@ -23,6 +24,10 @@ nav {
             li {
                 margin-right: 15px;
             }
+        }
+
+        #nav-username {
+            margin-right: 5px;
         }
     }
 }

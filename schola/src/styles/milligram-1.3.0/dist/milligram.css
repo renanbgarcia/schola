@@ -472,7 +472,7 @@ dl,
 ol,
 ul {
   list-style: none;
-  margin-top: 0;
+  margin: 0;
   padding-left: 0;
 }
 dl dl,
@@ -485,7 +485,7 @@ ul dl,
 ul ol,
 ul ul {
   font-size: 90%;
-  margin: 1.5rem 0 1.5rem 3rem;
+  margin: 0;
 }
 
 ol {
@@ -506,8 +506,7 @@ ul {
 .button,
 button,
 dd,
-dt,
-li {
+dt {
   margin-bottom: 1rem;
 }
 
@@ -516,18 +515,6 @@ input,
 select,
 textarea {
   margin-bottom: 1.5rem;
-}
-
-blockquote,
-dl,
-figure,
-form,
-ol,
-p,
-pre,
-table,
-ul {
-  margin-bottom: 2.5rem;
 }
 
 /*!

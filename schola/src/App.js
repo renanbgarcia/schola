@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Navbar from './components/Navbar';
+import CreateLesson from './components/lesson/CreateLesson';
 
 let history = createBrowserHistory()
 
@@ -33,6 +34,7 @@ class App extends React.Component {
           <div className="Content container">
             <Route path='/login' component={Login}/>
             <Route path='/signup' component={Signup}/>
+            <Route path='/create/lesson' component={CreateLesson}/>
           </div>
         </Router>
         <div id="alert-area" className="alert-area"></div>

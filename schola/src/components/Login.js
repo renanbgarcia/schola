@@ -29,9 +29,8 @@ class Login extends React.Component {
         .then((res) => {
           firebase.auth().onAuthStateChanged(user => {
             this.props.signIn(user);
-          })
-          alert(res)
-        })
+          });
+        });
     }
 
     render() {

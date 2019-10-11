@@ -26,10 +26,10 @@ class Navbar extends React.Component {
         return (
             <nav>
                 <div className="nav-wrapper">
-                    { isLogged? <span>{user}</span> : '' }
+                    { isLogged? <div id="nav-username">{user}</div> : '' }
                     <ul>
                         { isLogged?
-                            <button onClick={this.doLogout}><li>Logout</li></button> :
+                            <li onClick={this.doLogout}>Logout</li> :
                             <>
                             <Link to="/login"><li>Login</li></Link>
                             <Link to="/signup"><li>Signup</li></Link>
