@@ -64,6 +64,33 @@ nav .nav-wrapper #nav-username {
   flex-wrap: wrap;
 }
 
+.file-list-item {
+  display: flex;
+  min-width: 400px;
+  background-color: #e1e1e1;
+  padding: 5px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.file-list {
+  margin: 15px 0;
+}
+
+input[type=file] {
+  display: none;
+}
+
+.input-file-label {
+  background-color: #f4f5f6;
+  box-shadow: #646464 3px 2px 5px;
+  min-width: 350px;
+  padding: 5px;
+  border-radius: 10px;
+  color: #727272;
+  font-size: 0.8em;
+}
+
 @media (min-width: 750px) {
   .Content {
     width: 80%;

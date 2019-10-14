@@ -1,0 +1,27 @@
+.file-list-item {
+    display: flex;
+    min-width: 400px;
+    background-color: $color-quinary;
+    padding: 5px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.file-list {
+    margin: 15px 0;
+}
+
+input[type='file'] {
+    display: none;
+}
+
+.input-file-label {
+    background-color: $color-tertiary;
+    box-shadow: $color-secondary 3px 2px 5px;
+    min-width: 350px;
+    padding: 5px;
+    border-radius: 10px;
+    color: $color-primary;
+    font-size: 0.8em;
+
+}
