@@ -9,6 +9,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
+textarea {
+  /* will prevent resizing horizontally */
+  resize: vertical;
+}
+
 /*!
  * Milligram-scss v1.3.0
  * https://milligram.github.io
@@ -89,6 +94,16 @@ input[type=file] {
   border-radius: 10px;
   color: #727272;
   font-size: 0.8em;
+}
+
+@media (max-width: 40rem) {
+  .mobile-full-width {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+.Content {
+  margin-top: 2em;
 }
 
 @media (min-width: 750px) {

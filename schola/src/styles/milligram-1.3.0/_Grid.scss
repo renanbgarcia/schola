@@ -201,3 +201,11 @@
 		}
 	}
 }
+
+// Renan | deixar full width no mobile
+@media (max-width: 40.0rem) {
+    .mobile-full-width {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
