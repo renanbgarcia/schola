@@ -34,18 +34,24 @@ class Signup extends React.Component {
     }
 
     handleSubmit() {
-        axios.post(`${config.API_URL}/signup`, {
-            email: this.state.emailInput,
-            password: this.state.passInput,
-            displayName: this.state.nameInput
-        })
-        .then(res => {
-            if (res.status === 200) {
-                console.log(res);
-                this.props.history.push('/login');
-            }
-            alertbox.show(res.data.message);
-        })
+        if (this.state.nameInput &&
+            this.state.emailInput &&
+            this.state.passInput !== '') {
+            axios.post(`${config.API_URL}/signup`, {
+                email: this.state.emailInput,
+                password: this.state.passInput,
+                displayName: this.state.nameInput
+            })
+            .then(res => {
+                if (res.status === 200) {
+                    console.log(res);
+                    this.props.history.push('/login');
+                }
+                alertbox.show(res.data.message);
+            })
+        } else {
+            alertbox.show('Preencha todos os campos!');
+        }
     }
 
     render() {

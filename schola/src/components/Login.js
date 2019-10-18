@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import firebase from '../firebase';
 import { userSignedIn } from '../actions/authAction';
 import { connect } from 'react-redux'; 
+import { alertbox } from './utils/alert';
 
 class Login extends React.Component {
 
@@ -26,8 +27,15 @@ class Login extends React.Component {
 
     handleSubmit() {
         firebase.auth().signInWithEmailAndPassword(this.state.emailInput, this.state.passInput)
+        .catch(err => {
+            console.log(err);
+            alertbox.show(err.message);
+            throw err
+        }) 
         .then((res) => {
-          firebase.auth().onAuthStateChanged(user => {
+            console.log(res);
+            alertbox.show('Logado!');
+            firebase.auth().onAuthStateChanged(user => {
             this.props.signIn(user);
           });
         });

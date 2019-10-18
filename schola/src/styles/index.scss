@@ -23,14 +23,23 @@ textarea {
 @import 'navbar';
 @import 'login';
 @import 'createlesson';
+@import 'listViewer';
 
 .Content {
-  margin-top: 2em;
+  // margin-top: 2em;
+  height: calc(100vh - 65px);
 }
 
 @media (min-width: 750px) {
   .Content {
     width: $main-content-width;
+
     background-color: rgb(255, 255, 255);
   }
+}
+
+.home-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }

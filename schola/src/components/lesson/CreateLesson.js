@@ -68,12 +68,12 @@ class CreateLesson extends React.Component {
     /**
      * 
      */
-     uploadFiles() {
+     uploadFiles(id) {
         const self = this;
         let db = firebase.firestore();
-        let docRef = db.collection(`users/${this.props.userObject.uid}/lessons`).doc(this.state.titleInput);
+        let docRef = db.collection(`users/${this.props.userObject.uid}/lessons`).doc(id);
         for (let file of this.state.fileList) {
-            let storageRef = firebase.storage().ref(`${this.props.userObject.uid}/lessons/${file.name}`);
+            let storageRef = firebase.storage().ref(`${this.props.userObject.uid}/lessons/${id}/${file.name}`);
             let uploadTask = storageRef.put(file);
             uploadTask.on('state_changed', function(snapshot){
                 let progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
@@ -89,6 +89,7 @@ class CreateLesson extends React.Component {
                 // }
             }, function(error) {
                 console.log("Ocorreu um erro: " + error);
+                alertbox.show('Ocorreu um erro :(')
                 throw error;
             }, function() {
             uploadTask.snapshot.ref.getDownloadURL()
@@ -102,7 +103,6 @@ class CreateLesson extends React.Component {
                 });
             });
         }
-        return true
     }
 
     /**
@@ -112,18 +112,23 @@ class CreateLesson extends React.Component {
     sendLessonInfo() {
         try {
             let db = firebase.firestore();
-            let docRef = db.collection(`users/${this.props.userObject.uid}/lessons`).doc(this.state.titleInput);
+            let docRef = db.collection(`lessons`).doc();
+            let docID = docRef.id;
     
             docRef.set({
                 title: this.state.titleInput,
                 targetAge: this.state.ageInput,
                 discipline: this.state.disciplineInput,
-                desc: this.state.descriptionInput
+                desc: this.state.descriptionInput,
+                created_at: firebase.firestore.Timestamp.fromDate(new Date()),
+                author: this.props.userObject.displayName,
+                author_id: this.props.userObject.uid
             });
+            return docID
         } catch(error) {
             console.log(error);
+            alertbox.show('Ocorreu um erro :(')
         }
-        return true
     }
 
     //era para renderizar o progesso do upload no component - não está sendo usado
@@ -137,8 +142,12 @@ class CreateLesson extends React.Component {
             this.state.disciplineInput &&
             this.state.descriptionInput !== '') {
             try {
-                this.uploadFiles();
-                this.sendLessonInfo();
+                // for (let i = 0; i < 30 ; i++ ) {
+                //     this.sendLessonInfo();
+                // }
+                // let lessonID = this.sendLessonInfo();
+                // this.uploadFiles(lessonID);
+
             } catch(err) {
                 console.log(err);
             }

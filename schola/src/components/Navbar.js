@@ -16,12 +16,13 @@ class Navbar extends React.Component {
         firebase.auth().signOut().then(() => {
             this.props.signOut();
         });
+        localStorage.clear();
     }
 
     render() {
 
         const { isLogged, user } = this.props;
-        console.log(user)
+        console.log(user + ' ' + isLogged)
 
         return (
             <nav>

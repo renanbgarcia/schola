@@ -102,8 +102,31 @@ input[type=file] {
     max-width: 100% !important;
   }
 }
+.listView-item-container {
+  display: flex;
+  flex-grow: 2;
+}
+
+.list-view-container {
+  display: flex;
+  flex-grow: 2;
+}
+
+.list-title {
+  margin-top: 15px;
+}
+
+.List {
+  height: 90%;
+  width: 90%;
+  box-shadow: #00000071 0px 0px 7px;
+  border-radius: 10px;
+  background-color: #fff;
+  margin: 10px auto 10px;
+}
+
 .Content {
-  margin-top: 2em;
+  height: calc(100vh - 65px);
 }
 
 @media (min-width: 750px) {
@@ -111,6 +134,11 @@ input[type=file] {
     width: 80%;
     background-color: white;
   }
+}
+.home-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 /*# sourceMappingURL=index.css.map */

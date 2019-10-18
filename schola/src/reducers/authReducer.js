@@ -17,6 +17,7 @@ function authReducer(state = initialState, action) {
       console.log(action.user);
       return Object.assign({}, state, {
           currentUser: action.user,
+          user: action.user,
           isLogged: false
       })
     }

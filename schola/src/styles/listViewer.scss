@@ -1,0 +1,23 @@
+.listView-item-container {
+    // width: 100%;
+    // border-bottom: $color-tertiary;
+    display: flex;
+    flex-grow: 2;
+}
+.list-view-container {
+    // height: 100%;
+    display: flex;
+    flex-grow: 2;
+}
+.list-title {
+    margin-top: 15px;
+}
+.List {
+    // border-bottom: solid 1px;
+    height: 90%;
+    width: 90%;
+    box-shadow: #00000071 0px 0px 7px;
+    border-radius: 10px;
+    background-color: $color-initial;
+    margin:10px auto 10px;
+}
