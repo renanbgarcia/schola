@@ -145,8 +145,8 @@ class CreateLesson extends React.Component {
                 // for (let i = 0; i < 30 ; i++ ) {
                 //     this.sendLessonInfo();
                 // }
-                // let lessonID = this.sendLessonInfo();
-                // this.uploadFiles(lessonID);
+                let lessonID = this.sendLessonInfo();
+                this.uploadFiles(lessonID);
 
             } catch(err) {
                 console.log(err);
