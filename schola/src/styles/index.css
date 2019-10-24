@@ -102,14 +102,8 @@ input[type=file] {
     max-width: 100% !important;
   }
 }
-.listView-item-container {
-  display: flex;
-  flex-grow: 2;
-}
-
 .list-view-container {
-  display: flex;
-  flex-grow: 2;
+  height: 100%;
 }
 
 .list-title {
@@ -117,12 +111,34 @@ input[type=file] {
 }
 
 .List {
-  height: 90%;
+  display: flex;
   width: 90%;
+  align-items: flex-start;
   box-shadow: #00000071 0px 0px 7px;
-  border-radius: 10px;
-  background-color: #fff;
   margin: 10px auto 10px;
+  padding: 10px;
+}
+
+.list-author-photo {
+  display: block;
+  width: 30px;
+}
+
+.listview-content-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+}
+
+.ReactVirtualized__List:focus {
+  outline: none !important;
+  border: none !important;
+}
+
+#root > div > div.Content.container > div > div:focus {
+  outline: none !important;
+  border: none !important;
 }
 
 .Content {

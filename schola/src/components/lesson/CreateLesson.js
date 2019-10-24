@@ -71,7 +71,8 @@ class CreateLesson extends React.Component {
      uploadFiles(id) {
         const self = this;
         let db = firebase.firestore();
-        let docRef = db.collection(`users/${this.props.userObject.uid}/lessons`).doc(id);
+        // let docRef = db.collection(`users/${this.props.userObject.uid}/lessons`).doc(id);
+        let docRef = db.collection(`lessons`).doc(id);
         for (let file of this.state.fileList) {
             let storageRef = firebase.storage().ref(`${this.props.userObject.uid}/lessons/${id}/${file.name}`);
             let uploadTask = storageRef.put(file);
@@ -116,13 +117,15 @@ class CreateLesson extends React.Component {
             let docID = docRef.id;
     
             docRef.set({
+                lessonId: docID,
                 title: this.state.titleInput,
                 targetAge: this.state.ageInput,
                 discipline: this.state.disciplineInput,
                 desc: this.state.descriptionInput,
                 created_at: firebase.firestore.Timestamp.fromDate(new Date()),
                 author: this.props.userObject.displayName,
-                author_id: this.props.userObject.uid
+                author_id: this.props.userObject.uid,
+                authorProto: 'https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png'
             });
             return docID
         } catch(error) {
@@ -143,7 +146,7 @@ class CreateLesson extends React.Component {
             this.state.descriptionInput !== '') {
             try {
                 // for (let i = 0; i < 30 ; i++ ) {
-                //     this.sendLessonInfo();
+                //     this.sendLessonInfo(i);
                 // }
                 let lessonID = this.sendLessonInfo();
                 this.uploadFiles(lessonID);
