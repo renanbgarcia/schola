@@ -47,7 +47,7 @@ class SuperList extends React.Component {
         title = content.title;
         description = content.desc
         content = <div style={style} className="listView-item-container observed">
-                        <div  className="List" >
+                        <div id={'sel' + index} className="List" >
                             <img src={photo} className="list-author-photo"/>
                             <div className="listview-content-container">
                                 <p><strong>{title}</strong></p>
@@ -59,7 +59,7 @@ class SuperList extends React.Component {
                         </div>
                     </div>
         }
-    
+
         return (
             <CellMeasurer 
             key={key}
@@ -73,7 +73,6 @@ class SuperList extends React.Component {
       }
 
     previewFiles(content, index) {
-
         if (content.filesURLs) {
             let className;
             if (content.filesURLs.length > 1) {
@@ -81,7 +80,7 @@ class SuperList extends React.Component {
             } else {
                 className = 'list-image'
             }
-            return content.filesURLs.map(src => <img className={className} src={src} alt={content.title}/>)
+            return content.filesURLs.map(src => <img key={(index + 1) * Math.random()} className={className} src={src} alt={content.title}/>)
         }
     }
 
@@ -93,25 +92,26 @@ class SuperList extends React.Component {
         const isRowLoaded = index => !hasNextPage || index < list.length;
         this.cache.clearAll();
 
-        const resizeObserver =  new ResizeObserver(entries => {
-            console.log('observando', entries)
-            for (let entry of entries) {
-                if(entry.contentRect.height) {
-                    console.log('observando', entry)
-                    if (document.querySelectorAll('.list-image').length > 0 && entry.contentRect.height > 100) {
-                        console.log(entry);
-                        [...document.querySelectorAll('.list-image')].map((img) => {
-                            img.style.visibility = 'visible'
-                        })
-                    }
-                }
-            }
-        })
+        // const resizeObserver =  new ResizeObserver(entries => {
+        //     // console.log('observando', entries)
+        //     for (let entry of entries) {
+        //         if(entry.contentRect.height) {
+        //             // console.log('observando', entry)
+        //             if (document.querySelectorAll('.list-image').length > 0 && entry.contentRect.height > 100) {
+        //                 console.log(entry.contentRect.height);
+        //                 [...document.querySelectorAll('.list-image')].map((img) => {
+        //                     img.style.visibility = 'visible'
+        //                 })
+        //             }
+        //         }
+        //     }
+        // })
 
-        const elems = document.querySelectorAll('.observed');
-        [...elems].map(elem => {
-            resizeObserver.observe(elem);
-        })
+        // const elems = document.querySelectorAll('.observed');
+        // [...elems].map((elem) => {
+        //     resizeObserver.observe(elem);
+        //     console.log(elem)
+        // })
 
         return (
 

@@ -24,22 +24,32 @@ textarea {
 @import 'login';
 @import 'createlesson';
 @import 'listViewer';
+@import 'sidebar';
 
 .Content {
   // margin-top: 2em;
   height: calc(100vh - 65px);
+  width: 70%;
 }
 
 @media (min-width: 750px) {
   .Content {
     width: $main-content-width;
-
     background-color: rgb(255, 255, 255);
+    display: flex;
+    flex-direction: row;
+  }
+}
+
+@media (max-width: 750px) {
+  .sidebar {
+    display: none;
   }
 }
 
 .home-container {
   height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
 }

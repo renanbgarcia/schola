@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import MenuButton from './utils/menu-button';
 import firebase from '../firebase';
 
 import { userSignedOut } from '../actions/authAction';
@@ -26,6 +27,7 @@ class Navbar extends React.Component {
 
         return (
             <nav>
+                <MenuButton/>
                 <div className="nav-wrapper">
                     { isLogged? <div id="nav-username">{user}</div> : '' }
                     <ul>

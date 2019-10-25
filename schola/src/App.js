@@ -9,6 +9,7 @@ import { userSignedIn } from './actions/authAction';
 import { connect } from 'react-redux';
 
 import Home from './components/home/Home';
+import Sidebar from './components/utils/Sidebar';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Navbar from './components/Navbar';
@@ -41,6 +42,7 @@ class App extends React.Component {
       <div className="App">
         <Router history={history}>
           <Navbar/>
+          <Sidebar/>
           <div className="Content container">
             <Route exact path='/' component={this.guard()}/>
             <Route path='/login' component={Login}/>
