@@ -28,29 +28,38 @@ class SuperList extends React.Component {
       }
 
     renderRow({ index, key, style, parent }) {
+       
         const list  = this.props.list;
         let content, photo, title, description;
         if (!this.isRowLoaded({ index, list })) {
-            content = <div style={style}>Loading...</div>
+            
+            content = <div style={style} className="listView-item-container">
+                        <div  className="List" >
+                            <div className="listview-content-container">
+                                <div className="placeholder-div"></div>
+                                <div className="placeholder-div"></div>
+                            </div>
+                        </div>
+                      </div>
         } else {
         content = list[index];
         photo = content.authorProto
         title = content.title;
         description = content.desc
-        content = <div style={style} className="listView-item-container">
+        content = <div style={style} className="listView-item-container observed">
                         <div  className="List" >
                             <img src={photo} className="list-author-photo"/>
                             <div className="listview-content-container">
                                 <p><strong>{title}</strong></p>
                                 <p>{description}</p>
                                 {
-                                    this.previewFiles(content)
+                                    this.previewFiles(content, index)
                                 }
                             </div>
                         </div>
                     </div>
         }
-                         
+    
         return (
             <CellMeasurer 
             key={key}
@@ -63,11 +72,12 @@ class SuperList extends React.Component {
         );
       }
 
-    previewFiles(content) {
+    previewFiles(content, index) {
+
         if (content.filesURLs) {
             let className;
             if (content.filesURLs.length > 1) {
-                className = 'list-image-multiple';
+                className = 'list-image list-image-multiple';
             } else {
                 className = 'list-image'
             }
@@ -77,10 +87,31 @@ class SuperList extends React.Component {
 
     render() {
         const { hasNextPage, isNextPageLoading, list, loadMore } = this.props;
-        const rowCount = hasNextPage ? list.length + 1 : list.length;
+        // const rowCount = hasNextPage ? list.length + 1 : list.length;
+        const rowCount = list.length === 0? 10 : list.length;
         const loadMoreRows = isNextPageLoading ? () => {} : loadMore;
         const isRowLoaded = index => !hasNextPage || index < list.length;
         this.cache.clearAll();
+
+        const resizeObserver =  new ResizeObserver(entries => {
+            console.log('observando', entries)
+            for (let entry of entries) {
+                if(entry.contentRect.height) {
+                    console.log('observando', entry)
+                    if (document.querySelectorAll('.list-image').length > 0 && entry.contentRect.height > 100) {
+                        console.log(entry);
+                        [...document.querySelectorAll('.list-image')].map((img) => {
+                            img.style.visibility = 'visible'
+                        })
+                    }
+                }
+            }
+        })
+
+        const elems = document.querySelectorAll('.observed');
+        [...elems].map(elem => {
+            resizeObserver.observe(elem);
+        })
 
         return (
 

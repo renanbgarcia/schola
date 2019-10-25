@@ -145,6 +145,17 @@ input[type=file] {
   width: 25%;
 }
 
+.list-image {
+  visibility: hidden;
+}
+
+.placeholder-div {
+  background-color: #DDD;
+  height: 1em;
+  width: 150px;
+  margin-bottom: 4px;
+}
+
 .Content {
   height: calc(100vh - 65px);
 }
