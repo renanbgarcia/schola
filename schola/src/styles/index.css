@@ -102,6 +102,10 @@ input[type=file] {
     max-width: 100% !important;
   }
 }
+.listView-item-container {
+  padding: 5px;
+}
+
 .list-view-container {
   height: 100%;
 }
@@ -113,6 +117,7 @@ input[type=file] {
 .List {
   display: flex;
   width: 90%;
+  height: 100%;
   align-items: flex-start;
   box-shadow: #00000071 0px 0px 7px;
   margin: 10px auto 10px;
@@ -136,9 +141,8 @@ input[type=file] {
   border: none !important;
 }
 
-#root > div > div.Content.container > div > div:focus {
-  outline: none !important;
-  border: none !important;
+.list-image-multiple {
+  width: 25%;
 }
 
 .Content {

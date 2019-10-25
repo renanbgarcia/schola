@@ -11,8 +11,17 @@ class SuperList extends React.Component {
             minHeight: 100,
             defaultHeight: 100
           });
+        this.onResize = this.onResize.bind(this);
     }
 
+    componentDidMount() {
+        window.addEventListener('resize', this.onResize);
+    }
+
+    onResize() {
+        this.cache.clearAll();
+        console.log("resized")
+    }
 
     isRowLoaded ({ index, list }) {
         return !!list[index];
@@ -28,7 +37,7 @@ class SuperList extends React.Component {
         photo = content.authorProto
         title = content.title;
         description = content.desc
-        content = <div style={style}>
+        content = <div style={style} className="listView-item-container">
                         <div  className="List" >
                             <img src={photo} className="list-author-photo"/>
                             <div className="listview-content-container">
@@ -56,7 +65,13 @@ class SuperList extends React.Component {
 
     previewFiles(content) {
         if (content.filesURLs) {
-            return content.filesURLs.map(src => <img className="list-image" src={src} alt={content.title}/>)
+            let className;
+            if (content.filesURLs.length > 1) {
+                className = 'list-image-multiple';
+            } else {
+                className = 'list-image'
+            }
+            return content.filesURLs.map(src => <img className={className} src={src} alt={content.title}/>)
         }
     }
 
