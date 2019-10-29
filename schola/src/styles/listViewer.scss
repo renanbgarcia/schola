@@ -57,7 +57,9 @@
 }
 
 .list-image {
-    // visibility: hidden;
+   width: min-content;
+   max-width: 300px;
+   margin: 5px;
 }
 
 .placeholder-div {
@@ -65,4 +67,16 @@
     height: 1em;
     width: 150px;
     margin-bottom: 4px;
+}
+
+.files-preview-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.and-more {
+    width: 100%;
+    font-size: x-large;
 }

@@ -1,15 +1,33 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 class Sidebar extends React.Component {
-    state = {
-        isOpen: false
+
+    renderSidebar() {
+        console.log(window.innerWidth)
+        if (this.props.isOpen || window.innerWidth > 750) {
+            return <div key="sidebar" className="sidebar">Sidebar</div>
+        } else {
+            return null
+        }
     }
 
     render() {
         return (
-            <div className="sidebar">Sidebar</div>
+                    
+            <ReactCSSTransitionGroup
+            transitionName="example"
+            transitionEnterTimeout={250}
+            transitionLeaveTimeout={250}>
+                {this.renderSidebar()}
+            </ReactCSSTransitionGroup>
         )
     }
 }
 
-export default Sidebar;
+const mapStateToProps = (store) => ({
+    isOpen: store.menuReducer.isMenuVisible
+})
+
+export default connect(mapStateToProps)(Sidebar);

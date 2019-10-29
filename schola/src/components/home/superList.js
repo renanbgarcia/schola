@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { List, AutoSizer, CellMeasurer, CellMeasurerCache, InfiniteLoader } from 'react-virtualized'
 
 class SuperList extends React.Component {
@@ -48,13 +49,13 @@ class SuperList extends React.Component {
         description = content.desc
         content = <div style={style} className="listView-item-container observed">
                         <div id={'sel' + index} className="List" >
-                            <img src={photo} className="list-author-photo"/>
+                            <img src={photo} title={content.author} className="list-author-photo"/>
                             <div className="listview-content-container">
                                 <p><strong>{title}</strong></p>
                                 <p>{description}</p>
-                                {
-                                    this.previewFiles(content, index)
-                                }
+                                <div className="files-preview-container">
+                                    {this.previewFiles(content, index)}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -78,9 +79,14 @@ class SuperList extends React.Component {
             if (content.filesURLs.length > 1) {
                 className = 'list-image list-image-multiple';
             } else {
-                className = 'list-image'
+                className = 'list-image';
             }
-            return content.filesURLs.map(src => <img key={(index + 1) * Math.random()} className={className} src={src} alt={content.title}/>)
+
+            let elem = content.filesURLs.slice(0, 3).map(src => <img key={(index + 1) * Math.random()} className={className} src={src} alt={content.title}/>);
+            if (content.filesURLs.length > 3) {
+                elem.push(<Link href={'#'} className="and-more">... e mais</Link>);
+            }
+            return elem
         }
     }
 
@@ -91,27 +97,6 @@ class SuperList extends React.Component {
         const loadMoreRows = isNextPageLoading ? () => {} : loadMore;
         const isRowLoaded = index => !hasNextPage || index < list.length;
         this.cache.clearAll();
-
-        // const resizeObserver =  new ResizeObserver(entries => {
-        //     // console.log('observando', entries)
-        //     for (let entry of entries) {
-        //         if(entry.contentRect.height) {
-        //             // console.log('observando', entry)
-        //             if (document.querySelectorAll('.list-image').length > 0 && entry.contentRect.height > 100) {
-        //                 console.log(entry.contentRect.height);
-        //                 [...document.querySelectorAll('.list-image')].map((img) => {
-        //                     img.style.visibility = 'visible'
-        //                 })
-        //             }
-        //         }
-        //     }
-        // })
-
-        // const elems = document.querySelectorAll('.observed');
-        // [...elems].map((elem) => {
-        //     resizeObserver.observe(elem);
-        //     console.log(elem)
-        // })
 
         return (
 

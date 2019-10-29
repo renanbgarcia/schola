@@ -29,11 +29,12 @@ nav {
   width: 100%;
   align-items: center;
   justify-content: center;
+  padding: 0 5% 0;
 }
 nav .nav-wrapper {
   display: flex;
   justify-content: flex-end;
-  width: 70%;
+  width: 100%;
   align-items: center;
 }
 nav .nav-wrapper a {
@@ -54,6 +55,11 @@ nav .nav-wrapper #nav-username {
   margin-right: 5px;
 }
 
+@media (min-width: 750px) {
+  .menu-button {
+    display: none;
+  }
+}
 .login-form {
   max-width: 450px;
   margin-top: calc(100vh/6);
@@ -146,6 +152,12 @@ input[type=file] {
   width: 25%;
 }
 
+.list-image {
+  width: min-content;
+  max-width: 300px;
+  margin: 5px;
+}
+
 .placeholder-div {
   background-color: #DDD;
   height: 1em;
@@ -153,28 +165,70 @@ input[type=file] {
   margin-bottom: 4px;
 }
 
-.sidebar {
+.files-preview-container {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.and-more {
+  width: 100%;
+  font-size: x-large;
+}
+
+.sidebar, .sidebar-fixed {
   width: 30%;
   height: 100%;
   background-color: #d1d1d1;
+  z-index: 50;
+}
+
+@media (max-width: 750px) {
+  .sidebar {
+    position: fixed;
+    top: 65px;
+  }
+
+  .sidebar-fixed {
+    display: none;
+  }
+}
+@media (min-width: 750px) {
+  .sidebar {
+    display: none;
+  }
+}
+.example-enter {
+  opacity: 0.01;
+}
+
+.example-enter.example-enter-active {
+  opacity: 1;
+  transition: opacity 250ms ease-in;
+}
+
+.example-leave {
+  opacity: 1;
+}
+
+.example-leave.example-leave-active {
+  opacity: 0.01;
+  transition: opacity 250ms ease-in;
 }
 
 .Content {
   height: calc(100vh - 65px);
-  width: 70%;
+  padding: 0;
+  width: 100%;
+  max-width: unset !important;
 }
 
 @media (min-width: 750px) {
   .Content {
-    width: 70%;
     background-color: white;
     display: flex;
     flex-direction: row;
-  }
-}
-@media (max-width: 750px) {
-  .sidebar {
-    display: none;
   }
 }
 .home-container {

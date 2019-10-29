@@ -1,5 +1,41 @@
-.sidebar {
+.sidebar, .sidebar-fixed {
     width: 30%;
     height: 100%;
     background-color: $color-quaternary;
+    z-index: 50;
+}
+
+@media (max-width: 750px) {
+    .sidebar {
+    position: fixed;
+    top: 65px;
+    }
+
+    .sidebar-fixed {
+        display: none;
+    }
+}
+
+@media (min-width: 750px) {
+    .sidebar {
+        display: none;
+    }
+}
+
+.example-enter {
+    opacity: 0.01;
+}
+  
+.example-enter.example-enter-active {
+    opacity: 1;
+    transition: opacity 250ms ease-in;
+}
+
+.example-leave {
+    opacity: 1;
+}
+
+.example-leave.example-leave-active {
+    opacity: 0.01;
+    transition: opacity 250ms ease-in;
 }

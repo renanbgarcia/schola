@@ -4,12 +4,12 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { createBrowserHistory } from 'history';
 
 import './App.css';
-import { getUser } from './actions/actions';
 import { userSignedIn } from './actions/authAction';
 import { connect } from 'react-redux';
 
 import Home from './components/home/Home';
 import Sidebar from './components/utils/Sidebar';
+import SidebarFixed from './components/utils/SidebarFixed';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Navbar from './components/Navbar';
@@ -35,17 +35,28 @@ class App extends React.Component {
     }
   }
 
+  renderSidebar() {
+    console.log(history.location)
+    if (this.props.isLogged === false) {
+      return null
+    } else {
+      return <Sidebar/>
+    }
+  }
+
   render() {
     //const { } = this.props;
 
     return (
-      <div className="App">
+      <div className="App" id="app">
         <Router history={history}>
           <Navbar/>
-          <Sidebar/>
+
           <div className="Content container">
+            <SidebarFixed/>
+            {this.renderSidebar()}
             <Route exact path='/' component={this.guard()}/>
-            <Route path='/login' component={Login}/>
+            <Route path='/login' component={this.guard()}/>
             <Route path='/signup' component={Signup}/>
             <Route path='/create/lesson' component={CreateLesson}/>
             <Route path='/lessons' component={Lessons}/>
