@@ -1,6 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { showMenu, hideMenu } from '../../actions/menuAction'; 
+import { showMenu, hideMenu } from '../../actions/menuAction';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowAltCircleLeft, faArrowCircleDown } from '@fortawesome/free-solid-svg-icons'
+
 
 class MenuButton extends React.Component {
 
@@ -18,10 +21,20 @@ class MenuButton extends React.Component {
         }
     }
 
+    chooseArrow() {
+        return this.props.isMenuVisible? faArrowCircleDown : faArrowAltCircleLeft;
+    }
+
     render() {
 
         return (
-            <div onClick={this.toggleMenu} className="menu-button">Menu</div>
+            <div onClick={this.toggleMenu}
+                  className="menu-button">
+                    <span style={{marginRight: "3px"}}>Menu</span>
+                    <FontAwesomeIcon
+                        icon={this.chooseArrow()}
+                        style={{color:"#fff"}} />
+            </div>
         )
     }
 }

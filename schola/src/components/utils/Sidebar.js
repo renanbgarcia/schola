@@ -1,13 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import { menuContent } from './menuContent';
 
 class Sidebar extends React.Component {
 
     renderSidebar() {
         console.log(window.innerWidth)
         if (this.props.isOpen || window.innerWidth > 750) {
-            return <div key="sidebar" className="sidebar">Sidebar</div>
+            return <div key="sidebar" className="sidebar">
+                    {menuContent()}
+                   </div>
         } else {
             return null
         }

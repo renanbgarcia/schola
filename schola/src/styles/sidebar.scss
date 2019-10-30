@@ -1,8 +1,10 @@
 .sidebar, .sidebar-fixed {
-    width: 30%;
+    width: 35%;
+    max-width: 250px;
     height: 100%;
-    background-color: $color-quaternary;
+    background-color: $color-quinary;
     z-index: 50;
+    box-shadow: 0 2px 8px 3px rgba(0, 0, 0, 0.425);
 }
 
 @media (max-width: 750px) {
@@ -22,6 +24,7 @@
     }
 }
 
+//animação do menu
 .example-enter {
     opacity: 0.01;
 }
@@ -38,4 +41,19 @@
 .example-leave.example-leave-active {
     opacity: 0.01;
     transition: opacity 250ms ease-in;
+} //
+
+.menu-content {
+    text-align: left;
+    li {
+        padding-left: 10px;
+        height: 50px;
+        border-bottom: solid 1px;
+        line-height: 50px;
+        vertical-align: middle;
+        font-weight: 400;
+        &:hover {
+            background-color: white;
+        }
+    }
 }

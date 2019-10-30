@@ -45,8 +45,6 @@ class App extends React.Component {
   }
 
   render() {
-    //const { } = this.props;
-
     return (
       <div className="App" id="app">
         <Router history={history}>

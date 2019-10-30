@@ -171,7 +171,7 @@ class CreateLesson extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="home-container">
                 <div className="row row-center">
                     <h3>Create lesson</h3>
                 </div>

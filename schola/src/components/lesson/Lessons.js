@@ -63,7 +63,7 @@ class Lessons extends React.Component {
     render() {
         let ageArray = Array.apply(null, Array(18));
         return (
-            <div>
+            <div className="home-container">
                 <h3>Lições</h3>
                 <label>Age:</label>
                 <select onChange={(e) => this.handleAgeFilter(e)} id="age-filter">
