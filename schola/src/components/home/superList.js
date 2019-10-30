@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { List, AutoSizer, CellMeasurer, CellMeasurerCache, InfiniteLoader } from 'react-virtualized'
+import HomeLessonItem from '../lesson/homeLessonItem';
 
 class SuperList extends React.Component {
     constructor(props, context) {
@@ -31,7 +32,7 @@ class SuperList extends React.Component {
     renderRow({ index, key, style, parent }) {
        
         const list  = this.props.list;
-        let content, photo, title, description;
+        let content;
         if (!this.isRowLoaded({ index, list })) {
             
             content = <div style={style} className="listView-item-container">
@@ -43,22 +44,7 @@ class SuperList extends React.Component {
                         </div>
                       </div>
         } else {
-        content = list[index];
-        photo = content.authorProto
-        title = content.title;
-        description = content.desc
-        content = <div style={style} className="listView-item-container observed">
-                        <div id={'sel' + index} className="List" >
-                            <img src={photo} title={content.author} className="list-author-photo"/>
-                            <div className="listview-content-container">
-                                <p><strong>{title}</strong></p>
-                                <p>{description}</p>
-                                <div className="files-preview-container">
-                                    {this.previewFiles(content, index)}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            content = <HomeLessonItem style={style} index={index} list={list}/>
         }
 
         return (
@@ -72,23 +58,6 @@ class SuperList extends React.Component {
             </CellMeasurer>
         );
       }
-
-    previewFiles(content, index) {
-        if (content.filesURLs) {
-            let className;
-            if (content.filesURLs.length > 1) {
-                className = 'list-image list-image-multiple';
-            } else {
-                className = 'list-image';
-            }
-
-            let elem = content.filesURLs.slice(0, 3).map(src => <img key={(index + 1) * Math.random()} className={className} src={src} alt={content.title}/>);
-            if (content.filesURLs.length > 3) {
-                elem.push(<Link href={'#'} className="and-more">... e mais</Link>);
-            }
-            return elem
-        }
-    }
 
     render() {
         const { hasNextPage, isNextPageLoading, list, loadMore } = this.props;
