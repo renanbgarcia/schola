@@ -36,7 +36,7 @@ class Home extends React.Component {
                             .where('author_id', '==', this.props.userObject.uid )
                             .orderBy('created_at', "desc")
                             .startAfter(this.state.lastDoc)
-                            .limit(15)
+                            .limit(10)
                             .get();
             docRef.then(snapshot => {
                 let lastDoc = snapshot.docs[snapshot.docs.length - 1];
@@ -74,6 +74,7 @@ class Home extends React.Component {
                         loadMore={this.loadMore}
                         isNextPageLoading={this.state.isNextPageLoading}
                         hasNextPage={this.state.hasNextPage}
+                        userId={this.props.userObject.uid}
                         />
                 </div>
             </div>

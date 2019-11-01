@@ -2,37 +2,88 @@ import React from 'react';
 import firebase from '../../firebase';
 import { connect } from 'react-redux';
 
+import LessonList from './LessonList';
+
 import MDSpinner from "react-md-spinner";
 
 class Lessons extends React.Component {
     constructor(props) {
         super(props)
+        this.queryLessons = this.queryLessons.bind(this)
     }
 
     state = {
         lessons: [],
         isLoaded: false,
         disciplineFilter: '',
-        ageFilter: ''
+        ageFilter: '',
+        lastDoc: {},
+        isNextPageLoading: false,
+        hasNextPage: true
     }
     
-    componentWillMount() {
-        this.queryLessons();
+    componentDidMount() {
+        // this.queryLessons();
     }
 
     queryLessons() {
-        // let  snap = firebase.firestore().collection(`users/${this.props.userObject.uid}/lessons`)
-        let  snap = firebase.firestore().collection(`lessons`)
-        let filteredSnap = this.addQueryFilters(snap);
-        filteredSnap.then(snapshot => snapshot.forEach(doc => {
-            let oldlessons = this.state.lessons;
-            oldlessons.push(doc.data())
-            this.setState({
-                lessons: oldlessons,
-                isLoaded: true
-            })
-        }))
+        const db = firebase.firestore();
+        this.setState({
+            isNextPageLoading: true
+        })
+        console.log(this.state.hasNextPage)
+        if (this.state.lastDoc === undefined || !this.state.hasNextPage) {
+            console.log('Nada pra mostrar')
+        } else {
+            let docRef = db.collection(`lessons`)
+                            .where('author_id', '==', this.props.userObject.uid )
+                            .orderBy('created_at', "desc")
+                            .startAfter(this.state.lastDoc)
+                            .limit(5)
+                            .get();
+            docRef.then(snapshot => {
+                let lastDoc = snapshot.docs[snapshot.docs.length - 1];
+                if (snapshot.empty === true || this.state.lastDoc.id === lastDoc.id) {
+                    console.log('sem mais resultados')
+                    this.setState({ hasNextPage: false});
+                } else {
+                    console.log("api calling")
+                    this.setState({
+                        lastDoc: lastDoc,
+                        isNextPageLoading: false,
+                    })
+                    snapshot.forEach( doc => {
+                        let oldlessons = this.state.lessons;
+                        oldlessons.push(doc.data())
+                        this.setState({
+                            lessons: oldlessons
+                        })
+                })
+                }
+        })
+        }
+
     }
+
+    // queryLessons() {
+    //     // let  snap = firebase.firestore().collection(`users/${this.props.userObject.uid}/lessons`)
+    //     let  snap = firebase.firestore().collection(`lessons`).orderBy('created_at', "desc").startAfter(this.state.lastDoc).limit(10)
+        
+    //     let filteredSnap = this.addQueryFilters(snap);
+        
+    //     filteredSnap.then(snapshot => {
+    //         let lastDoc = snapshot.docs[snapshot.docs.length - 1];
+    //         this.setState({lastDoc: lastDoc});
+    //         snapshot.forEach(doc => {
+    //         let oldlessons = this.state.lessons;
+    //         oldlessons.push(doc.data())
+    //         this.setState({
+    //             lessons: oldlessons,
+    //             isLoaded: true
+    //         })
+    //     })
+    // })
+    // }
 
     handleDisciplineFilter(e) {
         console.log(e.currentTarget.value)
@@ -64,7 +115,8 @@ class Lessons extends React.Component {
         let ageArray = Array.apply(null, Array(18));
         return (
             <div className="home-container">
-                <h3>Lições</h3>
+                <LessonList loadMore={this.queryLessons} lessons={this.state.lessons}/>
+                {/* <h3>Lições</h3>
                 <label>Age:</label>
                 <select onChange={(e) => this.handleAgeFilter(e)} id="age-filter">
                     <option value="">Todas</option>
@@ -91,7 +143,8 @@ class Lessons extends React.Component {
                         </tr>)
                     }
                     </tbody>
-                </table>
+                </table> */}
+
             </div>
         )
     }

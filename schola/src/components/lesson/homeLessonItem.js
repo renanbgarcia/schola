@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom';
 const HomeLessonItem = (props) => {
     let index = props.index;
     let content = props.list[index];
+    if (!content) {
+        return <div>Nada</div>
+    }
     const photo = content.authorProto
     const title = content.title;
     const description = content.desc;
