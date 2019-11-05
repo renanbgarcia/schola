@@ -62,6 +62,14 @@ class Home extends React.Component {
 
     }
 
+    docRef = (startAfter) => 
+        firebase.firestore().collection(`lessons`)
+        .where('author_id', '==', this.props.userObject.uid )
+        .orderBy('created_at', "desc")
+        .startAfter(startAfter)
+        .limit(10)
+        .get();
+
     render() {
         const { lessons } = this.state;
         
@@ -75,6 +83,7 @@ class Home extends React.Component {
                         isNextPageLoading={this.state.isNextPageLoading}
                         hasNextPage={this.state.hasNextPage}
                         userId={this.props.userObject.uid}
+                        docRef={this.docRef}
                         />
                 </div>
             </div>
