@@ -177,6 +177,11 @@ class LessonsListf extends React.Component {
             if (snapshot.empty === true) {
               console.log('sem mais resultados')
               console.log(this.state)
+              if (this.state.lessons.length === 0) {
+                this.setState({
+                    pageLoading: false
+                })
+              }
               this.setState({
                   loadingRowCount: 0,
               })
