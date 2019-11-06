@@ -1,3 +1,14 @@
+.create-lesson-container {
+    @extend .home-container;
+    flex-direction: row !important;
+    justify-content: center;
+}
+
+.create-lesson-form {
+    width: 100%;
+    max-width: 600px;
+}
+
 .file-list-item {
     display: flex;
     min-width: 400px;
@@ -17,12 +28,17 @@ input[type='file'] {
 
 .input-file-label {
     background-color: $color-tertiary;
-    box-shadow: $color-secondary 3px 2px 5px;
-    min-width: 350px;
+    // box-shadow: $color-secondary 3px 2px 5px;
+    border: solid $color-secondary 1px;
+    width: 100%;
     padding: 5px;
     border-radius: 10px;
     color: $color-primary;
     font-size: 0.8em;
+    cursor: pointer;
+    &:hover {
+        transform: scale(1.01);
+    }
 }
 
 @media (max-width: 40.0rem) {

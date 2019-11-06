@@ -82,6 +82,16 @@ nav .nav-wrapper #nav-username {
   flex-wrap: wrap;
 }
 
+.create-lesson-container {
+  flex-direction: row !important;
+  justify-content: center;
+}
+
+.create-lesson-form {
+  width: 100%;
+  max-width: 600px;
+}
+
 .file-list-item {
   display: flex;
   min-width: 400px;
@@ -101,12 +111,16 @@ input[type=file] {
 
 .input-file-label {
   background-color: #f4f5f6;
-  box-shadow: #646464 3px 2px 5px;
-  min-width: 350px;
+  border: solid #646464 1px;
+  width: 100%;
   padding: 5px;
   border-radius: 10px;
   color: #727272;
   font-size: 0.8em;
+  cursor: pointer;
+}
+.input-file-label:hover {
+  transform: scale(1.01);
 }
 
 @media (max-width: 40rem) {
@@ -269,12 +283,12 @@ input[type=file] {
     flex-direction: row;
   }
 
-  .home-container {
+  .home-container, .create-lesson-container {
     height: calc(100vh - 65px) !important;
     overflow: scroll !important;
   }
 }
-.home-container {
+.home-container, .create-lesson-container {
   height: calc(100vh - 65px);
   overflow: auto;
   width: 100%;

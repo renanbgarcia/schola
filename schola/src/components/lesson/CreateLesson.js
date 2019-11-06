@@ -160,72 +160,67 @@ class CreateLesson extends React.Component {
         }
     }
 
-    // componentWillMount() {
-    //     let storageRef = firebase.storage().ref(`${this.props.userObject.uid}/lessons`);
-    //     storageRef.listAll().then(function(res) {
-    //         res.items.forEach(function(itemRef) {
-    //             itemRef.getDownloadURL().then(url => console.log(url));
-    //           });
-    //     })
-    // }
-
     render() {
         return (
-            <div className="home-container">
-                <div className="row row-center">
-                    <h3>Create lesson</h3>
-                </div>
-                <label for="titulo">Título</label>
-                <input onChange={e => this.handleTitleInput(e)}
-                        type="text"
-                        name="titulo"
-                        id="title"/>
-                <div className="row">
-                    <div className="column column-25 mobile-full-width">
-                        <label for="idade">Idade alvo</label>
-                        <input onChange={e => this.handleAgeInput(e)}
-                                type="number"
-                                name="idade"
-                                id="age"
-                                min="0"
-                                max="18"/>
+            <div className="create-lesson-container">
+                <div className="create-lesson-form">
+                    <label for="titulo">Título</label>
+                    <input onChange={e => this.handleTitleInput(e)}
+                            type="text"
+                            name="titulo"
+                            id="title"/>
+                    <div className="row">
+                        <div className="column column-25 mobile-full-width">
+                            <label for="idade">Idade alvo</label>
+                            <input onChange={e => this.handleAgeInput(e)}
+                                    type="number"
+                                    name="idade"
+                                    id="age"
+                                    min="0"
+                                    max="18"/>
+                        </div>
+                        <div className="column column-75 mobile-full-width">
+                            <label for="titulo">Disciplina</label>
+                            <select onChange={(e) => this.handleDisciplineInput(e)}id="discipline">
+                                <option >Escolha uma disciplina</option>
+                                <option value="math">Matemática</option>
+                                <option value="grammar">Gramática</option>
+                                <option value="english">Inglês</option>
+                                <option value="history">História</option>
+                            </select>
+                        </div>
                     </div>
-                    <div className="column column-75 mobile-full-width">
-                        <label for="titulo">Disciplina</label>
-                        <select onChange={(e) => this.handleDisciplineInput(e)}id="discipline">
-                            <option value="math">Matemática</option>
-                            <option value="grammar">Gramática</option>
-                            <option value="english">Inglês</option>
-                        </select>
+                    <textarea onChange={e => this.handleDescriptionInput(e)}
+                                id="description"
+                                name="description"
+                                defaultValue="Descreva o material">
+                    </textarea>
+                    <div className="row">
+                        <div className="column">
+                            <label className="input-file-label" for="lesson-file">Carregar arquivos</label>
+                            <input onChange={this.handleFileInput}
+                                    type="file"
+                                    id="lesson-file"
+                                    multiple/>
+                        </div>
+
                     </div>
-                </div>
-                <textarea onChange={e => this.handleDescriptionInput(e)}
-                            id="description"
-                            name="description"
-                            defaultValue="Descreva o material">
-                </textarea>
-                <div className="row row-center">
-                    <label className="input-file-label" for="lesson-file">Carregar arquivos</label>
-                    <input onChange={this.handleFileInput}
-                            type="file"
-                            id="lesson-file"
-                            multiple/>
-                </div>
-                <div className="row row-center">
-                    <ul className="file-list">
-                        {this.state.fileList.map((item, i) =>
-                                <li className="file-list-item">
-                                    {item.name}
-                                    <span id={item.name}></span>
-                                    <span onClick={(i) => this.deleteListItem(i)} >
-                                        <FontAwesomeIcon className="delete-button-list" icon={faTimesCircle}/>
-                                    </span>
-                                </li>
-                            )}
-                    </ul>
-                </div>
-                <div>
-                    <button onClick={this.handleSubmit}>Enviar</button>
+                    <div className="row row-center">
+                        <ul className="file-list">
+                            {this.state.fileList.map((item, i) =>
+                                    <li className="file-list-item">
+                                        {item.name}
+                                        <span id={item.name}></span>
+                                        <span onClick={(i) => this.deleteListItem(i)} >
+                                            <FontAwesomeIcon className="delete-button-list" icon={faTimesCircle}/>
+                                        </span>
+                                    </li>
+                                )}
+                        </ul>
+                    </div>
+                    <div>
+                        <button onClick={this.handleSubmit}>Enviar</button>
+                    </div>
                 </div>
             </div>
         )
