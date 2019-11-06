@@ -99,8 +99,6 @@ class Lessons extends React.Component {
         // console.log(this.state)
         return (
             <div className="home-container">
-
-                <h3>Lições</h3>
                 <label>Age:</label>
                 <select onChange={(e) => this.handleAgeFilter(e)} id="age-filter">
                     <option value="">Todas</option>
@@ -112,12 +110,20 @@ class Lessons extends React.Component {
                     <option value="grammar">Gramática</option>
                     <option value="english">Inglês</option>
                 </select>
-                <div>{this.state.ageFilter}</div>
+
+                <tr className="listView-item-container">
+                    <td className="title">Título</td>
+                    <td>Arquivos</td>
+                    <td>Idade alvo</td>
+                    <td>Disciplina</td>
+                    <td>Criado em</td>
+                </tr>
                 <LessonsListf
-                    // docRef={this.docRef}
-                    disciplineFilter={this.state.disciplineFilter}
-                    ageFilter={this.state.ageFilter}
+                // docRef={this.docRef}
+                disciplineFilter={this.state.disciplineFilter}
+                ageFilter={this.state.ageFilter}
                 />
+
             </div>
         )
     }

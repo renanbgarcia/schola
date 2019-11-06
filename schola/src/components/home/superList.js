@@ -34,6 +34,12 @@ class SuperList extends React.Component {
 
     componentDidMount() {
         window.addEventListener('resize', this.onResize);
+        window.addEventListener('scroll', this.cache.clearAll());
+        
+    }
+
+    componentDidUpdate() {
+        this.cache.clearAll();
     }
 
     onResize() {
@@ -54,7 +60,6 @@ class SuperList extends React.Component {
     
         if (loadedRowsMap[index] === STATUS_LOADED) {
             content = <HomeLessonItem style={style} index={index} list={list}/>;
-            // content = <div style={style}>{list[index].title + " " + index}</div>
         } else {
           content = (
             <div style={style} className="listView-item-container">
@@ -81,11 +86,9 @@ class SuperList extends React.Component {
     }
 
     _loadMoreRows({startIndex, stopIndex}) {
-    const {loadedRowsMap, loadingRowCount, loadedRowCount} = this.state;
+    const {loadedRowsMap, loadingRowCount} = this.state;
     const increment = stopIndex - startIndex + 1;
-    console.log(increment)
 
-    
     for (var i = startIndex; i <= stopIndex; i++) {
         loadedRowsMap[i] = STATUS_LOADING;
     }
@@ -94,15 +97,6 @@ class SuperList extends React.Component {
         loadingRowCount: loadingRowCount + increment,
         loadedRowsMap: loadedRowsMap
     });
-
-    // const db = firebase.firestore();
-
-            // let docRef = db.collection(`lessons`)
-            //                 .where('author_id', '==', this.props.userId )
-            //                 .orderBy('created_at', "desc")
-            //                 .startAfter(this.state.lastDoc)
-            //                 .limit(10)
-            //                 .get();
 
     let docRef = this.props.docRef(this.state.lastDoc);
 
@@ -118,7 +112,6 @@ class SuperList extends React.Component {
                 snapshot.docs.forEach((doc, myindex) => {
                     let oldlessons = this.state.lessons;
                     oldlessons.push(doc.data())
-                    console.log(startIndex, stopIndex, myindex)
                     loadedRowsMap[startIndex + myindex] = STATUS_LOADED;
                     this.setState({
                         lessons: oldlessons,
@@ -132,13 +125,9 @@ class SuperList extends React.Component {
     }
 
     render() {
-
-        const {loadedRowCount, loadingRowCount, lessons, loadedRowsMap} = this.state;
+        const {loadedRowCount, loadingRowCount, lessons} = this.state;
 
         this.cache.clearAll();
-        console.log(lessons.length, loadedRowCount, loadingRowCount, loadedRowsMap)
-
-
 
         const rowCount = () => {
             if (lessons.length < 1) {

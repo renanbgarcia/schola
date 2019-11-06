@@ -42,17 +42,19 @@ textarea {
   }
 
   .home-container {
-    height: calc(100vh - $navbar-height);
-    overflow: scroll;
+    height: calc(100vh - 65px) !important;
+    overflow: scroll !important;
   }
 }
 
-
 .home-container {
-  height: 100%;
+  height: calc(100vh - 65px);
   overflow: auto;
   width: 100%;
   display: flex;
   flex-direction: column;
   padding: 0 20px;
+  & > * {
+    // flex: 1;
+  }
 }

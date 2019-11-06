@@ -116,7 +116,14 @@ input[type=file] {
   }
 }
 .listView-item-container {
+  display: flex;
   padding: 5px;
+}
+.listView-item-container td {
+  flex: 1;
+}
+.listView-item-container .title {
+  flex: 3 !important;
 }
 
 .list-view-container {
@@ -133,7 +140,6 @@ input[type=file] {
   height: 100%;
   align-items: flex-start;
   box-shadow: #00000071 0px 0px 7px;
-  margin: 10px auto 10px;
   padding: 10px;
   overflow: hidden;
 }
@@ -260,12 +266,12 @@ input[type=file] {
   }
 
   .home-container {
-    height: calc(100vh - $navbar-height);
-    overflow: scroll;
+    height: calc(100vh - 65px) !important;
+    overflow: scroll !important;
   }
 }
 .home-container {
-  height: 100%;
+  height: calc(100vh - 65px);
   overflow: auto;
   width: 100%;
   display: flex;

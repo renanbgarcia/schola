@@ -3,6 +3,7 @@ import firebase from '../../firebase';
 import { connect } from 'react-redux';
 import { List, AutoSizer, CellMeasurer, CellMeasurerCache, InfiniteLoader } from 'react-virtualized'
 import HomeLessonItem from '../lesson/homeLessonItem';
+import LessonItem from '../lesson/LessonItem';
 
 const STATUS_LOADING = 1;
 const STATUS_LOADED = 2;
@@ -17,11 +18,10 @@ class LessonsListf extends React.Component {
         this._resetList = this._resetList.bind(this);
         this.docRef = this.docRef.bind(this)
 
-        // this.rowCount = this.rowCount.bind(this)
         this.cache = new CellMeasurerCache({
             fixedWidth: true,
-            minHeight: 100,
-            defaultHeight: 100
+            minHeight: 60,
+            defaultHeight: 60
           });
 
         this.onResize = this.onResize.bind(this);
@@ -42,7 +42,7 @@ class LessonsListf extends React.Component {
         window.addEventListener('resize', this.onResize);
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps) {
         this._list.forceUpdateGrid()
         console.log(this.props !== prevProps, this.state.pageLoading)
         if (this.props !== prevProps && this.state.pageLoading === false) {
@@ -55,7 +55,7 @@ class LessonsListf extends React.Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps() {
         this._resetList()
         this.cache.clearAll();
     }
@@ -70,7 +70,7 @@ class LessonsListf extends React.Component {
             disciplineFilter: this.props.disciplineFilter,
             ageFilter: this.props.ageFilter
           })
-          console.log('resetadooooo')
+          this.cache.clearAll();
     }
 
     onResize() {
@@ -88,10 +88,8 @@ class LessonsListf extends React.Component {
         let {loadedRowsMap} = this.state;
 
         let content;
-        // console.log(this.state.lessons, this.state.loadedRowsMap)
         if (loadedRowsMap[index] === STATUS_LOADED) {
-            content = <div>{this.state.ageFilter2}<HomeLessonItem style={style} index={index} list={list}/></div>;
-            // content = <div style={style}>{list[index].title + " " + index}</div>
+            content = <LessonItem style={style} index={index} list={list}/>;
         } else {
           content = (
             <div style={style} className="listView-item-container">
@@ -151,7 +149,6 @@ class LessonsListf extends React.Component {
         this._loadMoreRowsStartIndex = startIndex
         this._loadMoreRowsStopIndex = stopIndex
     const {loadedRowsMap, loadingRowCount, loadedRowCount} = this.state;
-    const increment = stopIndex - startIndex + 1;
 
     console.log('called loadmorerows', loadedRowCount);
     
@@ -160,7 +157,6 @@ class LessonsListf extends React.Component {
     }
 
     this.setState({
-        // loadingRowCount: loadingRowCount + increment,
         loadedRowsMap: loadedRowsMap,
         pageLoading: true
       });
@@ -170,13 +166,10 @@ class LessonsListf extends React.Component {
 
 
     return docRef.then(snapshot => {
-      console.log(snapshot)
-
             let lastDoc = snapshot.size > 0 ? snapshot.docs[snapshot.size - 1] : {};
             console.log(lastDoc)
             if (snapshot.empty === true) {
               console.log('sem mais resultados')
-              console.log(this.state)
               if (this.state.lessons.length === 0) {
                 this.setState({
                     pageLoading: false
@@ -191,17 +184,14 @@ class LessonsListf extends React.Component {
                     loadingRowCount: loadingRowCount + snapshot.size
                 });
                 console.log("api calling")
-                console.log(snapshot)
                 snapshot.docs.forEach((doc, myindex) => {
                     let oldlessons = this.state.lessons;
                     oldlessons.push(doc.data())
                     loadedRowsMap[startIndex + myindex] = STATUS_LOADED;
                     let isloading = true;
-                    console.log(startIndex, myindex, snapshot.size, ' --  <---------')
                     if (startIndex + myindex + 1 === snapshot.size ) {
                         isloading = false
                     }
-                    console.log(oldlessons, loadedRowsMap, startIndex + myindex)
                     this.setState({
                         lessons: oldlessons,
                         loadedRowsMap: loadedRowsMap,
@@ -216,26 +206,17 @@ class LessonsListf extends React.Component {
 
     render() {
 
-        const {loadedRowCount, loadingRowCount, lessons, loadedRowsMap} = this.state;
+        const { lessons } = this.state;
         this.cache.clearAll();
 
         const rowCount = () => {
             if (lessons.length < 1) {
                 return 1
             } else {
-                // if (loadingRowCount !== 0 && loadedRowCount < lessons.length ) {
-                //     return lessons.length
-                // } else {
-                //     return lessons.length
-                // }
                 return lessons.length
             }
         }
 
-        // console.log(rowCount(),' - rowciunt', this.state)
-        for( let lesson of lessons) {
-            console.log(lesson.title)
-        }
         return (
 
             <AutoSizer>
@@ -267,8 +248,7 @@ class LessonsListf extends React.Component {
 }
 
 const mapStateToProps = (store) => ({
-    user: store.authReducer.currentUser,
-    userObject: store.authReducer.user,
+    userObject: store.authReducer.user
   });
 
 export default connect(mapStateToProps)(LessonsListf)
