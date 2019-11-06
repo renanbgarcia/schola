@@ -1,4 +1,6 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
 
 const LessonItem = (props) => {
     let index = props.index;
@@ -6,9 +8,8 @@ const LessonItem = (props) => {
     if (!content) {
         return <div>Nada</div>
     }
-    console.log(content)
+    const deleteLesson = props.deleteLesson;
     const title = content.title;
-    const description = content.desc;
     const style = props.style;
     const age = content.targetAge;
     const createdAt = content.created_at.toDate().toLocaleDateString("pt-BR");
@@ -22,6 +23,7 @@ const LessonItem = (props) => {
                         <td>{age} </td>
                         <td>{discipline} </td>
                         <td >{createdAt} </td>
+                        <td className="close-btn" onClick={() => deleteLesson(content.lessonId)} ><FontAwesomeIcon icon={faWindowClose}/></td>
                     </tr>
     return (
         <>{table}</>

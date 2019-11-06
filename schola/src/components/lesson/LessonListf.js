@@ -2,7 +2,6 @@ import React from 'react';
 import firebase from '../../firebase';
 import { connect } from 'react-redux';
 import { List, AutoSizer, CellMeasurer, CellMeasurerCache, InfiniteLoader } from 'react-virtualized'
-import HomeLessonItem from '../lesson/homeLessonItem';
 import LessonItem from '../lesson/LessonItem';
 
 const STATUS_LOADING = 1;
@@ -17,6 +16,7 @@ class LessonsListf extends React.Component {
         this._rowRenderer = this._rowRenderer.bind(this);
         this._resetList = this._resetList.bind(this);
         this.docRef = this.docRef.bind(this)
+        this.deleteLesson = this.deleteLesson.bind(this);
 
         this.cache = new CellMeasurerCache({
             fixedWidth: true,
@@ -89,7 +89,8 @@ class LessonsListf extends React.Component {
 
         let content;
         if (loadedRowsMap[index] === STATUS_LOADED) {
-            content = <LessonItem style={style} index={index} list={list}/>;
+            
+            content = <LessonItem deleteLesson={this.deleteLesson} style={style} index={index} list={list}/>;
         } else {
           content = (
             <div style={style} className="listView-item-container">
@@ -132,7 +133,6 @@ class LessonsListf extends React.Component {
                     .get()
         return baseQ
     }
-
 
     addQueryFilters(snap) {
         let newSnap = snap;
@@ -204,6 +204,13 @@ class LessonsListf extends React.Component {
         })
     }
 
+    deleteLesson(lessonId) {
+        // let docRef = firebase.firestore().collection(`lessons`).where('lessonId', '==', lessonId ).get();
+        // docRef.then(snap => snap.forEach((doc) => doc.delete().then(() => console.log(`Lição ${lessonId} deletada`))));
+        firebase.firestore().collection(`lessons`).doc(lessonId).delete().then(() => this._resetList());
+        
+    }
+
     render() {
 
         const { lessons } = this.state;
@@ -216,6 +223,7 @@ class LessonsListf extends React.Component {
                 return lessons.length
             }
         }
+        console.log(lessons[0])
 
         return (
 
@@ -242,7 +250,6 @@ class LessonsListf extends React.Component {
                 </InfiniteLoader>
             )}
             </AutoSizer>
-
         )
     }
 }

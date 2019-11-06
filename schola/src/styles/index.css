@@ -194,6 +194,10 @@ input[type=file] {
   font-size: x-large;
 }
 
+.close-btnhover {
+  cursor: pointer;
+}
+
 .sidebar, .sidebar-fixed {
   width: 35%;
   max-width: 250px;

@@ -9,7 +9,6 @@ const STATUS_LOADED = 2;
 class SuperList extends React.Component {
     constructor(props, context) {
         super(props, context)
-        // this.list = props.list;
 
         this._isRowLoaded = this._isRowLoaded.bind(this);
         this._loadMoreRows = this._loadMoreRows.bind(this);
@@ -35,10 +34,6 @@ class SuperList extends React.Component {
     componentDidMount() {
         window.addEventListener('resize', this.onResize);
         window.addEventListener('scroll', this.cache.clearAll());
-        
-    }
-
-    componentDidUpdate() {
         this.cache.clearAll();
     }
 
