@@ -17,8 +17,7 @@ class Sidebar extends React.Component {
     }
 
     render() {
-        return (
-                    
+        return (               
             <ReactCSSTransitionGroup
             transitionName="example"
             transitionEnterTimeout={250}

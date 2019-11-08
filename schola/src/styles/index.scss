@@ -19,6 +19,8 @@ textarea {
 
 @import 'variables';
 @import './milligram-1.3.0/Color';
+@import 'react-big-calendar/styles';
+@import 'react-big-calendar/dnd/styles';
 
 @import 'navbar';
 @import 'login';
@@ -48,10 +50,21 @@ textarea {
 }
 
 .home-container {
-  height: calc(100vh - 65px);
+  height: calc(100vh - 65px) !important;
   overflow: auto;
   width: 100%;
-  display: flex;
-  flex-direction: column;
+  // display: flex;
+  // flex-direction: column;
   padding: 0 20px;
+}
+
+
+.row-mobile-container {
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.full-width {
+  width: 100%;
+  margin: 10px 0 5px;
 }

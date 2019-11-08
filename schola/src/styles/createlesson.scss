@@ -1,12 +1,15 @@
 .create-lesson-container {
     @extend .home-container;
-    flex-direction: row !important;
+    display: flex;
+    // flex-direction: row !important;
+    flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
 }
 
 .create-lesson-form {
     width: 100%;
-    max-width: 600px;
+    // max-width: 600px;
 }
 
 .file-list-item {
@@ -46,4 +49,42 @@ input[type='file'] {
         width: 100% !important;
         max-width: 100% !important;
     }
+}
+
+//animação do calendarEditBox
+.calendarEdit-enter {
+    opacity: 0.01;
+    height: 1px;
+}
+  
+.calendarEdit-enter.calendarEdit-enter-active {
+    opacity: 1;
+    height: 200px;
+    transition: opacity 250ms ease-in, height 250ms ease-in;
+}
+
+.calendarEdit-leave {
+    opacity: 1;
+    height: 200px;
+}
+
+.calendarEdit-leave.calendarEdit-leave-active {
+    opacity: 0.01;
+    height: 1px;
+    transition: opacity 250ms ease-in, height 250ms ease-in;
+} //
+
+.tag-pill {
+    background-color: $color-primary;
+    color: $color-quinary;
+    font-size: 0.8em;
+    border-radius: 15px;
+    padding: 3px 8px;
+    margin: 2px 4px;
+}
+
+.tags-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 0 15px 0;
 }
