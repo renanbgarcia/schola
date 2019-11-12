@@ -1,0 +1,51 @@
+.profile-pic-file-label {
+    background-color: $color-tertiary;
+    border: solid $color-secondary 1px;
+    width: 100%;
+    padding: 5px;
+    border-radius: 10px;
+    color: $color-primary;
+    font-size: 0.8em;
+    cursor: pointer;
+    &:hover {
+        transform: scale(1.01);
+    }
+}
+
+input[type="file" ] {
+    display: none;
+}
+
+.register-student-modal {
+    position: absolute;
+    max-width: 250px;
+    border-radius: 10px;
+    padding: 15px;
+    z-index: 110;
+    overflow: hidden;
+    transform: scale(0);
+    box-shadow: #000 0px 0px 4px;
+}
+
+// .register-student-modal-background {
+//     position: absolute;
+//     width: 100vw;
+//     height: calc(100vh - 65px);
+//     z-index: 100;
+// }
+
+#add-student-button {
+    &::after {
+        content: "\002B";
+        display: inline-block;
+        transform: scale(4);
+        text-align: center;
+        color: white;
+        height: 38px;
+        width: 7px;
+    }
+}
+
+.register-student-modal {
+    transition: transform 125ms ease-in, translate 125ms ease-in;
+}

@@ -7,6 +7,7 @@ import './App.css';
 import { userSignedIn } from './actions/authAction';
 import { connect } from 'react-redux';
 
+// import Home from './components/home/Home';
 import Home from './components/home/Home';
 import Sidebar from './components/utils/Sidebar';
 import SidebarFixed from './components/utils/SidebarFixed';
@@ -15,6 +16,8 @@ import Signup from './components/Signup';
 import Navbar from './components/Navbar';
 import CreateLesson from './components/lesson/CreateLesson';
 import Lessons from './components/lesson/Lessons';
+import Students from './components/students/Students';
+import RegisterStudent from './components/students/RegisterStudent';
 
 let history = createBrowserHistory()
 
@@ -58,6 +61,8 @@ class App extends React.Component {
             <Route path='/signup' component={Signup}/>
             <Route path='/create/lesson' component={CreateLesson}/>
             <Route path='/lessons' component={Lessons}/>
+            <Route path='/students' component={Students}/>
+            <Route path='/registerstudent' component={RegisterStudent}/>
           </div>
         </Router>
         <div id="alert-area" className="alert-area"></div>

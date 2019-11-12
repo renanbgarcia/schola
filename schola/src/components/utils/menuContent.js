@@ -1,7 +1,7 @@
 import React from 'react';
 import  { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHome, faStickyNote, faPlusSquare } from '@fortawesome/free-solid-svg-icons'
+import { faHome, faStickyNote, faPlusSquare, faUserGraduate } from '@fortawesome/free-solid-svg-icons'
 
 export const menuContent = () => {
     return (
@@ -9,6 +9,7 @@ export const menuContent = () => {
             <Link to="/"><li><FontAwesomeIcon icon={faHome}/> Home</li></Link>
             <Link to="/lessons"><li><FontAwesomeIcon icon={faStickyNote}/> Lições</li></Link>
             <Link to="/create/lesson"><li><FontAwesomeIcon icon={faPlusSquare}/> Criar lições</li></Link>
+            <Link to="/students"><li><FontAwesomeIcon icon={faUserGraduate}/> Alunos</li></Link>
         </ul>
     )
 }

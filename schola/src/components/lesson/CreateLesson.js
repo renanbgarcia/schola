@@ -417,7 +417,6 @@ class CreateLesson extends React.Component {
                         </div>
                     </div>
                     <div className="column">
-                        {/* <label>Agendar</label> */}
                         <ReactCSSTransitionGroup
                         transitionName="calendarEdit"
                         transitionEnterTimeout={250}
@@ -446,7 +445,7 @@ class CreateLesson extends React.Component {
                 </div>
             </div>
         )
-     }
+    }
 }
 
 const mapStateToProps = (store) => ({
