@@ -6,12 +6,14 @@
   box-shadow: none;
   margin: 0;
   padding: $event-padding;
-  background-color: $color-primary;
+  background-color: $event-bg;
   border-radius: $event-border-radius;
   color: $event-color;
   cursor: pointer;
   width: 100%;
   text-align: left;
+  font-size: 0.9rem;
+  height: 1.5rem;
 
   .rbc-slot-selecting & {
     cursor: inherit;

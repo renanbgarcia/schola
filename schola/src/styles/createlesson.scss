@@ -74,6 +74,14 @@
     transition: opacity 250ms ease-in, height 250ms ease-in;
 } //
 
+.calendar-edit-box {
+    // border: solid 2px $color-secondary;
+    box-shadow: rgba(90, 90, 90, 0.699) 0 0 8px;
+    border-radius: 5px;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
 .tag-pill {
     background-color: $color-primary;
     color: $color-quinary;
@@ -87,4 +95,9 @@
     display: flex;
     flex-wrap: wrap;
     margin: 0 0 15px 0;
+}
+
+.send-lesson-button {
+    height: 70px;
+    font-size: 1.4rem;
 }

@@ -65,7 +65,7 @@
 	}
 
 	.column {
-		display: block;
+		display: flex;
 		// IE 11 required specifying the flex-basis otherwise it breaks mobile
 		flex: 1 1 auto;
 		margin-left: 0;

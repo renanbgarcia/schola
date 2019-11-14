@@ -22,6 +22,671 @@ textarea {
  * Copyright (c) 2017 CJ Patoilo
  * Licensed under the MIT license
  */
+/*!
+ * Milligram-scss v1.3.0
+ * https://milligram.github.io
+ *
+ * Copyright (c) 2017 CJ Patoilo
+ * Licensed under the MIT license
+ */
+/*!
+ * Milligram-scss v1.3.0
+ * https://milligram.github.io
+ *
+ * Copyright (c) 2017 CJ Patoilo
+ * Licensed under the MIT license
+ */
+*,
+*:after,
+*:before {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%;
+}
+html:active {
+  border: none;
+  outline: none;
+}
+
+body {
+  color: #646464;
+  font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  font-size: 1.6em;
+  font-weight: 300;
+  letter-spacing: 0.01em;
+  line-height: 1.6;
+}
+
+svg {
+  color: #646464;
+}
+
+/*!
+ * Milligram-scss v1.3.0
+ * https://milligram.github.io
+ *
+ * Copyright (c) 2017 CJ Patoilo
+ * Licensed under the MIT license
+ */
+blockquote {
+  border-left: 0.3rem solid #d1d1d1;
+  margin-left: 0;
+  margin-right: 0;
+  padding: 1rem 1.5rem;
+}
+blockquote *:last-child {
+  margin-bottom: 0;
+}
+
+/*!
+ * Milligram-scss v1.3.0
+ * https://milligram.github.io
+ *
+ * Copyright (c) 2017 CJ Patoilo
+ * Licensed under the MIT license
+ */
+.button,
+button,
+input[type=button],
+input[type=reset],
+input[type=submit] {
+  background-color: #727272;
+  border: 0.1rem solid #727272;
+  border-radius: 0.4rem;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 1.1rem;
+  font-weight: 700;
+  height: 3.8rem;
+  letter-spacing: 0.1rem;
+  line-height: 3.8rem;
+  padding: 0 3rem;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.button:focus, .button:hover,
+button:focus,
+button:hover,
+input[type=button]:focus,
+input[type=button]:hover,
+input[type=reset]:focus,
+input[type=reset]:hover,
+input[type=submit]:focus,
+input[type=submit]:hover {
+  background-color: #646464;
+  border-color: #646464;
+  color: #fff;
+  outline: 0;
+}
+.button[disabled],
+button[disabled],
+input[type=button][disabled],
+input[type=reset][disabled],
+input[type=submit][disabled] {
+  cursor: default;
+  opacity: 0.5;
+}
+.button[disabled]:focus, .button[disabled]:hover,
+button[disabled]:focus,
+button[disabled]:hover,
+input[type=button][disabled]:focus,
+input[type=button][disabled]:hover,
+input[type=reset][disabled]:focus,
+input[type=reset][disabled]:hover,
+input[type=submit][disabled]:focus,
+input[type=submit][disabled]:hover {
+  background-color: #727272;
+  border-color: #727272;
+}
+.button.button-outline,
+button.button-outline,
+input[type=button].button-outline,
+input[type=reset].button-outline,
+input[type=submit].button-outline {
+  background-color: transparent;
+  color: #727272;
+}
+.button.button-outline:focus, .button.button-outline:hover,
+button.button-outline:focus,
+button.button-outline:hover,
+input[type=button].button-outline:focus,
+input[type=button].button-outline:hover,
+input[type=reset].button-outline:focus,
+input[type=reset].button-outline:hover,
+input[type=submit].button-outline:focus,
+input[type=submit].button-outline:hover {
+  background-color: transparent;
+  border-color: #646464;
+  color: #646464;
+}
+.button.button-outline[disabled]:focus, .button.button-outline[disabled]:hover,
+button.button-outline[disabled]:focus,
+button.button-outline[disabled]:hover,
+input[type=button].button-outline[disabled]:focus,
+input[type=button].button-outline[disabled]:hover,
+input[type=reset].button-outline[disabled]:focus,
+input[type=reset].button-outline[disabled]:hover,
+input[type=submit].button-outline[disabled]:focus,
+input[type=submit].button-outline[disabled]:hover {
+  border-color: inherit;
+  color: #727272;
+}
+.button.button-clear,
+button.button-clear,
+input[type=button].button-clear,
+input[type=reset].button-clear,
+input[type=submit].button-clear {
+  background-color: transparent;
+  border-color: transparent;
+  color: #727272;
+}
+.button.button-clear:focus, .button.button-clear:hover,
+button.button-clear:focus,
+button.button-clear:hover,
+input[type=button].button-clear:focus,
+input[type=button].button-clear:hover,
+input[type=reset].button-clear:focus,
+input[type=reset].button-clear:hover,
+input[type=submit].button-clear:focus,
+input[type=submit].button-clear:hover {
+  background-color: transparent;
+  border-color: transparent;
+  color: #646464;
+}
+.button.button-clear[disabled]:focus, .button.button-clear[disabled]:hover,
+button.button-clear[disabled]:focus,
+button.button-clear[disabled]:hover,
+input[type=button].button-clear[disabled]:focus,
+input[type=button].button-clear[disabled]:hover,
+input[type=reset].button-clear[disabled]:focus,
+input[type=reset].button-clear[disabled]:hover,
+input[type=submit].button-clear[disabled]:focus,
+input[type=submit].button-clear[disabled]:hover {
+  color: #727272;
+}
+
+/*!
+ * Milligram-scss v1.3.0
+ * https://milligram.github.io
+ *
+ * Copyright (c) 2017 CJ Patoilo
+ * Licensed under the MIT license
+ */
+code {
+  background: #e2e0dc;
+  border-radius: 0.4rem;
+  font-size: 86%;
+  margin: 0 0.2rem;
+  padding: 0.2rem 0.5rem;
+  white-space: nowrap;
+}
+
+pre {
+  background: #e2e0dc;
+  border-left: 0.3rem solid #727272;
+  overflow-y: hidden;
+}
+pre > code {
+  border-radius: 0;
+  display: block;
+  padding: 1rem 1.5rem;
+  white-space: pre;
+}
+
+/*!
+ * Milligram-scss v1.3.0
+ * https://milligram.github.io
+ *
+ * Copyright (c) 2017 CJ Patoilo
+ * Licensed under the MIT license
+ */
+hr {
+  border: 0;
+  border-top: 0.1rem solid #e2e0dc;
+  margin: 3rem 0;
+}
+
+/*!
+ * Milligram-scss v1.3.0
+ * https://milligram.github.io
+ *
+ * Copyright (c) 2017 CJ Patoilo
+ * Licensed under the MIT license
+ */
+input[type=email],
+input[type=number],
+input[type=password],
+input[type=search],
+input[type=tel],
+input[type=text],
+input[type=url],
+input[type=date],
+textarea,
+select {
+  appearance: none;
+  background-color: transparent;
+  border: 0.1rem solid #d1d1d1;
+  border-radius: 0.4rem;
+  box-shadow: none;
+  box-sizing: inherit;
+  height: 3.8rem;
+  padding: 0.6rem 1rem;
+  width: 100%;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  color: #646464;
+}
+input[type=email]:focus,
+input[type=number]:focus,
+input[type=password]:focus,
+input[type=search]:focus,
+input[type=tel]:focus,
+input[type=text]:focus,
+input[type=url]:focus,
+input[type=date]:focus,
+textarea:focus,
+select:focus {
+  border-color: #727272;
+  outline: 0;
+}
+
+select {
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="14" viewBox="0 0 29 14" width="29"><path fill="#d1d1d1" d="M9.37727 3.625l5.08154 6.93523L19.54036 3.625"/></svg>') center right no-repeat;
+  padding-right: 3rem;
+}
+select:focus {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="14" viewBox="0 0 29 14" width="29"><path fill="#9b4dca" d="M9.37727 3.625l5.08154 6.93523L19.54036 3.625"/></svg>');
+}
+
+textarea {
+  min-height: 6.5rem;
+}
+
+label,
+legend {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+fieldset {
+  border-width: 0;
+  padding: 0;
+}
+
+input[type=checkbox],
+input[type=radio] {
+  display: inline;
+}
+
+.label-inline {
+  display: inline-block;
+  font-weight: normal;
+  margin-left: 0.5rem;
+}
+
+/*!
+ * Milligram-scss v1.3.0
+ * https://milligram.github.io
+ *
+ * Copyright (c) 2017 CJ Patoilo
+ * Licensed under the MIT license
+ */
+.container {
+  margin: 0 auto;
+  max-width: 112rem;
+  padding: 0 2rem;
+  position: relative;
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  width: 100%;
+}
+.row.row-no-padding {
+  padding: 0;
+}
+.row.row-no-padding > .column {
+  padding: 0;
+}
+.row.row-wrap {
+  flex-wrap: wrap;
+}
+.row.row-top {
+  align-items: flex-start;
+}
+.row.row-bottom {
+  align-items: flex-end;
+}
+.row.row-center {
+  align-items: center;
+}
+.row.row-stretch {
+  align-items: stretch;
+}
+.row.row-baseline {
+  align-items: baseline;
+}
+.row .column {
+  display: flex;
+  flex: 1 1 auto;
+  margin-left: 0;
+  max-width: 100%;
+  width: 100%;
+}
+.row .column.column-offset-10 {
+  margin-left: 10%;
+}
+.row .column.column-offset-20 {
+  margin-left: 20%;
+}
+.row .column.column-offset-25 {
+  margin-left: 25%;
+}
+.row .column.column-offset-33, .row .column.column-offset-34 {
+  margin-left: 33.3333%;
+}
+.row .column.column-offset-50 {
+  margin-left: 50%;
+}
+.row .column.column-offset-66, .row .column.column-offset-67 {
+  margin-left: 66.6666%;
+}
+.row .column.column-offset-75 {
+  margin-left: 75%;
+}
+.row .column.column-offset-80 {
+  margin-left: 80%;
+}
+.row .column.column-offset-90 {
+  margin-left: 90%;
+}
+.row .column.column-10 {
+  flex: 0 0 10%;
+  max-width: 10%;
+}
+.row .column.column-20 {
+  flex: 0 0 20%;
+  max-width: 20%;
+}
+.row .column.column-25 {
+  flex: 0 0 25%;
+  max-width: 25%;
+}
+.row .column.column-33, .row .column.column-34 {
+  flex: 0 0 33.3333%;
+  max-width: 33.3333%;
+}
+.row .column.column-40 {
+  flex: 0 0 40%;
+  max-width: 40%;
+}
+.row .column.column-50 {
+  flex: 0 0 50%;
+  max-width: 50%;
+}
+.row .column.column-60 {
+  flex: 0 0 60%;
+  max-width: 60%;
+}
+.row .column.column-66, .row .column.column-67 {
+  flex: 0 0 66.6666%;
+  max-width: 66.6666%;
+}
+.row .column.column-75 {
+  flex: 0 0 75%;
+  max-width: 75%;
+}
+.row .column.column-80 {
+  flex: 0 0 80%;
+  max-width: 80%;
+}
+.row .column.column-90 {
+  flex: 0 0 90%;
+  max-width: 90%;
+}
+.row .column .column-top {
+  align-self: flex-start;
+}
+.row .column .column-bottom {
+  align-self: flex-end;
+}
+.row .column .column-center {
+  align-self: center;
+}
+
+@media (min-width: 40rem) {
+  .row {
+    flex-direction: row;
+    margin-left: -1rem;
+    width: calc(100% + 2.0rem);
+  }
+  .row .column {
+    margin-bottom: inherit;
+    padding: 0 1rem;
+  }
+}
+@media (max-width: 40rem) {
+  .mobile-full-width {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+/*!
+ * Milligram-scss v1.3.0
+ * https://milligram.github.io
+ *
+ * Copyright (c) 2017 CJ Patoilo
+ * Licensed under the MIT license
+ */
+a {
+  color: #727272;
+  text-decoration: none;
+}
+a:focus, a:hover {
+  color: #646464;
+}
+
+/*!
+ * Milligram-scss v1.3.0
+ * https://milligram.github.io
+ *
+ * Copyright (c) 2017 CJ Patoilo
+ * Licensed under the MIT license
+ */
+dl,
+ol,
+ul {
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+}
+dl dl,
+dl ol,
+dl ul,
+ol dl,
+ol ol,
+ol ul,
+ul dl,
+ul ol,
+ul ul {
+  font-size: 90%;
+  margin: 0;
+}
+
+ol {
+  list-style: decimal inside;
+}
+
+ul {
+  list-style: circle inside;
+}
+
+/*!
+ * Milligram-scss v1.3.0
+ * https://milligram.github.io
+ *
+ * Copyright (c) 2017 CJ Patoilo
+ * Licensed under the MIT license
+ */
+.button,
+button,
+dd,
+dt {
+  margin-bottom: 1rem;
+}
+
+fieldset,
+input,
+select,
+textarea {
+  margin-bottom: 1.5rem;
+}
+
+/*!
+ * Milligram-scss v1.3.0
+ * https://milligram.github.io
+ *
+ * Copyright (c) 2017 CJ Patoilo
+ * Licensed under the MIT license
+ */
+table {
+  border-spacing: 0;
+  width: 100%;
+}
+
+td,
+th {
+  border-bottom: 0.1rem solid #e1e1e1;
+  padding: 1.2rem 1.5rem;
+  text-align: left;
+}
+td:first-child,
+th:first-child {
+  padding-left: 0;
+}
+td:last-child,
+th:last-child {
+  padding-right: 0;
+}
+
+/*!
+ * Milligram-scss v1.3.0
+ * https://milligram.github.io
+ *
+ * Copyright (c) 2017 CJ Patoilo
+ * Licensed under the MIT license
+ */
+b,
+strong {
+  font-weight: bold;
+}
+
+p {
+  margin-top: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 300;
+  letter-spacing: -0.1rem;
+  margin-bottom: 2rem;
+  margin-top: 0;
+}
+
+h1 {
+  font-size: 4.6rem;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 3.6rem;
+  line-height: 1.25;
+}
+
+h3 {
+  font-size: 2.8rem;
+  line-height: 1.3;
+}
+
+h4 {
+  font-size: 2.2rem;
+  letter-spacing: -0.08rem;
+  line-height: 1.35;
+}
+
+h5 {
+  font-size: 1.8rem;
+  letter-spacing: -0.05rem;
+  line-height: 1.5;
+}
+
+h6 {
+  font-size: 1.6rem;
+  letter-spacing: 0;
+  line-height: 1.4;
+}
+
+/*!
+ * Milligram-scss v1.3.0
+ * https://milligram.github.io
+ *
+ * Copyright (c) 2017 CJ Patoilo
+ * Licensed under the MIT license
+ */
+img {
+  max-width: 100%;
+}
+
+/*!
+ * Milligram-scss v1.3.0
+ * https://milligram.github.io
+ *
+ * Copyright (c) 2017 CJ Patoilo
+ * Licensed under the MIT license
+ */
+.clearfix:after {
+  clear: both;
+  content: " ";
+  display: table;
+}
+
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+.resp-container {
+  position: relative;
+  overflow: hidden;
+  padding-top: 56.25%;
+}
+
+.resp-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
 .rbc-btn {
   color: inherit;
   font: inherit;
@@ -123,26 +788,27 @@ button.rbc-input::-moz-focus-inner {
 }
 
 @media (max-width: 750px) {
-  .rbc-toolbar {
-    justify-content: unset !important;
+  .rbc-toolbar-label {
+    text-align: right !important;
   }
 }
 .rbc-toolbar {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
-  font-size: 16px;
+  font-size: 0.8em;
 }
 .rbc-toolbar .rbc-toolbar-label {
   flex-grow: 1;
   padding: 0 10px;
   text-align: center;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
+  border-bottom: solid #727272 2px;
 }
 .rbc-toolbar button {
   color: #373a3c;
-  display: inline-block;
   margin: 0;
   text-align: center;
   vertical-align: middle;
@@ -153,11 +819,11 @@ button.rbc-input::-moz-focus-inner {
   border-radius: 4px;
   line-height: normal;
   white-space: nowrap;
+  font-size: 0.6em;
 }
 .rbc-toolbar button:active, .rbc-toolbar button.rbc-active {
   background-image: none;
-  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  background-color: #e6e6e6;
+  background-color: #000;
   border-color: #adadad;
 }
 .rbc-toolbar button:active:hover, .rbc-toolbar button:active:focus, .rbc-toolbar button.rbc-active:hover, .rbc-toolbar button.rbc-active:focus {
@@ -177,8 +843,23 @@ button.rbc-input::-moz-focus-inner {
 }
 
 .rbc-btn-group {
-  display: inline-block;
+  display: flex;
   white-space: nowrap;
+}
+.rbc-btn-group .rcb-button {
+  color: #373a3c;
+  margin: 2px 2px 2px 0;
+  text-align: center;
+  vertical-align: middle;
+  background: none;
+  background-image: none;
+  background-color: #e2e0dc;
+  border: 1px solid #ccc;
+  padding: 0.375rem 1rem;
+  border-radius: 4px;
+  line-height: normal;
+  white-space: nowrap;
+  font-size: 0.6em;
 }
 .rbc-btn-group > button:first-child:not(:last-child) {
   border-top-right-radius: 0;
@@ -217,23 +898,25 @@ button.rbc-input::-moz-focus-inner {
   box-sizing: border-box;
   box-shadow: none;
   margin: 0;
-  padding: 2px 5px;
-  background-color: #727272;
+  padding: 0px 5px;
+  background-color: #cacaca;
   border-radius: 5px;
   color: #fff;
   cursor: pointer;
   width: 100%;
   text-align: left;
+  font-size: 0.9rem;
+  height: 1.5rem;
 }
 .rbc-slot-selecting .rbc-event {
   cursor: inherit;
   pointer-events: none;
 }
 .rbc-event.rbc-selected {
-  background-color: #265985;
+  background-color: #b1b1b1;
 }
 .rbc-event:focus {
-  outline: 5px auto #3b99fc;
+  outline: 5px auto #707070;
 }
 
 .rbc-event-label {
@@ -465,7 +1148,7 @@ button.rbc-input::-moz-focus-inner {
   right: 0;
 }
 .rbc-day-slot .rbc-event {
-  border: 1px solid #265985;
+  border: 1px solid #a7a7a7;
   display: flex;
   max-height: 100%;
   min-height: 20px;
@@ -810,7 +1493,7 @@ nav .nav-wrapper #nav-username {
 }
 
 .input-file-label {
-  background-color: #f4f5f6;
+  background-color: #e2e0dc;
   border: solid #646464 1px;
   width: 100%;
   padding: 5px;
@@ -851,6 +1534,13 @@ nav .nav-wrapper #nav-username {
   transition: opacity 250ms ease-in, height 250ms ease-in;
 }
 
+.calendar-edit-box {
+  box-shadow: rgba(90, 90, 90, 0.699) 0 0 8px;
+  border-radius: 5px;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
 .tag-pill {
   background-color: #727272;
   color: #e1e1e1;
@@ -866,15 +1556,23 @@ nav .nav-wrapper #nav-username {
   margin: 0 0 15px 0;
 }
 
+.send-lesson-button {
+  height: 70px;
+  font-size: 1.4rem;
+}
+
 .profile-pic-file-label {
-  background-color: #f4f5f6;
-  border: solid #646464 1px;
-  width: 100%;
+  display: flex;
+  background-color: #e2e0dc;
+  flex-grow: 1;
+  align-items: center;
   padding: 5px;
-  border-radius: 10px;
+  margin-left: 5px;
+  border-radius: 5px;
   color: #727272;
   font-size: 0.8em;
   cursor: pointer;
+  overflow: hidden;
 }
 .profile-pic-file-label:hover {
   transform: scale(1.01);
@@ -888,25 +1586,41 @@ input[type=file] {
   position: absolute;
   max-width: 250px;
   border-radius: 10px;
+  border-bottom-right-radius: 0;
   padding: 15px;
   z-index: 110;
-  overflow: hidden;
+  word-wrap: break-word;
   transform: scale(0);
+  background-color: #fff;
   box-shadow: #000 0px 0px 4px;
-}
-
-#add-student-button::after {
-  content: "+";
-  display: inline-block;
-  transform: scale(4);
-  text-align: center;
-  color: white;
-  height: 38px;
-  width: 7px;
 }
 
 .register-student-modal {
   transition: transform 125ms ease-in, translate 125ms ease-in;
+}
+
+#upload-photo-preview {
+  object-fit: cover;
+}
+
+.photo-profile-wrapper {
+  display: flex;
+  min-width: 60px;
+  max-width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #e1e1e1;
+}
+
+.student-row {
+  display: flex;
+  width: 100%;
+  height: 100px;
+}
+
+.student-profile-pic {
+  object-fit: cover;
 }
 
 .listView-item-container {
@@ -1082,19 +1796,47 @@ input[type=file] {
 
 .full-width {
   width: 100%;
-  margin: 10px 0 5px;
+  margin: 10px 0px;
 }
 
 .round-button {
   width: 60px;
   height: 60px;
   border-radius: 50%;
+  box-shadow: rgba(75, 67, 87, 0.658) 2px 1px 3px;
   position: absolute;
   right: 30px;
   bottom: 30px;
   z-index: 25;
   padding: 0;
   margin: auto;
+}
+.round-button:active {
+  transform: scale(1.1);
+  background-color: #6e668a;
+}
+
+.add-button {
+  overflow: hidden;
+}
+.add-button::after {
+  content: "+";
+  display: inline-block;
+  transform: scale(4);
+  text-align: center;
+  color: white;
+  height: 38px;
+  width: 7px;
+}
+
+label {
+  text-align: left;
+}
+
+input::placeholder {
+  color: red;
+  font-size: 1.2em;
+  font-style: italic;
 }
 
 /*# sourceMappingURL=index.css.map */

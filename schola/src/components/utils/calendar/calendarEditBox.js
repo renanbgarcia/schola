@@ -37,7 +37,7 @@ class CalendarBox extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="calendar-edit-box">
                 <div className="row mobile-full-width">
                     <div className="column">
                         <input  type="text" onChange={(e) => this.handleTitleEdit(e)} value={ this.state.updatedEvent.title }/>

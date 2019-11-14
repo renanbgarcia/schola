@@ -13,6 +13,7 @@ import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import moment from 'moment';
 
 import CalendarBox from '../utils/calendar/calendarEditBox';
+import CalendarToolbar from '../utils/calendar/ToolBar';
 
 const DnDCalendar = withDragAndDrop(Calendar);
 
@@ -74,7 +75,7 @@ class CreateLesson extends React.Component {
     handleFileInput() {
         let fileList = document.getElementById('lesson-file').files;
         this.setState({
-            fileList: this.convertItemsToArray(fileList)
+            fileList: Array.from(fileList)
         })
     }
 
@@ -98,10 +99,6 @@ class CreateLesson extends React.Component {
         this.setState({
             categoryInput: e.currentTarget.value
         })
-    }
-
-    convertItemsToArray(array) {
-        return Array.from(array)
     }
 
     /**
@@ -172,7 +169,7 @@ class CreateLesson extends React.Component {
                 discipline: this.state.disciplineInput,
                 desc: this.state.descriptionInput,
                 tags: this.state.tags,
-                category: this.state.category,
+                category: this.state.categoryInput,
                 created_at: firebase.firestore.Timestamp.fromDate(new Date()),
                 author: this.props.userObject.displayName,
                 author_id: this.props.userObject.uid,
@@ -334,11 +331,6 @@ class CreateLesson extends React.Component {
             <div className="create-lesson-container">
                 <div className="row">
                     <div className="column">
-                        <button className="full-width" onClick={this.handleSubmit}>Enviar</button>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="column">
                         <div className="create-lesson-form">
                             <label for="titulo">Título</label>
                             <input onChange={e => this.handleTitleInput(e)}
@@ -375,6 +367,7 @@ class CreateLesson extends React.Component {
                                 <div className="column">
                                     <label>Categoria</label>
                                     <select onChange={(e) => this.handleCategory(e)}>
+                                        <option>Escolha um acategoria</option>
                                         {categories.map(cat => <option value={cat}>{cat}</option>)}
                                     </select>
                                 </div>
@@ -436,11 +429,17 @@ class CreateLesson extends React.Component {
                             selectable
                             popup={true}
                             components={{
-                                event: this.eventComponent
+                                event: this.eventComponent,
+                                toolbar: CalendarToolbar
                             }}
                             style={{ height: '100%', 'min-height': '370px'}}
                         />
                         <br/>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="column">
+                        <button className="full-width send-lesson-button" onClick={this.handleSubmit}>Enviar</button>
                     </div>
                 </div>
             </div>
