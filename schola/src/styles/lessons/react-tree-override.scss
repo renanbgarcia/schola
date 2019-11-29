@@ -1,0 +1,39 @@
+
+// .rst__toolbarButton {
+//     width: 30px !important;
+// }
+
+.child-counter {
+    background-color: $color-tertiary;
+    width: 30px !important;
+    height: 25px;
+    color: $color-primary;
+    border: none;
+    border-radius: 50%;
+    vertical-align: middle;
+    line-height: 100%;
+    padding: unset;
+    margin: unset;
+    &:focus, &:active, &:hover {
+        background-color: $color-tertiary;
+        color: $color-primary;
+        cursor: unset;
+    }
+}
+
+.tree-view-wrapper {
+    height: calc(100vh - 150px);
+}
+
+.rstcustom__expandButton, .rstcustom__collapseButton {
+    width: 100%;
+    height: 100%;
+    color: $color-primary;
+    left: calc(100% / 2 );
+    padding-left: 2%;
+    text-align: left;
+    &:hover, &:active, &:focus {
+        background-color: unset;
+        color: $color-primary;
+    }
+}

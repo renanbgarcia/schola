@@ -350,7 +350,7 @@ class CreateLesson extends React.Component {
                                 <div className="column column-75 mobile-full-width">
                                     <label for="titulo">Disciplina</label>
                                     <select onChange={(e) => this.handleDisciplineInput(e)} id="discipline">
-                                        <option >Escolha uma disciplina</option>
+                                        <option>Escolha uma disciplina</option>
                                         <option value="math">Matemática</option>
                                         <option value="grammar">Gramática</option>
                                         <option value="english">Inglês</option>
@@ -358,10 +358,11 @@ class CreateLesson extends React.Component {
                                     </select>
                                 </div>
                             </div>
-                            <textarea onChange={e => this.handleDescriptionInput(e)}
-                                        id="description"
-                                        name="description"
-                                        defaultValue="Descreva o material">
+                            <textarea
+                                onChange={e => this.handleDescriptionInput(e)}
+                                id="description"
+                                name="description"
+                                defaultValue="Descreva o material">
                             </textarea>
                             <div className="row">
                                 <div className="column">

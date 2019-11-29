@@ -24,7 +24,8 @@ class RegisterStudent extends React.Component {
         },
         nameInput: '',
         birthInput: '',
-        profilePhoto: false
+        profilePhoto: false,
+        turmaInput: ''
     }
 
     componentWillReceiveProps(nprops) {
@@ -53,6 +54,13 @@ class RegisterStudent extends React.Component {
         })
     }
 
+    handleTurmaInput(e) {
+        console.log(e.target.value)
+        this.setState({
+            turmaInput: e.target.value
+        })
+    }
+
     handlePhotoInput() {
         let file = document.getElementById('profile-photo-file').files[0];
         console.log(file)
@@ -65,7 +73,7 @@ class RegisterStudent extends React.Component {
         var preview = document.querySelector('#upload-photo-preview');
         var file    = this.state.profilePhoto;
         var reader  = new FileReader();
-      
+    
         reader.onloadend = function () {
           preview.src = reader.result;
           console.log(reader.result)
@@ -76,7 +84,7 @@ class RegisterStudent extends React.Component {
         } else {
           preview.src = "";
         }
-      }
+    }
 
     registerStudents() {
         if (this.state.birthInput === '' || this.state.nameInput === '') {
@@ -94,9 +102,11 @@ class RegisterStudent extends React.Component {
                 photo: "https://media.istockphoto.com/vectors/cartoon-animal-head-icon-cat-face-avatar-for-profile-of-vector-id542307016",
                 name: this.state.nameInput,
                 birthDate: this.state.birthInput,
+                turma: this.state.turmaInput,
                 created_at: firebase.firestore.Timestamp.fromDate(new Date()),
             });
-            alertbox.show("Registrado!")
+            alertbox.show("Registrado!");
+            this.props.resetList();
 
             this.setState({
                 nameInput: '',
@@ -147,6 +157,9 @@ class RegisterStudent extends React.Component {
                     </label>
                     <label>Nascimento:
                         <input onChange={(e) => this.handleBirthInput(e)} type="date" required/>
+                    </label>
+                    <label>Turma:
+                        <input onChange={(e) => this.handleTurmaInput(e)} type="text" required/>
                     </label>
                     <div className="row">
                         <div className="column">

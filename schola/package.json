@@ -20,6 +20,7 @@
     "react-redux-firebase": "^2.4.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.1.2",
+    "react-sortable-tree": "^2.7.1",
     "react-virtualized": "^9.21.1",
     "react-virtualized-auto-sizer": "^1.0.2",
     "react-window": "^1.8.5",
@@ -52,5 +53,8 @@
   },
   "resolutions": {
     "date-arithmetic": "3.1.0"
+  },
+  "devDependencies": {
+    "react-sortable-tree-theme-minimal": "^0.0.14"
   }
 }

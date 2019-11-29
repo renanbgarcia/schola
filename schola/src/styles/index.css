@@ -313,6 +313,7 @@ legend {
   font-size: 1.1rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
+  width: 100%;
 }
 
 fieldset {
@@ -378,6 +379,7 @@ input[type=radio] {
 }
 .row .column {
   display: flex;
+  flex-wrap: wrap;
   flex: 1 1 auto;
   margin-left: 0;
   max-width: 100%;
@@ -1466,6 +1468,7 @@ nav .nav-wrapper #nav-username {
 
 .create-lesson-container {
   display: flex;
+  flex-direction: column !important;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
@@ -1561,6 +1564,46 @@ nav .nav-wrapper #nav-username {
   font-size: 1.4rem;
 }
 
+.child-counter {
+  background-color: #e2e0dc;
+  width: 30px !important;
+  height: 25px;
+  color: #727272;
+  border: none;
+  border-radius: 50%;
+  vertical-align: middle;
+  line-height: 100%;
+  padding: unset;
+  margin: unset;
+}
+.child-counter:focus, .child-counter:active, .child-counter:hover {
+  background-color: #e2e0dc;
+  color: #727272;
+  cursor: unset;
+}
+
+.tree-view-wrapper {
+  height: calc(100vh - 150px);
+}
+
+.rstcustom__expandButton, .rstcustom__collapseButton {
+  width: 100%;
+  height: 100%;
+  color: #727272;
+  left: calc(100% / 2 );
+  padding-left: 2%;
+  text-align: left;
+}
+.rstcustom__expandButton:hover, .rstcustom__expandButton:active, .rstcustom__expandButton:focus, .rstcustom__collapseButton:hover, .rstcustom__collapseButton:active, .rstcustom__collapseButton:focus {
+  background-color: unset;
+  color: #727272;
+}
+
+.lessons-container {
+  padding-top: 20px;
+  height: calc(100vh - 130px);
+}
+
 .profile-pic-file-label {
   display: flex;
   background-color: #e2e0dc;
@@ -1611,16 +1654,71 @@ input[type=file] {
   border-radius: 50%;
   overflow: hidden;
   background-color: #e1e1e1;
+  margin-right: 20px !important;
 }
 
 .student-row {
   display: flex;
+  flex-wrap: nowrap;
   width: 100%;
-  height: 100px;
+  min-height: 100px;
+  text-align: left;
+  align-items: center;
+  box-shadow: 2px 2px 10px rgba(104, 104, 104, 0.507);
+  margin: 10px 0;
+  padding: 10px;
+}
+.student-row p {
+  width: 100%;
+}
+.student-row div {
+  margin-right: 10px;
+  flex-grow: 1;
+}
+.student-row .student-column {
+  word-break: break-all;
+  text-overflow: ellipsis;
 }
 
 .student-profile-pic {
   object-fit: cover;
+}
+
+.students-container {
+  width: 100%;
+  height: calc(100vh - 65px);
+  padding: 15px;
+  overflow: scroll;
+}
+
+.delete-student-button-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.student-row-last {
+  height: 80px;
+}
+
+.choose-view-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 48px;
+  background-color: #e1e1e1;
+}
+.choose-view-bar span {
+  color: #727272;
+  font-weight: 600;
+  flex-grow: 1;
+  cursor: pointer;
+}
+.choose-view-bar span:hover {
+  color: #000;
+}
+.choose-view-bar span:focus {
+  color: #000;
 }
 
 .listView-item-container {
