@@ -108,3 +108,9 @@ input::placeholder {
   font-size: 1.2em;
   font-style: italic;
 }
+
+.row-nowrap {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}

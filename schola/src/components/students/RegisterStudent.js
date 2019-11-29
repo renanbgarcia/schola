@@ -161,11 +161,11 @@ class RegisterStudent extends React.Component {
                     <label>Turma:
                         <input onChange={(e) => this.handleTurmaInput(e)} type="text" required/>
                     </label>
-                    <div className="row">
-                        <div className="column">
-                            <div className="photo-profile-wrapper">
-                                <img id="upload-photo-preview" src=""/>
-                            </div>
+                    <div className="row-nowrap">
+                        <div className="photo-profile-wrapper">
+                            <img id="upload-photo-preview" src=""/>
+                        </div>
+                        <div className="file-label-wrapper">
                             <label className="profile-pic-file-label">
                                 <FontAwesomeIcon icon={faCloudUploadAlt} style={{height: "100%", width: "30px", marginRight: "10px"}}/>
                                 { this.state.profilePhoto ? <span>{this.state.profilePhoto.name}</span> : "Carregue uma foto de perfil" }

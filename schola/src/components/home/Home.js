@@ -75,7 +75,6 @@ class Home extends React.Component {
         
         return(
             <div className="home-container">
-                <h5 className="list-title">T</h5>
                 <div className="list-view-container">
                         <SuperList
                         list={lessons}
@@ -87,7 +86,6 @@ class Home extends React.Component {
                         />
                 </div>
             </div>
-
         )
     }
 }

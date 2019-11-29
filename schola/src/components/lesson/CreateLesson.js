@@ -34,6 +34,8 @@ class CreateLesson extends React.Component {
         this.onSelectEvent = this.onSelectEvent.bind(this)
         this.deleteEvent = this.deleteEvent.bind(this);
         this.updateSelectedEvent = this.updateSelectedEvent.bind(this);
+        this.dismissModal =  this.dismissModal.bind(this);
+        this.renderModal = this.renderModal.bind(this);
     }
 
     state = {
@@ -322,6 +324,24 @@ class CreateLesson extends React.Component {
         })
     }
 
+    dismissModal(e) {
+        console.log(e.target.id)
+        if (e.target.id === "wrapper") {
+            this.setState({ isEventEditBoxVisible: false });
+        }
+    }
+
+    renderModal() {
+        return this.state.isEventEditBoxVisible ?
+            <div id="wrapper"
+                    className="calendar-edit-box-wrapper"
+                    onClick={this.dismissModal}>
+                <CalendarBox updateSelectedEvent={this.updateSelectedEvent}
+                                deleteEvent={this.deleteEvent}
+                                eventTarget={this.state.clickedEvent}/>
+            </div> : null
+    }
+
     eventComponent(e) {
         return <div>{e.title}</div>
     }
@@ -368,7 +388,7 @@ class CreateLesson extends React.Component {
                                 <div className="column">
                                     <label>Categoria</label>
                                     <select onChange={(e) => this.handleCategory(e)}>
-                                        <option>Escolha um acategoria</option>
+                                        <option>Escolha uma categoria</option>
                                         {categories.map(cat => <option value={cat}>{cat}</option>)}
                                     </select>
                                 </div>
@@ -398,14 +418,14 @@ class CreateLesson extends React.Component {
                             <div className="row row-center">
                                 <ul className="file-list">
                                     {this.state.fileList.map((item, i) =>
-                                            <li className="file-list-item">
-                                                {item.name}
-                                                <span id={item.name}></span>
-                                                <span onClick={(i) => this.deleteListItem(i)} >
-                                                    <FontAwesomeIcon className="delete-button-list" icon={faTimesCircle}/>
-                                                </span>
-                                            </li>
-                                        )}
+                                        <li className="file-list-item">
+                                            {item.name}
+                                            <span id={item.name}></span>
+                                            <span onClick={(i) => this.deleteListItem(i)} >
+                                                <FontAwesomeIcon className="delete-button-list" icon={faTimesCircle}/>
+                                            </span>
+                                        </li>
+                                    )}
                                 </ul>
                             </div>
                         </div>
@@ -415,7 +435,7 @@ class CreateLesson extends React.Component {
                         transitionName="calendarEdit"
                         transitionEnterTimeout={250}
                         transitionLeaveTimeout={250}>
-                            { this.state.isEventEditBoxVisible ? <CalendarBox updateSelectedEvent={this.updateSelectedEvent} deleteEvent={this.deleteEvent} eventTarget={this.state.clickedEvent}/> : null}
+                            { this.renderModal() }
                         </ReactCSSTransitionGroup>
                         <DnDCalendar
                             defaultDate={new Date()}
@@ -433,7 +453,7 @@ class CreateLesson extends React.Component {
                                 event: this.eventComponent,
                                 toolbar: CalendarToolbar
                             }}
-                            style={{ height: '100%', 'min-height': '370px'}}
+                            style={{ height: '100%', 'min-height': '370px', width: '100%'}}
                         />
                         <br/>
                     </div>

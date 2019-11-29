@@ -8,15 +8,16 @@
 .profile-pic-file-label {
     display: flex;
     background-color: $color-tertiary;
-    flex-grow: 1;
     align-items: center;
     padding: 5px;
-    margin-left: 5px;
     border-radius: 5px;
     color: $color-primary;
     font-size: 0.8em;
     cursor: pointer;
-    overflow: hidden;
+    span {
+        overflow: hidden;
+        max-height: 100px;
+    }
     &:hover {
         transform: scale(1.01);
     }
@@ -48,15 +49,19 @@ input[type="file" ] {
     object-fit: cover;
 }
 
+.file-label-wrapper {
+    flex-grow: 1;
+    width: 1px;
+}
+
 .photo-profile-wrapper {
     display: flex;
-    min-width: 60px;
-    max-width: 60px;
-    height: 60px;
+    width: 60px !important;
+    height: 60px !important;
     border-radius: 50%;
     overflow: hidden;
     background-color: $color-quinary;
-    margin-right: 20px !important;
+    margin-right: 5px !important;
 }
 
 .student-row {
@@ -72,13 +77,11 @@ input[type="file" ] {
     p {
         width: 100%;
     }
-    div {
-        margin-right: 10px;
-        flex-grow: 1;
-    }
     .student-column {
         word-break: break-all;
         text-overflow: ellipsis;
+        margin-right: 10px;
+        flex-grow: 1;
     }
 }
 
