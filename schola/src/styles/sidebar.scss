@@ -10,7 +10,7 @@
 @media (max-width: 750px) {
     .sidebar {
     position: fixed;
-    top: 65px;
+    top: $navbar-height;
     }
 
     .sidebar-fixed {

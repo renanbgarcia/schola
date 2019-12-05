@@ -13,7 +13,9 @@ import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import moment from 'moment';
 
 import CalendarBox from '../utils/calendar/calendarEditBox';
-import CalendarToolbar from '../utils/calendar/ToolBar';
+import CalendarToolbarSmall from '../utils/calendar/ToolbarSmall';
+
+import Modal from '../utils/modal';
 
 const DnDCalendar = withDragAndDrop(Calendar);
 
@@ -36,6 +38,9 @@ class CreateLesson extends React.Component {
         this.updateSelectedEvent = this.updateSelectedEvent.bind(this);
         this.dismissModal =  this.dismissModal.bind(this);
         this.renderModal = this.renderModal.bind(this);
+        this.DoSchedule = this.DoSchedule.bind(this);
+
+        this.modalRef = React.createRef();
     }
 
     state = {
@@ -47,15 +52,7 @@ class CreateLesson extends React.Component {
         categoryInput: '',
         tagsInput: [],
         tags: [],
-        events: [
-            {
-                id: 1,
-                title: 'Conference',
-                start: new Date(2019, 10, 8),
-                end: new Date(2019, 10, 9),
-                desc: 'Big conference for important people',
-            }
-        ],
+        events: [],
         clickedEvent: {
             title: "Edite o título",
             desc: "Edite a descrição"
@@ -82,19 +79,19 @@ class CreateLesson extends React.Component {
     }
 
     handleTitleInput(e) {
-        this.setState({ titleInput: e.target.value});
+        this.setState({ titleInput: e.target.value });
     }
 
     handleAgeInput(e) {
-        this.setState({ ageInput: e.target.value});
+        this.setState({ ageInput: e.target.value });
     }
 
     handleDisciplineInput(e) {
-        this.setState({ disciplineInput: e.currentTarget.value});
+        this.setState({ disciplineInput: e.currentTarget.value });
     }
 
     handleDescriptionInput(e) {
-        this.setState({ descriptionInput: e.target.value});
+        this.setState({ descriptionInput: e.target.value });
     }
 
     handleCategory(e) {
@@ -126,16 +123,8 @@ class CreateLesson extends React.Component {
             let uploadTask = storageRef.put(file);
             uploadTask.on('state_changed', function(snapshot){
                 let progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-                //Render a informação no tiem da lista
+                //Render a informação no item da lista
                 document.getElementById(file.name).innerHTML = `Progresso: ${progress}%`;
-                // switch (snapshot.state) {
-                //   case firebase.storage.TaskState.PAUSED:
-                //     console.log('Upload is paused');
-                //     break;
-                //   case firebase.storage.TaskState.RUNNING:
-                //     console.log('Upload is running');
-                //     break;
-                // }
             }, function(error) {
                 console.log("Ocorreu um erro: " + error);
                 alertbox.show('Ocorreu um erro :(')
@@ -161,7 +150,7 @@ class CreateLesson extends React.Component {
     sendLessonInfo() {
         try {
             let db = firebase.firestore();
-            let docRef = db.collection(`lessons`).doc();
+            let docRef = db.collection('lessons').doc();
             let docID = docRef.id;
     
             docRef.set({
@@ -173,14 +162,36 @@ class CreateLesson extends React.Component {
                 tags: this.state.tags,
                 category: this.state.categoryInput,
                 created_at: firebase.firestore.Timestamp.fromDate(new Date()),
+                scheduled: this.state.events,
                 author: this.props.userObject.displayName,
                 author_id: this.props.userObject.uid,
                 authorProto: 'https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png'
             });
+
+            this.DoSchedule();
+
             return docID
         } catch(error) {
             console.log(error);
             alertbox.show('Ocorreu um erro :(')
+        }
+    }
+
+    DoSchedule() {
+        try {
+            let db = firebase.firestore();
+            let docRef = db.collection('events').doc();
+            let docID = docRef.id;
+    
+            docRef.set({
+                id: docID,
+                author_id: this.props.userObject.uid,
+                events: this.state.events
+            });
+        } catch(error) {
+            console.log(error);
+            alertbox.show('Ocorreu um erro :(')
+            throw error;
         }
     }
 
@@ -199,6 +210,7 @@ class CreateLesson extends React.Component {
             tagsInput: valueArray
         })
     }
+    
     confirmTags() {
         this.setState({
             tags: this.state.tags.concat(this.state.tagsInput)
@@ -243,7 +255,7 @@ class CreateLesson extends React.Component {
         const { events } = this.state
 
         const nextEvents = events.map(existingEvent => {
-          return existingEvent.id == event.id
+          return existingEvent.id === event.id
             ? { ...existingEvent, start, end }
             : existingEvent
         })
@@ -347,8 +359,10 @@ class CreateLesson extends React.Component {
     }
 
     render() {
+        console.log(this.state)
         return (
             <div className="create-lesson-container">
+                <div>
                 <div className="row">
                     <div className="column">
                         <div className="create-lesson-form">
@@ -451,7 +465,7 @@ class CreateLesson extends React.Component {
                             popup={true}
                             components={{
                                 event: this.eventComponent,
-                                toolbar: CalendarToolbar
+                                toolbar: CalendarToolbarSmall
                             }}
                             style={{ height: '100%', 'min-height': '370px', width: '100%'}}
                         />
@@ -462,6 +476,7 @@ class CreateLesson extends React.Component {
                     <div className="column">
                         <button className="full-width send-lesson-button" onClick={this.handleSubmit}>Enviar</button>
                     </div>
+                </div>
                 </div>
             </div>
         )

@@ -1,20 +1,20 @@
-import  React, { createRef } from 'react';
-// import ListViewer from './ListViewer';
+import  React from 'react';
 import firebase from    '../../firebase';
 import { connect } from 'react-redux';
 
-import { InfiniteLoader } from 'react-virtualized';
 import SuperList from './superList';
+import AllEvents from '../calendar/AllEvents';
+import Aba from '../utils/abas/Abas';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faList, faCalendar } from '@fortawesome/free-solid-svg-icons'
 
 class Home extends React.Component {
 
     constructor(props) {
         super(props);
-   
-        this.loadMore = this.loadMore.bind(this);
+           this.loadMore = this.loadMore.bind(this);
         console.log(this.props.userObject)
     }
-
     
     state = {
         isNextPageLoading: false,
@@ -72,18 +72,46 @@ class Home extends React.Component {
 
     render() {
         const { lessons } = this.state;
+        const icons = [
+            <FontAwesomeIcon icon={faList} style={{color: '#d3d3d3'}}/>,
+            <FontAwesomeIcon icon={faCalendar} style={{color: '#d3d3d3'}}/>
+        ]
         
         return(
             <div className="home-container">
-                <div className="list-view-container">
-                        <SuperList
-                        list={lessons}
-                        loadMore={this.loadMore}
-                        isNextPageLoading={this.state.isNextPageLoading}
-                        hasNextPage={this.state.hasNextPage}
-                        userId={this.props.userObject.uid}
-                        docRef={this.docRef}
-                        />
+                <div className="mobile">
+                    <Aba icons={icons}>
+                        <div key="feed" className="super-list-container">
+                            <SuperList
+                                list={lessons}
+                                loadMore={this.loadMore}
+                                isNextPageLoading={this.state.isNextPageLoading}
+                                hasNextPage={this.state.hasNextPage}
+                                userId={this.props.userObject.uid}
+                                docRef={this.docRef}
+                                />
+                        </div>
+                        <div key="agenda" className="agenda-container">
+                            <AllEvents />
+                        </div>
+                    </Aba>
+                </div>
+                <div className="container desktop">
+                    <div className="row" style={{height: '100%', padding: 15}}>
+                        <div className="column">
+                            <SuperList
+                            list={lessons}
+                            loadMore={this.loadMore}
+                            isNextPageLoading={this.state.isNextPageLoading}
+                            hasNextPage={this.state.hasNextPage}
+                            userId={this.props.userObject.uid}
+                            docRef={this.docRef}
+                            />
+                        </div>
+                        <div className="column">
+                            <AllEvents />
+                        </div>
+                    </div>
                 </div>
             </div>
         )
@@ -91,9 +119,7 @@ class Home extends React.Component {
 }
 
 const mapStateToProps = (store) => ({
-    user: store.authReducer.currentUser,
     userObject: store.authReducer.user,
-    isLogged: store.authReducer.isLogged
-  });
+});
 
 export default connect(mapStateToProps)(Home)

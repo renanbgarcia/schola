@@ -1,7 +1,7 @@
 import React from 'react';
-import firebase from '../../firebase';
 import { List, AutoSizer, CellMeasurer, CellMeasurerCache, InfiniteLoader } from 'react-virtualized'
 import HomeLessonItem from '../lesson/homeLessonItem';
+import PlaceHolderListItem from '../utils/placeHolderListItem';
 
 const STATUS_LOADING = 1;
 const STATUS_LOADED = 2;
@@ -56,16 +56,7 @@ class SuperList extends React.Component {
         if (loadedRowsMap[index] === STATUS_LOADED) {
             content = <HomeLessonItem style={style} index={index} list={list}/>;
         } else {
-          content = (
-            <div style={style} className="listView-item-container">
-                <div  className="List" >
-                    <div className="listview-content-container">
-                        <div className="placeholder-div"></div>
-                        <div className="placeholder-div"></div>
-                    </div>
-                </div>
-            </div>
-          );
+            content = <PlaceHolderListItem style={style}/>;
         }
     
         return (

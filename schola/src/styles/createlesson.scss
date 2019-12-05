@@ -1,7 +1,6 @@
 .create-lesson-container {
     @extend .home-container;
     display: flex;
-    // flex-direction: column !important;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
@@ -9,7 +8,6 @@
 
 .create-lesson-form {
     width: 100%;
-    // max-width: 600px;
 }
 
 .file-list-item {
@@ -31,7 +29,6 @@
 
 .input-file-label {
     background-color: $color-tertiary;
-    // box-shadow: $color-secondary 3px 2px 5px;
     border: solid $color-secondary 1px;
     width: 100%;
     padding: 5px;
@@ -54,24 +51,20 @@
 //animação do calendarEditBox
 .calendarEdit-enter {
     opacity: 0.01;
-    // height: 1px;
 }
-  
+
 .calendarEdit-enter.calendarEdit-enter-active {
     opacity: 1;
-    // height: 200px;
-    transition: opacity 250ms ease-in, height 250ms ease-in;
+    transition: opacity 250ms ease-in;
 }
 
 .calendarEdit-leave {
     opacity: 1;
-    // height: 200px;
 }
 
 .calendarEdit-leave.calendarEdit-leave-active {
     opacity: 0.01;
-    // height: 1px;
-    transition: opacity 250ms ease-in, height 250ms ease-in;
+    transition: opacity 250ms ease-in;
 } //
 
 .calendar-edit-box {

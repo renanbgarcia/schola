@@ -3,6 +3,7 @@ import firebase from '../../firebase';
 import { connect } from 'react-redux';
 import { List, AutoSizer, CellMeasurer, CellMeasurerCache, InfiniteLoader } from 'react-virtualized'
 import LessonItem from '../lesson/LessonItem';
+import PlaceHolderListItem from '../utils/placeHolderListItem';
 
 const STATUS_LOADING = 1;
 const STATUS_LOADED = 2;
@@ -50,8 +51,6 @@ class LessonsListf extends React.Component {
               startIndex: this._loadMoreRowsStartIndex,
               stopIndex: this._loadMoreRowsStopIndex
             })
-            console.log(this.props, prevProps)
-            console.log('chamou de novo2')
         }
     }
 
@@ -89,20 +88,9 @@ class LessonsListf extends React.Component {
 
         let content;
         if (loadedRowsMap[index] === STATUS_LOADED) {
-            
             content = <LessonItem deleteLesson={this.deleteLesson} style={style} index={index} list={list}/>;
         } else {
-          content = (
-            <div style={style} className="listView-item-container">
-                <div  className="List" >
-                    <div className="listview-content-container">
-                        {this.state.ageFilter2}
-                        <div className="placeholder-div"></div>
-                        <div className="placeholder-div"></div>
-                    </div>
-                </div>
-            </div>
-          );
+            content = <PlaceHolderListItem style={style}/>;
         }
     
         return (
@@ -146,11 +134,9 @@ class LessonsListf extends React.Component {
     }
 
     _loadMoreRows({startIndex, stopIndex}) {
-        this._loadMoreRowsStartIndex = startIndex
-        this._loadMoreRowsStopIndex = stopIndex
+    this._loadMoreRowsStartIndex = startIndex
+    this._loadMoreRowsStopIndex = stopIndex
     const {loadedRowsMap, loadingRowCount, loadedRowCount} = this.state;
-
-    console.log('called loadmorerows', loadedRowCount);
     
     for (var i = startIndex; i <= stopIndex; i++) {
         loadedRowsMap[i] = STATUS_LOADING;
@@ -159,15 +145,13 @@ class LessonsListf extends React.Component {
     this.setState({
         loadedRowsMap: loadedRowsMap,
         pageLoading: true
-      });
+    });
 
-    console.log(this.state.lastDoc)
     let docRef = this.docRef(this.state.lastDoc);
 
 
     return docRef.then(snapshot => {
             let lastDoc = snapshot.size > 0 ? snapshot.docs[snapshot.size - 1] : {};
-            console.log(lastDoc)
             if (snapshot.empty === true) {
               console.log('sem mais resultados')
               if (this.state.lessons.length === 0) {
@@ -183,9 +167,13 @@ class LessonsListf extends React.Component {
                     lastDoc: lastDoc,
                     loadingRowCount: loadingRowCount + snapshot.size
                 });
-                console.log("api calling")
+                if (this.state.lessons.length > 0) {
+                    if (this.state.lessons[0].lessonId === snapshot.docs[0].data().lessonId) {
+                        return
+                    }
+                }
                 snapshot.docs.forEach((doc, myindex) => {
-                    let oldlessons = this.state.lessons;
+                    let oldlessons = this.state.lessons;                
                     oldlessons.push(doc.data())
                     loadedRowsMap[startIndex + myindex] = STATUS_LOADED;
                     let isloading = true;
@@ -212,7 +200,6 @@ class LessonsListf extends React.Component {
     }
 
     render() {
-
         const { lessons } = this.state;
         this.cache.clearAll();
 
@@ -223,17 +210,15 @@ class LessonsListf extends React.Component {
                 return lessons.length
             }
         }
-        console.log(lessons[0])
 
         return (
-
             <AutoSizer>
             {({ height, width }) => (
                 <InfiniteLoader
                 isRowLoaded={this._isRowLoaded}
                 rowCount={999999}
                 loadMoreRows={this._loadMoreRows}
-                threshold={9}
+                threshold={20}
                 >
                 {({ onRowsRendered, ref }) => (
                     <List 

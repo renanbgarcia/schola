@@ -20,8 +20,8 @@ export default class CalendarToolbar extends Toolbar {
             <div className="rbc-toolbar-label">{this.props.label}</div>
             <div className="rbc-btn-group">
                 <button className="rcb-button" onClick={this.view.bind(null, 'month')}>Mês</button>
-                <button className="rcb-button" onClick={this.view.bind(null, 'week')}>Semana</button>
-                <button className="rcb-button" onClick={this.view.bind(null, 'day')}>Dia</button>
+                {/* <button className="rcb-button" onClick={this.view.bind(null, 'week')}>Semana</button>
+                <button className="rcb-button" onClick={this.view.bind(null, 'day')}>Dia</button> */}
                 <button className="rcb-button" onClick={this.view.bind(null, 'agenda')}>Agenda</button>
             </div>
         </div>

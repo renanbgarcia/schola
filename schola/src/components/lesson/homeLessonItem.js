@@ -12,7 +12,7 @@ const HomeLessonItem = (props) => {
     const description = content.desc;
     const style = props.style;
     let item = <div style={style} className="listView-item-container observed">
-                    <div id={'sel' + index} className="List" >
+                    <div id={'sel' + index} className="list" >
                         <img src={photo} title={content.author} className="list-author-photo"/>
                         <div className="listview-content-container">
                             <p><strong>{title}</strong></p>

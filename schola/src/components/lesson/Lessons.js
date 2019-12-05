@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import  SortableTree from 'react-sortable-tree';
-// import 'react-sortable-tree/style.css';
+import LessonsFolder from './lessonsFolder';
 import firebase from '../../firebase';
 import LessonsListf from '../lesson/LessonListf';
-import FileExplorerTheme from 'react-sortable-tree-theme-minimal';
 
 class Lessons extends React.Component {
 
@@ -18,7 +17,6 @@ class Lessons extends React.Component {
     }
 
     componentWillMount() {
-
         let categories = [
             { title: "Atividade", children: []},
             { title: "Exercício", children: []},
@@ -47,7 +45,6 @@ class Lessons extends React.Component {
 
             }))
             .then(() => {
-                console.log(categories)
                 this.setState({
                     treeData: categories
                 })
@@ -80,7 +77,6 @@ class Lessons extends React.Component {
     }
 
     handleDisciplineFilter(e) {
-        console.log(e.currentTarget.value)
         this.setState({
             disciplineFilter: e.currentTarget.value
         });
@@ -101,47 +97,25 @@ class Lessons extends React.Component {
 
     renderLessonsView(ageArray) {
         return this.state.view === 'tree' ?
-                <div className="tree-view-wrapper">
-                    <SortableTree
-                    theme={FileExplorerTheme}
-                    treeData={this.state.treeData}
-                    onChange={treeData => {
-                        this.setState({ treeData });
-                    }}
-                    canDrag={false}
-                    generateNodeProps={({ node, path }) => ({
-                        buttons: [
-                            this.getButtonCount(node)
-                        ]
-                    })}
-                    />
-                </div>
+                // <div className="tree-view-wrapper">
+                    <LessonsFolder data={this.state.treeData}/>
                 :
                 <>
-                <label>Age:</label>
-                <select onChange={(e) => this.handleAgeFilter(e)} id="age-filter">
-                    <option value="">Todas</option>
-                    { ageArray.map((key, i) => <option value={i + 1}>{i + 1}</option>) }
-                </select>
-                <label>Disciplina:</label>
-                <select onChange={(e) => this.handleDisciplineFilter(e)} id="discipline-filter">
-                    <option value="">Todas</option>
-                    <option value="grammar">Gramática</option>
-                    <option value="english">Inglês</option>
-                </select>
-
-                <tr className="listView-item-container">
-                    <td className="title">Título</td>
-                    <td>Arquivos</td>
-                    <td>Idade alvo</td>
-                    <td>Disciplina</td>
-                    <td>Criado em</td>
-                    <td>Excluir</td>
-                </tr>
-                <LessonsListf
-                    disciplineFilter={this.state.disciplineFilter}
-                    ageFilter={this.state.ageFilter}
-                />
+                    <label>Age:</label>
+                    <select onChange={(e) => this.handleAgeFilter(e)} id="age-filter">
+                        <option value="">Todas</option>
+                        { ageArray.map((key, i) => <option value={i + 1}>{i + 1}</option>) }
+                    </select>
+                    <label>Disciplina:</label>
+                    <select onChange={(e) => this.handleDisciplineFilter(e)} id="discipline-filter">
+                        <option value="">Todas</option>
+                        <option value="grammar">Gramática</option>
+                        <option value="english">Inglês</option>
+                    </select>
+                    <LessonsListf
+                        disciplineFilter={this.state.disciplineFilter}
+                        ageFilter={this.state.ageFilter}
+                    />
                 </>
     }
 

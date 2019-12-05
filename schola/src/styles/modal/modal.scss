@@ -1,0 +1,32 @@
+
+.modal-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(90, 90, 90, 0.699);
+    z-index: 999;
+}
+
+//animação
+.modal-enter {
+    opacity: 0.01;
+}
+
+.modal-enter.modal-enter-active {
+    opacity: 1;
+    transition: opacity 250ms ease-in;
+}
+
+.modal-leave {
+    opacity: 1;
+}
+
+.modal-leave.modal-leave-active {
+    opacity: 0.01;
+    transition: opacity 250ms ease-in;
+} //

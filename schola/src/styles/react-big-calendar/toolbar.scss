@@ -18,32 +18,35 @@ $active-border: darken($btn-border, 12%);
   font-size: 0.8em;
 
   .rbc-toolbar-label {
-    flex-grow:1;
+    flex-grow: 1;
     padding: 0 10px;
+    margin-top: 5px;
     text-align: center;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     border-bottom: solid $color-primary 2px;
+    border-top: solid $color-primary 1px;
+    background-color: $color-tertiary;
+    color: #fff;
   }
 
   & button {
+    flex-grow: 2;
     color: $btn-color;
-    // display: inline-block;
+    color: #373a3c;
+    border-radius: 0 !important;
     margin: 0;
     text-align: center;
     vertical-align: middle;
     background: none;
     background-image: none;
-    border: 1px solid $btn-border;
-    padding: .375rem 1rem;
-    border-radius: 4px;
     line-height: normal;
     white-space: nowrap;
     font-size: 0.6em;
+    width: 50px;
+    padding: 5px;
 
     &:active,
     &.rbc-active {
       background-image: none;
-      // box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
       background-color: #000;
       border-color: $active-border;
 
@@ -70,13 +73,11 @@ $active-border: darken($btn-border, 12%);
 }
 
 .rbc-btn-group {
-  // display: inline-block;
   display: flex;
   white-space: nowrap;
 
   .rcb-button {
     color: $btn-color;
-    // display: inline-block;
     margin: 2px 2px 2px 0;
     text-align: center;
     vertical-align: middle;

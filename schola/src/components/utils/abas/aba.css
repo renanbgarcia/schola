@@ -1,0 +1,61 @@
+.aba-container {
+    height: 100%;
+    overflow: hidden;
+}
+
+.aba-topbar {
+    display: flex;
+    height: 50px;
+    justify-content: space-around;
+    align-items: center;
+    border-bottom: solid 2px rgb(114, 114, 114);
+}
+
+.aba-content {
+    height: calc(100% - 60px);
+}
+
+.aba-button {
+    padding: 5px;
+    transition: color .5s;
+}
+
+.aba-button:hover {
+    cursor: pointer;
+}
+
+.aba-button:hover > svg {
+    color: rgb(114, 114, 114) !important;
+}
+
+.aba-button > svg {
+    width: 35px !important;
+    height: 30px;
+}
+
+.aba-button.active-aba-button {
+    color: rgb(114, 114, 114) !important;
+}
+
+.aba-button.active-aba-button > svg {
+    color: rgb(114, 114, 114) !important;
+    transition: color .5s;
+}
+
+.aba-animation-enter {
+    opacity: 0.01;
+}
+  
+.aba-animation-enter.aba-animation-enter-active {
+    opacity: 1;
+    transition: opacity 500ms ease-in-out;
+}
+
+.aba-animation-leave {
+    opacity: 1;
+}
+
+.aba-animation-leave.aba-animation-leave-active {
+    opacity: 0.01;
+    transition: opacity 500ms ease-in-out;
+}
