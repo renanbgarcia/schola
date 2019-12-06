@@ -1,6 +1,9 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
+import Modal from '../utils/modal';
+import CreateLesson from '../lesson/CreateLesson';
+import CalendarBox from '../utils/calendar/calendarEditBox';
 
 class LessonsFolder extends React.Component {
 
@@ -11,6 +14,8 @@ class LessonsFolder extends React.Component {
         this.addCrumb = this.addCrumb.bind(this);
         this.goBack =this.goBack.bind(this);
         this.removeCrumbs = this.removeCrumbs.bind(this);
+
+        this.modalRef = React.createRef();
     }
 
     componentWillReceiveProps(next) {
@@ -79,12 +84,15 @@ class LessonsFolder extends React.Component {
         console.log(this.state.parents)
         return (
             <div className="tree-view-wrapper">
+
                 <div className="lessons-folder-toolbar">
                     <span className="lessons-folder-back-arrow"
                           onClick={this.goBack}>
-                            {<FontAwesomeIcon icon={faArrowLeft}/>}<pre> Voltar</pre>
+                            {<FontAwesomeIcon icon={faArrowLeft}/>} Voltar
                     </span>
                     {this.renderBreadcrumbs()}
+                    <Modal ref={this.modalRef} Component={CalendarBox}/>
+                    <span className="lessons-folder-create" ><FontAwesomeIcon icon={faPlus}/></span>
                 </div>
                 <div className="lessons-folder-items-wrapper">
                     {this.renderFolders()}

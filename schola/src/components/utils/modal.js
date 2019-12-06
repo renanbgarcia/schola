@@ -6,10 +6,11 @@ class Modal extends React.Component {
     constructor(props) {
         super(props);
         this.dismissModal = this.dismissModal.bind(this);
+        this.showModal = this.showModal.bind(this);
     }
 
     state = {
-        isOpen: false
+        isOpen: true
     }
 
     dismissModal(e) {
@@ -25,6 +26,7 @@ class Modal extends React.Component {
     }
 
     renderModal() {
+        console.log(this.props.Component)
         return this.state.isOpen ?
         <div id="wrapper"
         className="modal-wrapper"
@@ -40,6 +42,7 @@ class Modal extends React.Component {
                 transitionName="modal"
                 transitionEnterTimeout={250}
                 transitionLeaveTimeout={250}>
+                    {this.props.Component}
                     { this.renderModal() }
                 </ReactCSSTransitionGroup>
             </div>

@@ -57,3 +57,16 @@
     height: calc(100vh - 180px);
     padding-top: 10px;
 }
+
+.lessons-folder-create {
+    @include shadow;
+    background-color: $color-tertiary;
+    display: flex;
+    align-items: center;
+    height: 30px;
+    padding: 0 10px;
+    border-radius: 10px;
+    margin-left: 10px;
+    line-height: 100%;
+    text-align: left;
+}

@@ -1,11 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import  SortableTree from 'react-sortable-tree';
 import LessonsFolder from './lessonsFolder';
 import firebase from '../../firebase';
 import LessonsListf from '../lesson/LessonListf';
 
 class Lessons extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.retrieveFoldersData = this.retrieveFoldersData.bind(this);
+    }
 
     state = {
         view: 'tree',
@@ -13,10 +17,14 @@ class Lessons extends React.Component {
         disciplineFilter: '',
         ageFilter: '',
         lastDoc: {},
-        treeData: [{ title: 'Chicken', children: [{ title: 'Egg' }] }]
+        treeData: [{ title: 'Loading', children: [] }]
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
+        this.retrieveFoldersData();
+    }
+
+    retrieveFoldersData() {
         let categories = [
             { title: "Atividade", children: []},
             { title: "Exercício", children: []},
@@ -27,29 +35,41 @@ class Lessons extends React.Component {
             { title: "Filme", children: []},
         ]
 
-        let baseQ = firebase.firestore().collection(`lessons`).where('author_id', '==', this.props.userObject.uid ).get();
-        baseQ.then(snapshot => snapshot.docs.map((doc) => {
-                categories.map((cat, index) => {
-                    
-                    let hasDisc = categories[index].children.filter(disc => disc.title === doc.data().discipline ? true : false )
+        let materias = [
+            { title: "Matemática", name: "math", children: []},
+            { title: "História", name: "history", children: []},
+            { title: "Gramática", name: "grammar", children: []},
+            { title: "Artes", name: "art", children: []},
+        ]
 
-                    if (cat.title === doc.data().category && hasDisc.length === 0) {
-                        categories[index].children.push({title: doc.data().discipline, children: []})
+        let db = firebase.firestore();
+        let courseQ = db.collection('courses').where('author_id', '==', this.props.userObject.uid ).get()
+        courseQ.then(snapshot => {
+            for(let doc of snapshot.docs) {
+                for( let materia of materias ) {
+                    if (doc.data().discipline === materia.name) {
+                        let courseChildren = [];
+                        const childLessonsQ = db.collection('lessons').where('course_id', '==', doc.data().course_id).get();
+                        childLessonsQ.then(snapshot => {
+                            snapshot.docs.map(lesson => {
+                                categories.forEach(cat => {
+                                    if (lesson.data().category === cat.title && courseChildren.indexOf(cat.title) === -1) {
+                                        cat.children.push({title: lesson.data().title})
+                                        courseChildren.push({ title: cat.title, children: cat.children });
+                                    }
+                                });
+                            });
+                        })
+                        .then(() => { materia.children.push({ title: doc.data().title, children: courseChildren}); })
+                        .then(() => {
+                            this.setState({
+                                treeData: materias
+                            });
+                        })
                     }
-                    categories[index].children.map((disc, dindex) => {
-                        if (disc.title === doc.data().discipline && categories[index].title === doc.data().category) {
-                            categories[index].children[dindex].children.push({title: doc.data().title})
-                        }
-                    })
-                })
-
-            }))
-            .then(() => {
-                this.setState({
-                    treeData: categories
-                })
+                }
             }
-        )
+        })
     }
 
     getDescendantCount(node) {
@@ -97,8 +117,7 @@ class Lessons extends React.Component {
 
     renderLessonsView(ageArray) {
         return this.state.view === 'tree' ?
-                // <div className="tree-view-wrapper">
-                    <LessonsFolder data={this.state.treeData}/>
+                <LessonsFolder data={this.state.treeData}/>
                 :
                 <>
                     <label>Age:</label>
@@ -136,10 +155,8 @@ class Lessons extends React.Component {
 }
 
 const mapStateToProps = (store) => ({
-    user: store.authReducer.currentUser,
     userObject: store.authReducer.user,
-    isLogged: store.authReducer.isLogged
-  });
+});
 
 const mapDispatchToProps = dispatch => ({
 })
