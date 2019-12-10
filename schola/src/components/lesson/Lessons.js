@@ -3,6 +3,13 @@ import { connect } from 'react-redux';
 import LessonsFolder from './lessonsFolder';
 import firebase from '../../firebase';
 import LessonsListf from '../lesson/LessonListf';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTree, faListAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { showCreateLessonModal, showCreateCourseModal } from '../../actions/modalActions';
+import { updateFoldersData } from '../../actions/foldersDataAction';
+import Modal from '../utils/modal';
+import CreateLesson from '../lesson/CreateLesson';
+import CreateCourses from '../lesson/CreateCourses';
 
 class Lessons extends React.Component {
 
@@ -43,7 +50,7 @@ class Lessons extends React.Component {
         ]
 
         let db = firebase.firestore();
-        let courseQ = db.collection('courses').where('author_id', '==', this.props.userObject.uid ).get()
+        let courseQ = db.collection('courses').where('author_id', '==', this.props.userObject.uid ).get();
         courseQ.then(snapshot => {
             for(let doc of snapshot.docs) {
                 for( let materia of materias ) {
@@ -51,6 +58,7 @@ class Lessons extends React.Component {
                         let courseChildren = [];
                         const childLessonsQ = db.collection('lessons').where('course_id', '==', doc.data().course_id).get();
                         childLessonsQ.then(snapshot => {
+                            console.log(snapshot.docs.map(lesson => lesson.data().title))
                             snapshot.docs.map(lesson => {
                                 categories.forEach(cat => {
                                     if (lesson.data().category === cat.title && courseChildren.indexOf(cat.title) === -1) {
@@ -59,19 +67,31 @@ class Lessons extends React.Component {
                                     }
                                 });
                             });
+                            return snapshot.docs.length
                         })
-                        .then(() => { materia.children.push({ title: doc.data().title, children: courseChildren}); })
+                        .then((length) => {
+                            console.log(length)
+                            materia.children.push({
+                                title: doc.data().title,
+                                description: doc.data().desc,
+                                targetAge: doc.data().targetAge,
+                                children: courseChildren,
+                                lessonCount: length
+                            });
+                        })
                         .then(() => {
                             this.setState({
                                 treeData: materias
                             });
                         })
+                        .then(() => this.props.setFoldersData(this.state.treeData))
                     }
                 }
             }
         })
     }
 
+    //Deprecated
     getDescendantCount(node) {
         let count = 0;
 
@@ -117,7 +137,7 @@ class Lessons extends React.Component {
 
     renderLessonsView(ageArray) {
         return this.state.view === 'tree' ?
-                <LessonsFolder data={this.state.treeData}/>
+                <LessonsFolder data={this.props.treeData}/>
                 :
                 <>
                     <label>Age:</label>
@@ -140,11 +160,16 @@ class Lessons extends React.Component {
 
     render() {
         let ageArray = Array.apply(null, Array(18));
+        console.log(this.props)
         return (
             <div className="home-container">
+                <Modal modalCondition="isCreateLesson" Component={<CreateLesson/>}/>
+                <Modal modalCondition="isCreateCourse" Component={<CreateCourses updateData={this.retrieveFoldersData}/>}/>
                 <div className="choose-view-bar">
-                    <span onClick={() => this.setState({view: 'tree'})}>Árvore</span>
-                    <span onClick={() => this.setState({view: 'list'})}>Lista</span>
+                    <span onClick={() => this.setState({view: 'tree'})}><FontAwesomeIcon icon={faTree}/></span>
+                    <span onClick={() => this.setState({view: 'list'})}><FontAwesomeIcon icon={faListAlt}/></span>
+                    <span onClick={this.props.showCLmodal} ><FontAwesomeIcon icon={faPlus}/> Lição</span>
+                    <span onClick={this.props.showCCmodal} ><FontAwesomeIcon icon={faPlus}/> Curso</span>
                 </div>
                 <div className="lessons-container">
                     {this.renderLessonsView(ageArray)}
@@ -156,9 +181,13 @@ class Lessons extends React.Component {
 
 const mapStateToProps = (store) => ({
     userObject: store.authReducer.user,
+    treeData: store.foldersDataReducer.categories
 });
 
-const mapDispatchToProps = dispatch => ({
-})
+const mapDispatchToProps = (dispatch) => ({
+    showCLmodal: () => dispatch(showCreateLessonModal()),
+    showCCmodal: () => dispatch(showCreateCourseModal()),
+    setFoldersData: (data) => dispatch(updateFoldersData(data))
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Lessons)

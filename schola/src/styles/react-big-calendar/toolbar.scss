@@ -31,7 +31,7 @@ $active-border: darken($btn-border, 12%);
   & button {
     flex-grow: 2;
     color: $btn-color;
-    color: #373a3c;
+    // color: #373a3c;
     border-radius: 0 !important;
     margin: 0;
     text-align: center;
@@ -66,7 +66,7 @@ $active-border: darken($btn-border, 12%);
 
     &:hover {
       color: $btn-color;
-      background-color: $active-background;
+      background-color: $color-initial;
           border-color: $active-border;
     }
   }
@@ -75,6 +75,7 @@ $active-border: darken($btn-border, 12%);
 .rbc-btn-group {
   display: flex;
   white-space: nowrap;
+  background-color: $color-initial;
 
   .rcb-button {
     color: $btn-color;
@@ -83,7 +84,7 @@ $active-border: darken($btn-border, 12%);
     vertical-align: middle;
     background: none;
     background-image: none;
-    background-color: $color-tertiary;
+    background-color: $color-initial;
     border: 1px solid $btn-border;
     padding: .375rem 1rem;
     border-radius: 4px;

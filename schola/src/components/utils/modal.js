@@ -1,37 +1,31 @@
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import { connect } from 'react-redux';
+import { hideCreateLessonModal, hideCreateCourseModal } from '../../actions/modalActions'
 
 class Modal extends React.Component {
 
     constructor(props) {
         super(props);
         this.dismissModal = this.dismissModal.bind(this);
-        this.showModal = this.showModal.bind(this);
-    }
-
-    state = {
-        isOpen: true
     }
 
     dismissModal(e) {
-        console.log(e.target.id)
         if (e.target.id === "wrapper") {
-            this.setState({ isOpen: false });
+            this.props.hideCLModal();
+            this.props.hideCCModal();
         }
     }
 
-    showModal() {
-        console.log("show")
-        this.setState({ isOpen: true });
-    }
-
     renderModal() {
-        console.log(this.props.Component)
-        return this.state.isOpen ?
+        let condition = this.props.modalCondition;
+        return this.props[condition] ?
         <div id="wrapper"
         className="modal-wrapper"
         onClick={this.dismissModal}>
-            {this.props.Component}
+            <div className="element">
+                {this.props.Component}
+            </div>
         </div> : null
     }
 
@@ -42,7 +36,6 @@ class Modal extends React.Component {
                 transitionName="modal"
                 transitionEnterTimeout={250}
                 transitionLeaveTimeout={250}>
-                    {this.props.Component}
                     { this.renderModal() }
                 </ReactCSSTransitionGroup>
             </div>
@@ -50,4 +43,14 @@ class Modal extends React.Component {
     }
 }
 
-export default Modal;
+const mapStatetoProps = (store) => ({
+    isCreateLesson: store.modalReducer.isCLOpen,
+    isCreateCourse: store.modalReducer.isCCOpen
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    hideCLModal: () => dispatch(hideCreateLessonModal()),
+    hideCCModal: () => dispatch(hideCreateCourseModal())
+})
+
+export default connect(mapStatetoProps, mapDispatchToProps)(Modal);

@@ -30,3 +30,9 @@
     opacity: 0.01;
     transition: opacity 250ms ease-in;
 } //
+
+.element {
+    max-width: 90%;
+    max-height: 90%;
+    overflow: auto;
+}

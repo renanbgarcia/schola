@@ -32,7 +32,7 @@
 }
 
 .lessons-folder-item {
-    flex: 1 0 25%;
+    flex: 1 1 40%;
     background-color: $color-quaternary;
     color: $color-initial;
     min-width: min-content;
@@ -41,8 +41,9 @@
     // @include shadow;
     align-items: center;
     justify-content: center;
-    font-size: 1.5em;
+    font-size: 1em;
     transition: transform 350ms ease-in-out;
+    white-space: nowrap;
     &:hover {
         transform: scale(1.02);
         background-color: darken($color-quaternary, 5%);
@@ -58,15 +59,15 @@
     padding-top: 10px;
 }
 
-.lessons-folder-create {
-    @include shadow;
-    background-color: $color-tertiary;
-    display: flex;
-    align-items: center;
-    height: 30px;
-    padding: 0 10px;
-    border-radius: 10px;
-    margin-left: 10px;
-    line-height: 100%;
+.lessons-folder-title {
+    font-size: 1.5em;
+}
+
+.lessons-folder-description {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    max-height: 100px;
     text-align: left;
 }

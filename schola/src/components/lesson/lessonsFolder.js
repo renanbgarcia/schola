@@ -1,9 +1,12 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
-import Modal from '../utils/modal';
-import CreateLesson from '../lesson/CreateLesson';
-import CalendarBox from '../utils/calendar/calendarEditBox';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+// import Modal from '../utils/modal';
+// import CreateLesson from '../lesson/CreateLesson';
+// import CreateCourses from '../lesson/CreateCourses';
+import { connect } from 'react-redux';
+import { showCreateLessonModal } from '../../actions/modalActions';
+import { hideCreateLessonModal } from '../../actions/modalActions';
 
 class LessonsFolder extends React.Component {
 
@@ -15,7 +18,6 @@ class LessonsFolder extends React.Component {
         this.goBack =this.goBack.bind(this);
         this.removeCrumbs = this.removeCrumbs.bind(this);
 
-        this.modalRef = React.createRef();
     }
 
     componentWillReceiveProps(next) {
@@ -33,7 +35,11 @@ class LessonsFolder extends React.Component {
 
     renderFolders() {
         return this.state.actualView.map( folder => 
-            <div className="lessons-folder-item" onClick={() => this.goToFolder(folder) } >{folder.title}</div>
+            <div className="lessons-folder-item" onClick={() => this.goToFolder(folder) } >
+                <div className="lessons-folder-title">{ folder.title }</div>
+                <div className="lessons-folder-description">{ folder.description }</div>
+                <span>{ folder.lessonCount }</span>
+            </div>
         )
     }
 
@@ -91,16 +97,20 @@ class LessonsFolder extends React.Component {
                             {<FontAwesomeIcon icon={faArrowLeft}/>} Voltar
                     </span>
                     {this.renderBreadcrumbs()}
-                    <Modal ref={this.modalRef} Component={CalendarBox}/>
-                    <span className="lessons-folder-create" ><FontAwesomeIcon icon={faPlus}/></span>
+                    {/* <Modal modalCondition="isCreateLesson" Component={<CreateLesson/>}/>
+                    <Modal modalCondition="isCreateCourse" Component={<CreateCourses updateData={this.props.updateData}/>}/> */}
                 </div>
                 <div className="lessons-folder-items-wrapper">
                     {this.renderFolders()}
                 </div>
-                
             </div>
         )
     }
 }
 
-export default LessonsFolder;
+const mapDispatchToProps = (dispatch) => ({
+    showCLmodal: () => dispatch(showCreateLessonModal()),
+    hideCLmodal: () => dispatch(hideCreateLessonModal())
+});
+
+export default connect(null, mapDispatchToProps)(LessonsFolder);

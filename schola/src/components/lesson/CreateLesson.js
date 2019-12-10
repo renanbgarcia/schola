@@ -39,6 +39,7 @@ class CreateLesson extends React.Component {
         this.dismissModal =  this.dismissModal.bind(this);
         this.renderModal = this.renderModal.bind(this);
         this.DoSchedule = this.DoSchedule.bind(this);
+        this.hideParentModal =this.hideParentModal.bind(this);
 
         this.modalRef = React.createRef();
     }
@@ -246,6 +247,7 @@ class CreateLesson extends React.Component {
                 console.log(err);
             }
             alertbox.show('Lição cadastrada!');
+            this.hideParentModal()
         } else {
             alertbox.show('Preencha todos os campos corretamente.')
         }
@@ -352,6 +354,12 @@ class CreateLesson extends React.Component {
                                 deleteEvent={this.deleteEvent}
                                 eventTarget={this.state.clickedEvent}/>
             </div> : null
+    }
+
+    hideParentModal() {
+        if (this.props.hideModal) {
+            this.props.hideModal();
+        }
     }
 
     eventComponent(e) {
@@ -475,6 +483,7 @@ class CreateLesson extends React.Component {
                 <div className="row">
                     <div className="column">
                         <button className="full-width send-lesson-button" onClick={this.handleSubmit}>Enviar</button>
+                        { this.props.hasOwnProperty("modalCondition") ? <button className="full-width" onClick={this.hideParentModal}>Fechar</button> : null }
                     </div>
                 </div>
                 </div>
@@ -484,9 +493,7 @@ class CreateLesson extends React.Component {
 }
 
 const mapStateToProps = (store) => ({
-    user: store.authReducer.currentUser,
     userObject: store.authReducer.user,
-    isLogged: store.authReducer.isLogged
   });
 
 const mapDispatchToProps = dispatch => ({

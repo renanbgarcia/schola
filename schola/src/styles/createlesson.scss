@@ -1,9 +1,13 @@
 .create-lesson-container {
-    @extend .home-container;
+    // @extend .home-container;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    width: 100%;
+    padding: 20px;
+    border-radius: 15px;
+    background-color: $color-initial;
 }
 
 .create-lesson-form {
@@ -21,6 +25,10 @@
 
 .file-list {
     margin: 15px 0;
+}
+
+input, textarea, select {
+    background-color: #fff !important;
 }
 
 .input[type='file'] {
