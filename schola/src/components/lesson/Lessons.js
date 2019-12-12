@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import LessonsFolder from './lessonsFolder';
 import firebase from '../../firebase';
+import { categories, getMaterias } from '../utils/variables';
 import LessonsListf from '../lesson/LessonListf';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTree, faListAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -32,59 +33,51 @@ class Lessons extends React.Component {
     }
 
     retrieveFoldersData() {
-        let categories = [
-            { title: "Atividade", children: []},
-            { title: "Exercício", children: []},
-            { title: "Livro", children: []},
-            { title: "Música", children: []},
-            { title: "Vídeo", children: []},
-            { title: "Apostila", children: []},
-            { title: "Filme", children: []},
-        ]
-
-        let materias = [
-            { title: "Matemática", name: "math", children: []},
-            { title: "História", name: "history", children: []},
-            { title: "Gramática", name: "grammar", children: []},
-            { title: "Artes", name: "art", children: []},
-        ]
-
-        let db = firebase.firestore();
-        let courseQ = db.collection('courses').where('author_id', '==', this.props.userObject.uid ).get();
+        const db = firebase.firestore();
+        const courseQ = db.collection('courses').where('author_id', '==', this.props.userObject.uid ).get();
         courseQ.then(snapshot => {
+            let _materias = getMaterias();
             for(let doc of snapshot.docs) {
-                for( let materia of materias ) {
+                for( let materia of _materias ) {
                     if (doc.data().discipline === materia.name) {
                         let courseChildren = [];
-                        const childLessonsQ = db.collection('lessons').where('course_id', '==', doc.data().course_id).get();
+                        materia.lessonCount = materia.lessonCount + 1
+                        const childLessonsQ = db.collection('lessons').where('course_id', 'array-contains', doc.data().course_id).get();
                         childLessonsQ.then(snapshot => {
-                            console.log(snapshot.docs.map(lesson => lesson.data().title))
-                            snapshot.docs.map(lesson => {
-                                categories.forEach(cat => {
-                                    if (lesson.data().category === cat.title && courseChildren.indexOf(cat.title) === -1) {
-                                        cat.children.push({title: lesson.data().title})
-                                        courseChildren.push({ title: cat.title, children: cat.children });
+                            let innerCategories = categories;
+                            for (let cat of innerCategories) {
+                                cat.children = []
+                                for (let lesson of snapshot.docs) {
+                                    if (lesson.data().category === cat.title) {
+                                        console.log(lesson.data())
+                                        cat.children.push({
+                                            title: lesson.data().title,
+                                            description: lesson.data().desc,
+                                            rating: lesson.data().rating,
+                                            dueDate: lesson.data().scheduled,
+                                            id: lesson.data().lessonId
+                                        });                                    
                                     }
-                                });
-                            });
-                            return snapshot.docs.length
+                                }
+                                if (courseChildren.map(categ => categ.title === cat.title).indexOf(true) === -1) {
+                                    courseChildren.push({ title: cat.title, children: cat.children, lessonCount: cat.children.length });
+                                }
+                            }
                         })
-                        .then((length) => {
-                            console.log(length)
+                        .then(() => {
+                            console.log(materia)
+                            // materia.lessonCount = materia.lessonCount + 1;
                             materia.children.push({
                                 title: doc.data().title,
+                                id: doc.data().course_id,
                                 description: doc.data().desc,
                                 targetAge: doc.data().targetAge,
                                 children: courseChildren,
-                                lessonCount: length
-                            });
+                                // lessonCount: courseChildren.length,
+                                rating: doc.data().rating
+                            })
                         })
-                        .then(() => {
-                            this.setState({
-                                treeData: materias
-                            });
-                        })
-                        .then(() => this.props.setFoldersData(this.state.treeData))
+                        .then(() => this.props.setFoldersData(_materias))
                     }
                 }
             }
@@ -160,7 +153,6 @@ class Lessons extends React.Component {
 
     render() {
         let ageArray = Array.apply(null, Array(18));
-        console.log(this.props)
         return (
             <div className="home-container">
                 <Modal modalCondition="isCreateLesson" Component={<CreateLesson/>}/>

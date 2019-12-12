@@ -6,7 +6,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import { alertbox } from '../utils/alert';
-import { categories } from '../utils/categoriesList';
+import { categories, getMaterias } from '../utils/variables';
 
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
@@ -40,6 +40,8 @@ class CreateLesson extends React.Component {
         this.renderModal = this.renderModal.bind(this);
         this.DoSchedule = this.DoSchedule.bind(this);
         this.hideParentModal =this.hideParentModal.bind(this);
+        this.getCourses = this.getCourses.bind(this);
+        this.handleCourseInput = this.handleCourseInput.bind(this);
 
         this.modalRef = React.createRef();
     }
@@ -58,6 +60,8 @@ class CreateLesson extends React.Component {
             title: "Edite o título",
             desc: "Edite a descrição"
         },
+        courses: [],
+        coursesInput: [],
         isEventEditBoxVisible: false
     }
 
@@ -70,6 +74,10 @@ class CreateLesson extends React.Component {
                 tagsInputElem.value = "";
             }
         })
+    }
+
+    UNSAFE_componentWillMount() {
+        this.getCourses();
     }
 
     handleFileInput() {
@@ -161,6 +169,7 @@ class CreateLesson extends React.Component {
                 discipline: this.state.disciplineInput,
                 desc: this.state.descriptionInput,
                 tags: this.state.tags,
+                course_id: this.state.coursesInput,
                 category: this.state.categoryInput,
                 created_at: firebase.firestore.Timestamp.fromDate(new Date()),
                 scheduled: this.state.events,
@@ -228,6 +237,13 @@ class CreateLesson extends React.Component {
 
         this.setState({
             tags: tags
+        })
+    }
+
+    handleCourseInput(e) {
+        console.log(e.target.value)
+        this.setState({
+            coursesInput: [...this.state.coursesInput, e.target.value]
         })
     }
 
@@ -366,6 +382,24 @@ class CreateLesson extends React.Component {
         return <div>{e.title}</div>
     }
 
+    getCourses() {
+        firebase.firestore()
+                .collection('courses')
+                .get()
+                .then(snap => {
+                    let courses = [];
+                    for (let doc of snap.docs) {
+                        courses.push({title: doc.data().title, id: doc.data().course_id})
+                    }
+                    return courses
+                })
+                .then((courses) => {
+                    this.setState({
+                        courses: courses
+                    })
+                });
+    }
+
     render() {
         console.log(this.state)
         return (
@@ -393,10 +427,7 @@ class CreateLesson extends React.Component {
                                     <label for="titulo">Disciplina</label>
                                     <select onChange={(e) => this.handleDisciplineInput(e)} id="discipline">
                                         <option>Escolha uma disciplina</option>
-                                        <option value="math">Matemática</option>
-                                        <option value="grammar">Gramática</option>
-                                        <option value="english">Inglês</option>
-                                        <option value="history">História</option>
+                                        { getMaterias().map(mat => <option value={ mat.name }>{ mat.title }</option>) }
                                     </select>
                                 </div>
                             </div>
@@ -411,7 +442,7 @@ class CreateLesson extends React.Component {
                                     <label>Categoria</label>
                                     <select onChange={(e) => this.handleCategory(e)}>
                                         <option>Escolha uma categoria</option>
-                                        {categories.map(cat => <option value={cat}>{cat}</option>)}
+                                        {categories.map(cat => <option value={ cat.title }>{ cat.title }</option>)}
                                     </select>
                                 </div>
                             </div>
@@ -426,6 +457,16 @@ class CreateLesson extends React.Component {
                                     <div className="tags-wrapper">
                                         {this.state.tags.map((tag) => <span className="tag-pill">{tag} <FontAwesomeIcon onClick={() => this.deleteTagPill(tag)} icon={faTimesCircle} style={{color:"#fff"}}/></span>)}
                                     </div>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="column">
+                                    <fieldset onChange={this.handleCourseInput}>
+                                        <legend>Cursos: </legend>
+                                        <div className="create-lesson-checkbox-wrapper">
+                                            { this.state.courses.map((course) => { return <div><input type="checkbox" value={ course.id }/><div title={ course.title }>{ course.title }</div></div> })}
+                                        </div>
+                                    </fieldset>
                                 </div>
                             </div>
                             <div className="row">

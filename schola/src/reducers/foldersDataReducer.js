@@ -1,7 +1,8 @@
-import { UPDATE_FOLDERS_DATA } from '../actions/types';
+import { UPDATE_FOLDERS_DATA, UPDATE_ACTUAL_VIEW } from '../actions/types';
 
 const initialState = {
-    categories: [{title: "Loading", children: []}]
+    categories: [{title: "Loading", children: []}],
+    actualView: [{title: "Loading", children: []}]
   };
 
 function foldersDataReducer(state = initialState, action) {
@@ -10,6 +11,11 @@ function foldersDataReducer(state = initialState, action) {
             categories: action.categories
           })
     }
+    // else if (action.type === UPDATE_ACTUAL_VIEW) {
+    //     return Object.assign({}, state, {
+    //         actualView: action.actualView
+    //     })
+    // }
     return state;
 };
 

@@ -18,7 +18,7 @@ textarea {
 }
 
 @mixin shadow {
-  box-shadow: rgb(201, 201, 201) 1px 1px 3px 2px;
+  // box-shadow: rgb(201, 201, 201) 1px 1px 1px 1px;
 }
 
 @import 'variables';

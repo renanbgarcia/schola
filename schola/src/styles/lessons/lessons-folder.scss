@@ -1,7 +1,8 @@
 .lessons-folder-toolbar {
     display: flex;
+    flex-wrap: wrap;
     width: 100%;
-    height: 30px;
+    // height: 30px;
 }
 
 .lessons-folder-back-arrow {
@@ -9,6 +10,7 @@
     display: flex;
     align-items: center;
     height: 30px;
+    // width: 50px;
     background-color: $color-tertiary;
     padding: 0 10px;
     line-height: 100%;
@@ -23,29 +25,46 @@
     display: flex;
     align-items: center;
     height: 30px;
+    width: 100%;
     padding: 0 10px;
     border-radius: 10px;
-    margin-left: 10px;
+    margin: 0 10px;
     line-height: 100%;
     text-align: left;
     flex: 1;
 }
 
+.lessons-folder-toolbar-search-row {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    margin-top: 10px;
+    input, span {
+        margin-right: 5px;
+    }
+    input {
+        height: 30px;
+    }
+    span {
+        padding: 0 8px 0 8px;
+        background-color: $color-tertiary;
+        border-radius: 5px;
+    }
+}
+
 .lessons-folder-item {
+    position: relative;
     flex: 1 1 40%;
     background-color: $color-quaternary;
     color: $color-initial;
-    min-width: min-content;
-    margin: 5px;
+    margin: 5px 5px 50px 5px;
     padding: 10px;
-    // @include shadow;
     align-items: center;
     justify-content: center;
     font-size: 1em;
     transition: transform 350ms ease-in-out;
-    white-space: nowrap;
     &:hover {
-        transform: scale(1.02);
+        // transform: scale(1.02);
         background-color: darken($color-quaternary, 5%);
         cursor: pointer;
         z-index: 2;
@@ -57,10 +76,19 @@
     flex-wrap: wrap;
     height: calc(100vh - 180px);
     padding-top: 10px;
+    overflow: auto;
+}
+
+.lesson-folder-content {
+    overflow: hidden;
 }
 
 .lessons-folder-title {
     font-size: 1.5em;
+    height: min-content;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .lessons-folder-description {
@@ -68,6 +96,21 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: normal;
-    max-height: 100px;
+    max-height: 150px;
     text-align: left;
+}
+
+.lesson-folder-bar {
+    position: absolute;
+    bottom: -40px;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    max-height: 40px;
+    padding: 10px;
+    background-color: $color-quinary;
+}
+
+.highlighted {
+    color: #fff45b;
 }
