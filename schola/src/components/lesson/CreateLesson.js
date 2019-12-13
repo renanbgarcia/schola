@@ -175,7 +175,8 @@ class CreateLesson extends React.Component {
                 scheduled: this.state.events,
                 author: this.props.userObject.displayName,
                 author_id: this.props.userObject.uid,
-                authorProto: 'https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png'
+                authorProto: 'https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png',
+                rating: '--'
             });
 
             this.DoSchedule();

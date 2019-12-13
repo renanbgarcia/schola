@@ -150,7 +150,7 @@ class LessonsFolder extends React.Component {
 
         const ids = res.map(item => item.id);
         console.log(ids)
-        if (ids.length > 0) {
+        if (ids.length > 0 && this.state.searchTerm !== '') {
             this.setState({
                 actualResults: ids,
                 resultElemIdx: 0

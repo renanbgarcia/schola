@@ -42,7 +42,7 @@ class Lessons extends React.Component {
                     if (doc.data().discipline === materia.name) {
                         let courseChildren = [];
                         materia.lessonCount = materia.lessonCount + 1
-                        const childLessonsQ = db.collection('lessons').where('course_id', 'array-contains', doc.data().course_id).get();
+                        const childLessonsQ = db.collection('lessons').where('author_id', '==', this.props.userObject.uid).where('course_id', 'array-contains', doc.data().course_id).get();
                         childLessonsQ.then(snapshot => {
                             let innerCategories = categories;
                             for (let cat of innerCategories) {
@@ -55,26 +55,28 @@ class Lessons extends React.Component {
                                             description: lesson.data().desc,
                                             rating: lesson.data().rating,
                                             dueDate: lesson.data().scheduled,
-                                            id: lesson.data().lessonId
+                                            id: lesson.data().lessonId,
+                                            type: 'lesson'
                                         });                                    
                                     }
                                 }
                                 if (courseChildren.map(categ => categ.title === cat.title).indexOf(true) === -1) {
-                                    courseChildren.push({ title: cat.title, children: cat.children, lessonCount: cat.children.length });
+                                    courseChildren.push({ title: cat.title, children: cat.children, lessonCount: cat.children.length, type: 'category' });
                                 }
                             }
+                            return snapshot.size
                         })
-                        .then(() => {
+                        .then((count) => {
                             console.log(materia)
-                            // materia.lessonCount = materia.lessonCount + 1;
                             materia.children.push({
                                 title: doc.data().title,
                                 id: doc.data().course_id,
                                 description: doc.data().desc,
                                 targetAge: doc.data().targetAge,
                                 children: courseChildren,
-                                // lessonCount: courseChildren.length,
-                                rating: doc.data().rating
+                                lessonCount: count,
+                                rating: doc.data().rating,
+                                type: 'course'
                             })
                         })
                         .then(() => this.props.setFoldersData(_materias))

@@ -60,6 +60,7 @@ class CreateCourses extends React.Component {
                 course_id: docID,
                 author_id: this.props.user.uid,
                 created_at: firebase.firestore.Timestamp.fromDate(new Date()),
+                rating: '--'
             }).then(() => {
                 this.props.updateData();
                 alertbox.show("Curso criado com sucesso!")
