@@ -1586,9 +1586,13 @@ button.rbc-input::-moz-focus-inner {
   line-height: 30px;
   vertical-align: middle;
   margin-left: auto;
+  z-index: 200;
 }
 .circle-item-menu:hover {
   background-color: #d1d1d1;
+}
+.circle-item-menu svg {
+  pointer-events: none;
 }
 
 .highlighted {
@@ -2218,6 +2222,39 @@ input[type=file] {
   max-width: 90%;
   max-height: 90%;
   overflow: auto;
+}
+
+.pop-menu {
+  position: fixed;
+  width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background-color: #fff;
+  padding: 5px;
+  z-index: 999;
+}
+.pop-menu li {
+  border-bottom: ridge #000 1px;
+  padding: 5px;
+}
+.pop-menu li:hover {
+  background: #d3d3d3;
+  background: #e2e0dc;
+}
+.pop-menu li:last-child {
+  border-bottom: none !important;
+}
+
+.popmenu-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
 }
 
 .Content {

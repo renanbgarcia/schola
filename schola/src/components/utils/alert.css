@@ -6,6 +6,7 @@
     bottom: 5px;
     left: 20px;
     right: 20px;
+    z-index: 1600
   }
   
   .alert-box {

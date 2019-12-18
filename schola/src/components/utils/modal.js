@@ -1,7 +1,5 @@
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import { connect } from 'react-redux';
-import { hideCreateLessonModal, hideCreateCourseModal } from '../../actions/modalActions'
 
 class Modal extends React.Component {
 
@@ -12,14 +10,12 @@ class Modal extends React.Component {
 
     dismissModal(e) {
         if (e.target.id === "wrapper") {
-            this.props.hideCLModal();
-            this.props.hideCCModal();
+            this.props.hideFunc();
         }
     }
 
     renderModal() {
-        let condition = this.props.modalCondition;
-        return this.props[condition] ?
+        return this.props.isOpen ?
         <div id="wrapper"
         className="modal-wrapper"
         onClick={this.dismissModal}>
@@ -43,14 +39,4 @@ class Modal extends React.Component {
     }
 }
 
-const mapStatetoProps = (store) => ({
-    isCreateLesson: store.modalReducer.isCLOpen,
-    isCreateCourse: store.modalReducer.isCCOpen
-});
-
-const mapDispatchToProps = (dispatch) => ({
-    hideCLModal: () => dispatch(hideCreateLessonModal()),
-    hideCCModal: () => dispatch(hideCreateCourseModal())
-})
-
-export default connect(mapStatetoProps, mapDispatchToProps)(Modal);
+export default Modal;

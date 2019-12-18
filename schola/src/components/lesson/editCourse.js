@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import firebase from '../../firebase';
 import { alertbox } from '../utils/alert';
 
-class CreateCourses extends React.Component {
+class EditCourse extends React.Component {
 
     constructor(props) {
         super(props);
@@ -13,13 +13,23 @@ class CreateCourses extends React.Component {
         this.handleDescription = this.handleDescription.bind(this);
         this.handleDiscipline = this.handleDiscipline.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.populateForm = this.populateForm.bind(this);
     }
 
     state = {
         nameInput: '',
         descInput: '',
-        disciplineInput: 'math',
+        disciplineInput: '',
         ageInput: 18
+    }
+
+    UNSAFE_componentWillMount() {
+        this.populateForm();
+    }
+
+    getIdParam() {
+        console.log(this.props.match.params.id)
+        return this.props.match.params.id;
     }
 
     handleName(e) {
@@ -46,23 +56,40 @@ class CreateCourses extends React.Component {
         })
     }
 
+    populateForm() {
+        const db = firebase.firestore();
+        const docRef = db.collection('courses').doc(this.getIdParam());
+        console.log(docRef)
+
+        docRef.get().then(doc => {
+            console.log(doc.data())
+            this.setState({
+                nameInput: doc.data().title,
+                descriptionInput: doc.data().desc,
+                disciplineInput: doc.data().discipline,
+                ageInput: doc.data().targetAge,
+            })
+            return doc
+        })
+        .then((doc) => {
+            document.querySelector('#description').value = this.state.descriptionInput;
+            document.querySelector('#title').value = this.state.nameInput;
+            document.querySelector('#age').value = this.state.ageInput;
+            document.querySelector('#discipline').value = this.state.disciplineInput;
+        })
+    }
+
     handleSubmit() {
         const db = firebase.firestore();
-        let doc = db.collection('courses').doc();
-        const docID = doc.id;
+        let doc = db.collection('courses').doc(this.getIdParam());
         try {
-            doc.set({
+            doc.update({
                 title: this.state.nameInput,
                 desc: this.state.descInput,
                 discipline: this.state.disciplineInput,
                 targetAge: this.state.ageInput,
-                course_id: docID,
-                author_id: this.props.user.uid,
-                created_at: firebase.firestore.Timestamp.fromDate(new Date()),
-                rating: '--'
             }).then(() => {
-                this.props.updateData();
-                alertbox.show("Curso criado com sucesso!")
+                alertbox.show("Curso atualizado com sucesso!")
             });
         } catch(err) {
             console.log(err)
@@ -75,11 +102,11 @@ class CreateCourses extends React.Component {
         return (
             <div className="create-course-modal">
                 <label>Nome:</label>
-                <input onChange={(e) => this.handleName(e)} type="text"/>
+                <input id="title" onChange={(e) => this.handleName(e)} type="text"/>
                 <label>Descrição:</label>
-                <input onChange={(e) => this.handleDescription(e)} type="text"/>
+                <input id="description" onChange={(e) => this.handleDescription(e)} type="text"/>
                 <label>Matéria:</label>
-                <select onChange={(e) => this.handleDiscipline(e)}>
+                <select id="discipline" onChange={(e) => this.handleDiscipline(e)}>
                     <option value="math">Matemática</option>
                     <option value="grammar">Gramática</option>
                     <option value="english">Inglês</option>
@@ -88,8 +115,8 @@ class CreateCourses extends React.Component {
                 </select>
                 <label>Idade:</label>
                 <div class="range-value">{this.state.ageInput}</div>
-                <input onChange={(e) => this.handleAge(e)} type="range" max="18" min="0"/>
-                <button onClick={this.handleSubmit} className="full-width">Criar</button>
+                <input id="age" onChange={(e) => this.handleAge(e)} type="range" max="18" min="0"/>
+                <button onClick={this.handleSubmit} className="full-width">Atualizar</button>
             </div>
         )
     }
@@ -99,4 +126,4 @@ const mapStateToProps = (store) => ({
     user: store.authReducer.user
 });
 
-export default connect(mapStateToProps)(CreateCourses);
+export default connect(mapStateToProps)(EditCourse);

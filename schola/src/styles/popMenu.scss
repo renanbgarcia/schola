@@ -1,0 +1,36 @@
+.pop-menu {
+    position: fixed;
+    width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background-color: #fff;
+    padding: 5px;
+    z-index: 999;
+    li {
+        border-bottom: ridge #000 1px;
+        padding: 5px;
+        &:hover {
+            background: #d3d3d3;
+            background: $color-tertiary;
+        }
+        &:last-child {
+            border-bottom: none !important;
+        }
+    }
+    
+}
+
+
+.popmenu-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    // background-color: rgba(90, 90, 90, 0.699);
+    // backdrop-filter: blur(2px);
+    z-index: 999;
+}

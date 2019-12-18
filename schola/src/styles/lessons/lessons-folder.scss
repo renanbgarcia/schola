@@ -128,14 +128,19 @@
 }
 
 .circle-item-menu {
+    // position: relative;
     width: 30px;
     height: 30px;
     border-radius: 15px;
     line-height: 30px;
     vertical-align: middle;
     margin-left: auto;
+    z-index: 200;
     &:hover {
         background-color: $color-quaternary;
+    }
+    svg {
+        pointer-events: none;
     }
 }
 

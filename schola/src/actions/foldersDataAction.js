@@ -5,7 +5,7 @@ export const updateFoldersData = (data) => ({
     categories: data
 });
 
-// export const updateActualView = (data) => ({
-//     type: UPDATE_ACTUAL_VIEW,
-//     actualView: data
-// })
+export const updateActualView = (data) => ({
+    type: UPDATE_ACTUAL_VIEW,
+    actualView: data
+})

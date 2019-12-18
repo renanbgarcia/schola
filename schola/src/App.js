@@ -15,6 +15,8 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Navbar from './components/Navbar';
 import CreateLesson from './components/lesson/CreateLesson';
+import EditLesson from './components/lesson/editLesson';
+import EditCourse from './components/lesson/editCourse';
 import Lessons from './components/lesson/Lessons';
 import Students from './components/students/Students';
 import RegisterStudent from './components/students/RegisterStudent';
@@ -60,9 +62,12 @@ class App extends React.Component {
             <Route path='/login' component={this.guard()}/>
             <Route path='/signup' component={Signup}/>
             <Route path='/create/lesson' component={CreateLesson}/>
+            <Route path='/edit/lesson/:id' component={EditLesson}/>
+            <Route path='/edit/course/:id' component={EditCourse}/>
             <Route path='/lessons' component={Lessons}/>
             <Route path='/students' component={Students}/>
             <Route path='/registerstudent' component={RegisterStudent}/>
+            
           </div>
         </Router>
         <div id="alert-area" className="alert-area"></div>

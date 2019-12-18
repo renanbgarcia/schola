@@ -1,11 +1,18 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook, faBookOpen, faCalendarAlt, faStar, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import PopMenu, { offset } from '../utils/popMenu';
+import { connect } from 'react-redux';
+import { hidePopMenu, showPopMenu, updatePopMenuPosition, updatePopMenuTarget } from '../../actions/menuAction';
+import Modal from '../utils/modal';
 
 class Folder extends React.Component {
 
     state = {
-        showMenuOptions: false
+        menuOptionsPos: {
+            x: 0,
+            y: 0
+        }
     }
 
     getDate = (timestamp) => {
@@ -14,6 +21,7 @@ class Folder extends React.Component {
     }
 
     renderBar(folder) {
+        console.log(folder)
         let countIcon;
         switch (folder.type) {
             case 'category':
@@ -53,10 +61,12 @@ class Folder extends React.Component {
                     :
                     null
                 }
-                <div className="circle-item-menu" onClick={(e) => this.handleOptionsClick(e)}><FontAwesomeIcon icon={faEllipsisV}/></div>
                 {
-                    this.state.showMenuOptions ?
-                    <div style={{position: 'absolute', top: this.state.menuOptionsPos.y, left: this.state.menuOptionsPos.x}}>Menuzin</div>
+                    folder.hasOwnProperty('type') && folder.type !== 'category' ?
+                    <div className="circle-item-menu" onClick={(e) => {
+                            this.handleOptionsClick(e); this.props.updatePopMenuTarget(folder)
+                        }}><FontAwesomeIcon icon={faEllipsisV}/>
+                    </div>
                     :
                     null
                 }
@@ -66,27 +76,39 @@ class Folder extends React.Component {
 
     handleOptionsClick(e) {
         e.preventDefault();
-        console.log(e.clientX, e.clientY);
-        this.setState({
-            showMenuOptions: true,
-            menuOptionsPos: {x: e.offsetX, y: e.offsetY}
-        })
+        console.log(offset(e.target))
+        const t = offset(e.target).top;
+        const l = offset(e.target).left;
+        this.props.updatePopMenuPos(l - 100, t + 5);
+        this.props.showPopMenu();
     }
 
     render() {
         const folder = this.props.folder;
         console.log(folder)
         return (
-            <div className="lessons-folder-item " onClick={this.props.onClick} id={"item-" + folder.id} >
-                <div className="lesson-folder-content">
+            <div className="lessons-folder-item "  id={"item-" + folder.id} >
+                <div className="lesson-folder-content" onClick={this.props.onClick}>
                     <div className="lessons-folder-title">{ folder.title }</div>
                     <div className="lessons-folder-description">{ folder.description }</div>
-                    {this.renderBar(folder)}
-                </div>
 
+                </div>
+                {this.renderBar(folder)}
+                
             </div>
         )
     }
 }
 
-export default Folder;
+const mapStateToProps = (store) => ({
+    isPopMenuVisible: store.menuReducer.isPopMenuVisible
+})
+
+const mapDispatchToProps = (dispatch) => ({
+    hidePopMenu: () => dispatch(hidePopMenu()),
+    showPopMenu: () => dispatch(showPopMenu()),
+    updatePopMenuPos: (x, y) => dispatch(updatePopMenuPosition(x, y)),
+    updatePopMenuTarget: (target) => dispatch(updatePopMenuTarget(target))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Folder);

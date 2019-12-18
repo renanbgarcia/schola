@@ -14,6 +14,7 @@ import moment from 'moment';
 
 import CalendarBox from '../utils/calendar/calendarEditBox';
 import CalendarToolbarSmall from '../utils/calendar/ToolbarSmall';
+import ScheduleCalendar from '../calendar/scheduleCalendar';
 
 import Modal from '../utils/modal';
 
@@ -28,22 +29,10 @@ class CreateLesson extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleTagInput = this.handleTagInput.bind(this);
         this.confirmTags = this.confirmTags.bind(this);
-        this.localizer = momentLocalizer(moment);
-        this.eventComponent = this.eventComponent.bind(this)
-        this.onEventResize = this.onEventResize.bind(this);
-        this.onEventDrop = this.onEventDrop.bind(this);
-        this.onSelectRange = this.onSelectRange.bind(this)
-        this.onSelectEvent = this.onSelectEvent.bind(this)
-        this.deleteEvent = this.deleteEvent.bind(this);
-        this.updateSelectedEvent = this.updateSelectedEvent.bind(this);
-        this.dismissModal =  this.dismissModal.bind(this);
-        this.renderModal = this.renderModal.bind(this);
         this.DoSchedule = this.DoSchedule.bind(this);
         this.hideParentModal =this.hideParentModal.bind(this);
         this.getCourses = this.getCourses.bind(this);
         this.handleCourseInput = this.handleCourseInput.bind(this);
-
-        this.modalRef = React.createRef();
     }
 
     state = {
@@ -55,14 +44,8 @@ class CreateLesson extends React.Component {
         categoryInput: '',
         tagsInput: [],
         tags: [],
-        events: [],
-        clickedEvent: {
-            title: "Edite o título",
-            desc: "Edite a descrição"
-        },
         courses: [],
         coursesInput: [],
-        isEventEditBoxVisible: false
     }
 
     componentDidMount() {
@@ -270,109 +253,6 @@ class CreateLesson extends React.Component {
         }
     }
 
-    onEventResize({ event, start, end, allDay }) {
-        const { events } = this.state
-
-        const nextEvents = events.map(existingEvent => {
-          return existingEvent.id === event.id
-            ? { ...existingEvent, start, end }
-            : existingEvent
-        })
-    
-        this.setState({
-          events: nextEvents,
-        })
-      };
-    
-    onEventDrop({ event, start, end, isAllDay: droppedOnAllDaySlot }) {
-        const { events } = this.state
-
-        const idx = events.indexOf(event)
-        let allDay = event.allDay
-    
-        if (!event.allDay && droppedOnAllDaySlot) {
-          allDay = true
-        } else if (event.allDay && !droppedOnAllDaySlot) {
-          allDay = false
-        }
-    
-        const updatedEvent = { ...event, start, end, allDay }
-    
-        const nextEvents = [...events]
-        nextEvents.splice(idx, 1, updatedEvent)
-    
-        this.setState({
-          events: nextEvents,
-        })
-    };
-
-    onSelectRange(info) {
-        const { events } = this.state;
-
-        let timestamp = Date.now() * Math.random(0.1, 1);
-        timestamp = Math.floor(timestamp);
-        let id = timestamp + window.crypto.getRandomValues(new Uint32Array(1));
-
-        const newEvent = {
-            id: id,
-            start: info.start,
-            end: info.end,
-            title: this.state.titleInput !== "" ? this.state.titleInput: "Agendamento",
-            description: this.state.descriptionInput
-        }
-        this.setState({
-            events:[...events, newEvent]
-        })
-    }
-
-    deleteEvent(event) {
-        const { events } = this.state;
-        const idx = events.indexOf(event);
-
-        events.splice(idx, 1);
-        this.setState({
-            events: events,
-            isEventEditBoxVisible: false
-        })
-    }
-
-    onSelectEvent(event) {
-        this.setState({
-            clickedEvent: event,
-            isEventEditBoxVisible: true
-        })
-    }
-
-    updateSelectedEvent(event, updatedEvent) {
-        const { events } = this.state;
-        const idx = events.indexOf(event)
-
-        const nextEvents = [...events]
-        nextEvents.splice(idx, 1, updatedEvent)
-        this.setState({
-            events: nextEvents,
-            isEventEditBoxVisible: false
-        })
-    }
-
-    dismissModal(e) {
-        console.log(e.target.id)
-        if (e.target.id === "wrapper") {
-            this.setState({ isEventEditBoxVisible: false });
-        }
-    }
-
-    renderModal() {
-        return this.state.isEventEditBoxVisible ?
-            <div id="wrapper"
-                    className="calendar-edit-box-wrapper"
-                    onClick={this.dismissModal}>
-                <CalendarBox updateSelectedEvent={this.updateSelectedEvent}
-                                deleteEvent={this.deleteEvent}
-                                eventTarget={this.state.clickedEvent}/>
-            </div> : null
-    }
-
     hideParentModal() {
         if (this.props.hideModal) {
             this.props.hideModal();
@@ -495,30 +375,7 @@ class CreateLesson extends React.Component {
                         </div>
                     </div>
                     <div className="column">
-                        <ReactCSSTransitionGroup
-                        transitionName="calendarEdit"
-                        transitionEnterTimeout={250}
-                        transitionLeaveTimeout={250}>
-                            { this.renderModal() }
-                        </ReactCSSTransitionGroup>
-                        <DnDCalendar
-                            defaultDate={new Date()}
-                            defaultView="month"
-                            events={this.state.events}
-                            localizer={this.localizer}
-                            onEventDrop={this.onEventDrop}
-                            onEventResize={this.onEventResize}
-                            onSelectSlot={this.onSelectRange}
-                            onSelectEvent={this.onSelectEvent}
-                            resizable
-                            selectable
-                            popup={true}
-                            components={{
-                                event: this.eventComponent,
-                                toolbar: CalendarToolbarSmall
-                            }}
-                            style={{ height: '100%', 'min-height': '370px', width: '100%'}}
-                        />
+                        <ScheduleCalendar/>
                         <br/>
                     </div>
                 </div>

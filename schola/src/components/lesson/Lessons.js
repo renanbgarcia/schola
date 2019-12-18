@@ -6,11 +6,14 @@ import { categories, getMaterias } from '../utils/variables';
 import LessonsListf from '../lesson/LessonListf';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTree, faListAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { showCreateLessonModal, showCreateCourseModal } from '../../actions/modalActions';
+import { showCreateLessonModal, showCreateCourseModal, hideCreateLessonModal, hideCreateCourseModal } from '../../actions/modalActions';
 import { updateFoldersData } from '../../actions/foldersDataAction';
 import Modal from '../utils/modal';
 import CreateLesson from '../lesson/CreateLesson';
 import CreateCourses from '../lesson/CreateCourses';
+import PopMenu from '../utils/popMenu';
+import { hidePopMenu, showPopMenu } from '../../actions/menuAction';
+import { deleteFolder } from './folderPopMenu';
 
 class Lessons extends React.Component {
 
@@ -27,6 +30,11 @@ class Lessons extends React.Component {
         lastDoc: {},
         treeData: [{ title: 'Loading', children: [] }]
     }
+
+    optionItems = [
+        {title: 'Deletar', onClick: () => {deleteFolder(this.props.popMenuTarget); this.retrieveFoldersData()}},
+        {title: 'Editar', onClick: () => this.props.history.push(`/edit/${this.props.popMenuTarget.type}/${this.props.popMenuTarget.id}`)}
+    ]
 
     UNSAFE_componentWillMount() {
         this.retrieveFoldersData();
@@ -132,33 +140,34 @@ class Lessons extends React.Component {
 
     renderLessonsView(ageArray) {
         return this.state.view === 'tree' ?
-                <LessonsFolder data={this.props.treeData}/>
-                :
-                <>
-                    <label>Age:</label>
-                    <select onChange={(e) => this.handleAgeFilter(e)} id="age-filter">
-                        <option value="">Todas</option>
-                        { ageArray.map((key, i) => <option value={i + 1}>{i + 1}</option>) }
-                    </select>
-                    <label>Disciplina:</label>
-                    <select onChange={(e) => this.handleDisciplineFilter(e)} id="discipline-filter">
-                        <option value="">Todas</option>
-                        <option value="grammar">Gramática</option>
-                        <option value="english">Inglês</option>
-                    </select>
-                    <LessonsListf
-                        disciplineFilter={this.state.disciplineFilter}
-                        ageFilter={this.state.ageFilter}
-                    />
-                </>
+            <LessonsFolder data={this.props.treeData}/>
+            :
+            <>
+                <label>Idade:</label>
+                <select onChange={(e) => this.handleAgeFilter(e)} id="age-filter">
+                    <option value="">Todas</option>
+                    { ageArray.map((key, i) => <option value={i + 1}>{i + 1}</option>) }
+                </select>
+                <label>Disciplina:</label>
+                <select onChange={(e) => this.handleDisciplineFilter(e)} id="discipline-filter">
+                    <option value="">Todas</option>
+                    <option value="grammar">Gramática</option>
+                    <option value="english">Inglês</option>
+                </select>
+                <LessonsListf
+                    disciplineFilter={this.state.disciplineFilter}
+                    ageFilter={this.state.ageFilter}
+                />
+            </>
     }
 
     render() {
+        console.log(this.props.popMenuTarget)
         let ageArray = Array.apply(null, Array(18));
         return (
             <div className="home-container">
-                <Modal modalCondition="isCreateLesson" Component={<CreateLesson/>}/>
-                <Modal modalCondition="isCreateCourse" Component={<CreateCourses updateData={this.retrieveFoldersData}/>}/>
+                <Modal isOpen={this.props.isCreateLessonOpen} hideFunc={this.props.hideCLModal} Component={<CreateLesson/>}/>
+                <Modal isOpen={this.props.isCreateCourseOpen} hideFunc={this.props.hideCCModal} Component={<CreateCourses updateData={this.retrieveFoldersData}/>}/>
                 <div className="choose-view-bar">
                     <span onClick={() => this.setState({view: 'tree'})}><FontAwesomeIcon icon={faTree}/></span>
                     <span onClick={() => this.setState({view: 'list'})}><FontAwesomeIcon icon={faListAlt}/></span>
@@ -168,6 +177,11 @@ class Lessons extends React.Component {
                 <div className="lessons-container">
                     {this.renderLessonsView(ageArray)}
                 </div>
+                <PopMenu show={this.props.isPopMenuVisible}
+                        hideFunc={this.props.hidePopMenu}
+                        items={this.optionItems}
+                        x={this.props.popMenuX}
+                        y={this.props.popMenuY}/>
             </div>
         )
     }
@@ -175,13 +189,23 @@ class Lessons extends React.Component {
 
 const mapStateToProps = (store) => ({
     userObject: store.authReducer.user,
-    treeData: store.foldersDataReducer.categories
+    treeData: store.foldersDataReducer.categories,
+    isCreateLessonOpen: store.modalReducer.isCLOpen,
+    isCreateCourseOpen: store.modalReducer.isCCOpen,
+    isPopMenuVisible: store.menuReducer.isPopMenuVisible,
+    popMenuX: store.menuReducer.popMenuPositionX,
+    popMenuY: store.menuReducer.popMenuPositionY,
+    popMenuTarget: store.menuReducer.popMenuTarget
 });
 
 const mapDispatchToProps = (dispatch) => ({
     showCLmodal: () => dispatch(showCreateLessonModal()),
     showCCmodal: () => dispatch(showCreateCourseModal()),
-    setFoldersData: (data) => dispatch(updateFoldersData(data))
+    hideCLModal: () => dispatch(hideCreateLessonModal()),
+    hideCCModal: () => dispatch(hideCreateCourseModal()),
+    setFoldersData: (data) => dispatch(updateFoldersData(data)),
+    hidePopMenu: () => dispatch(hidePopMenu()),
+    showPopMenu: () => dispatch(showPopMenu()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Lessons)
