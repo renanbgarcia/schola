@@ -79,13 +79,14 @@ class EditLesson extends React.Component {
                 });
     }
 
-    getIdParam() {
-        return this.props.match.params.id;
-    }
+    // getIdParam() {
+    //     return this.props.match.params.id;
+    // }
 
     populateForm() {
         const db = firebase.firestore();
-        const docRef = db.collection('lessons').doc(this.getIdParam());
+        console.log(this.props.lessonId)
+        const docRef = db.collection('lessons').doc(this.props.lessonId);
 
         docRef.get().then(doc => {
             this.setState({
@@ -113,7 +114,7 @@ class EditLesson extends React.Component {
     sendLessonInfo() {
         try {
             const db = firebase.firestore();
-            const docRef = db.collection('lessons').doc(this.getIdParam());
+            const docRef = db.collection('lessons').doc(this.props.lessonId);
             const docID = docRef.id;
 
             docRef.get().then(doc => console.log(doc.data()))

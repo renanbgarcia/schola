@@ -2,17 +2,10 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { alertbox } from '../utils/alert';
-// import Modal from '../utils/modal';
-// import CreateLesson from '../lesson/CreateLesson';
-// import CreateCourses from '../lesson/CreateCourses';
 import { connect } from 'react-redux';
 import { showCreateLessonModal } from '../../actions/modalActions';
 import { hideCreateLessonModal } from '../../actions/modalActions';
-import { updateActualView } from '../../actions/foldersDataAction';
-
 import Folder from './folder';
-
-import firebase from '../../firebase';
 
 class LessonsFolder extends React.Component {
 
@@ -27,29 +20,12 @@ class LessonsFolder extends React.Component {
         this.goToNextResult = this.goToNextResult.bind(this);
         this.toggleSearchBar = this.toggleSearchBar.bind(this);
     }
-    UNSAFE_componentWillUnmount() {
-        this.props.updateView(this.state.actualView);
-    }
-
-    UNSAFE_componentWillMount() {
-        this.setState({
-            actualView: this.props.actualView,
-        })
-    }
 
     componentWillReceiveProps(next) {
-        // this.props.updateView(next.data);
-        let view;
-        if (this.props.actualView !== undefined) {
-            view = this.props.actualView
-            console.log("usando store")
-        } else {
-            // this.props.updateView(next.data);
-            view = next.data
-        }
+
         this.setState({
-            actualView: view,
-            parents: [{title: 'categorias', children: view}],
+            actualView: next.data,
+            parents: [{title: 'categorias', children: next.data}],
         })
 
         // const ref = firebase.firestore().collection('lessons').get();
@@ -68,8 +44,8 @@ class LessonsFolder extends React.Component {
 
     state = {
         breadcrumbs: [],
-        actualView: [{title: "Loading", children: [{title:'laoding'}, {title:'laoding'}, {title:'laoding'}]}],
-        parents: [{title: 'categorias', children: [{title:'laoding'}, {title:'laoding'}, {title:'laoding'}]}],
+        actualView: this.props.data,
+        parents: [{title: 'categorias', children: []}],
         showSearchBar: false,
         searchTerm: '',
         actualResults: [],
@@ -86,7 +62,6 @@ class LessonsFolder extends React.Component {
         console.log(folder)
         if (folder.hasOwnProperty('children')) {
             this.addCrumb(folder);
-            // this.props.updateView(folder.children)
             this.setState({
                 actualView: folder.children,
                 parents: [...this.state.parents, folder]
@@ -149,7 +124,6 @@ class LessonsFolder extends React.Component {
         if (newView.length > 1) {
             newView.pop();
             this.removeCrumbs();
-            // this.props.updateView(newView[newView.length - 1].children);
             console.log(newView[newView.length - 1].children)
             this.setState({
                 actualView: newView[newView.length - 1].children
@@ -211,7 +185,7 @@ class LessonsFolder extends React.Component {
 
     render() {
         
-        console.log(this.state.parents)
+        console.log(this.state)
         return (
             <div className="tree-view-wrapper">
 
@@ -235,14 +209,9 @@ class LessonsFolder extends React.Component {
     }
 }
 
-const mapStateToProps = (store) => ({
-    actualView: store.foldersDataReducer.actualView
-})
-
 const mapDispatchToProps = (dispatch) => ({
     showCLmodal: () => dispatch(showCreateLessonModal()),
     hideCLmodal: () => dispatch(hideCreateLessonModal()),
-    updateView: (data) => dispatch(updateActualView(data))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(LessonsFolder);
+export default connect(null, mapDispatchToProps)(LessonsFolder);

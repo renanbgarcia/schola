@@ -10,6 +10,7 @@ import { categories, getMaterias } from '../utils/variables';
 
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
+
 import moment from 'moment';
 
 import CalendarBox from '../utils/calendar/calendarEditBox';
@@ -33,6 +34,7 @@ class CreateLesson extends React.Component {
         this.hideParentModal =this.hideParentModal.bind(this);
         this.getCourses = this.getCourses.bind(this);
         this.handleCourseInput = this.handleCourseInput.bind(this);
+        this.handleDateInput = this.handleDateInput.bind(this);
     }
 
     state = {
@@ -45,7 +47,7 @@ class CreateLesson extends React.Component {
         tagsInput: [],
         tags: [],
         courses: [],
-        coursesInput: [],
+        coursesInput: []
     }
 
     componentDidMount() {
@@ -57,10 +59,6 @@ class CreateLesson extends React.Component {
                 tagsInputElem.value = "";
             }
         })
-    }
-
-    UNSAFE_componentWillMount() {
-        this.getCourses();
     }
 
     handleFileInput() {
@@ -78,8 +76,40 @@ class CreateLesson extends React.Component {
         this.setState({ ageInput: e.target.value });
     }
 
+    getCourses(discipline) {
+        console.log('got courses')
+        
+        firebase.firestore()
+                .collection('courses')
+                .where('discipline', '==', discipline)
+                .get()
+                .then(snap => {
+                    let courses = [];
+                    for (let doc of snap.docs) {
+                        courses.push({title: doc.data().title, id: doc.data().course_id})
+                    }
+                    return courses
+                })
+                .then((courses) => {
+                    this.setState({
+                        courses: courses
+                    })
+                })
+                .then(() => {
+                    let checkedElems = document.querySelectorAll('.checkbox-elem-wrapper input');
+                        checkedElems.forEach((elem) => {
+                            if (this.state.coursesInput.indexOf(elem.value ) !== -1) {
+                                console.log('foi')
+                                elem.setAttribute('checked', 'checked');
+                            } else {
+                                elem.removeAttribute('checked');
+                            }
+                        })
+                });
+    }
+
     handleDisciplineInput(e) {
-        this.setState({ disciplineInput: e.currentTarget.value });
+        this.setState({ disciplineInput: e.currentTarget.value }, this.getCourses(e.currentTarget.value));
     }
 
     handleDescriptionInput(e) {
@@ -155,14 +185,14 @@ class CreateLesson extends React.Component {
                 course_id: this.state.coursesInput,
                 category: this.state.categoryInput,
                 created_at: firebase.firestore.Timestamp.fromDate(new Date()),
-                scheduled: this.state.events,
+                // scheduled: this.state.events,
                 author: this.props.userObject.displayName,
                 author_id: this.props.userObject.uid,
                 authorProto: 'https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png',
                 rating: '--'
             });
 
-            this.DoSchedule();
+            // this.DoSchedule();
 
             return docID
         } catch(error) {
@@ -224,6 +254,13 @@ class CreateLesson extends React.Component {
         })
     }
 
+    handleDateInput(e) {
+        console.log(moment(e.target.value).valueOf());
+        this.setState({
+            dateInput: e.target.value
+        })
+    }
+
     handleCourseInput(e) {
         console.log(e.target.value)
         this.setState({
@@ -263,128 +300,115 @@ class CreateLesson extends React.Component {
         return <div>{e.title}</div>
     }
 
-    getCourses() {
-        firebase.firestore()
-                .collection('courses')
-                .get()
-                .then(snap => {
-                    let courses = [];
-                    for (let doc of snap.docs) {
-                        courses.push({title: doc.data().title, id: doc.data().course_id})
-                    }
-                    return courses
-                })
-                .then((courses) => {
-                    this.setState({
-                        courses: courses
-                    })
-                });
-    }
-
     render() {
         console.log(this.state)
         return (
             <div className="create-lesson-container">
                 <div>
-                <div className="row">
-                    <div className="column">
-                        <div className="create-lesson-form">
-                            <label for="titulo">Título</label>
-                            <input onChange={e => this.handleTitleInput(e)}
-                                    type="text"
-                                    name="titulo"
-                                    id="title"/>
-                            <div className="row">
-                                <div className="column column-25 mobile-full-width">
-                                    <label for="idade">Idade alvo</label>
-                                    <input onChange={e => this.handleAgeInput(e)}
-                                            type="number"
-                                            name="idade"
-                                            id="age"
-                                            min="0"
-                                            max="18"/>
-                                </div>
-                                <div className="column column-75 mobile-full-width">
-                                    <label for="titulo">Disciplina</label>
-                                    <select onChange={(e) => this.handleDisciplineInput(e)} id="discipline">
-                                        <option>Escolha uma disciplina</option>
-                                        { getMaterias().map(mat => <option value={ mat.name }>{ mat.title }</option>) }
-                                    </select>
-                                </div>
-                            </div>
-                            <textarea
-                                onChange={e => this.handleDescriptionInput(e)}
-                                id="description"
-                                name="description"
-                                defaultValue="Descreva o material">
-                            </textarea>
-                            <div className="row">
-                                <div className="column">
-                                    <label>Categoria</label>
-                                    <select onChange={(e) => this.handleCategory(e)}>
-                                        <option>Escolha uma categoria</option>
-                                        {categories.map(cat => <option value={ cat.title }>{ cat.title }</option>)}
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="column">
-                                    <label>Tags:</label>
-                                    <input type="text" onChange={this.handleTagInput} id="tags-input"/>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="column">
-                                    <div className="tags-wrapper">
-                                        {this.state.tags.map((tag) => <span className="tag-pill">{tag} <FontAwesomeIcon onClick={() => this.deleteTagPill(tag)} icon={faTimesCircle} style={{color:"#fff"}}/></span>)}
+                    <div className="row">
+                        <div className="column">
+                            <div className="create-lesson-form">
+                                <label for="titulo">Título</label>
+                                <input onChange={e => this.handleTitleInput(e)}
+                                        type="text"
+                                        name="titulo"
+                                        id="title"/>
+                                <div className="row">
+                                    <div className="column column-25 mobile-full-width">
+                                        <label for="idade">Idade alvo</label>
+                                        <input onChange={e => this.handleAgeInput(e)}
+                                                type="number"
+                                                name="idade"
+                                                id="age"
+                                                min="0"
+                                                max="18"/>
+                                    </div>
+                                    <div className="column column-75 mobile-full-width">
+                                        <label for="titulo">Disciplina</label>
+                                        <select onChange={(e) => this.handleDisciplineInput(e)} id="discipline">
+                                            <option>Escolha uma disciplina</option>
+                                            { getMaterias().map(mat => <option value={ mat.name }>{ mat.title }</option>) }
+                                        </select>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="row">
-                                <div className="column">
-                                    <fieldset onChange={this.handleCourseInput}>
-                                        <legend>Cursos: </legend>
-                                        <div className="create-lesson-checkbox-wrapper">
-                                            { this.state.courses.map((course) => { return <div><input type="checkbox" value={ course.id }/><div title={ course.title }>{ course.title }</div></div> })}
+                                <textarea
+                                    onChange={e => this.handleDescriptionInput(e)}
+                                    id="description"
+                                    name="description"
+                                    defaultValue="Descreva o material">
+                                </textarea>
+                                <div className="row">
+                                    <div className="column">
+                                        <label>Categoria</label>
+                                        <select onChange={(e) => this.handleCategory(e)}>
+                                            <option>Escolha uma categoria</option>
+                                            {categories.map(cat => <option value={ cat.title }>{ cat.title }</option>)}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="column">
+                                        <label>Tags:</label>
+                                        <input type="text" onChange={this.handleTagInput} id="tags-input"/>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="column">
+                                        <div className="tags-wrapper">
+                                            {this.state.tags.map((tag) => <span className="tag-pill">{tag} <FontAwesomeIcon onClick={() => this.deleteTagPill(tag)} icon={faTimesCircle} style={{color:"#fff"}}/></span>)}
                                         </div>
-                                    </fieldset>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="row">
-                                <div className="column">
-                                    <label className="input-file-label" for="lesson-file">Carregar arquivos</label>
-                                    <input onChange={this.handleFileInput}
-                                            type="file"
-                                            id="lesson-file"
-                                            multiple/>
+                                <div className="row">
+                                    <div className="column">
+                                        <fieldset onChange={this.handleCourseInput}>
+                                            <legend>Cursos: </legend>
+                                            <div className="create-lesson-checkbox-wrapper">
+                                                { this.state.courses.map((course) => { return <div><input type="checkbox" value={ course.id }/><div title={ course.title }>{ course.title }</div></div> })}
+                                            </div>
+                                        </fieldset>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="row row-center">
-                                <ul className="file-list">
-                                    {this.state.fileList.map((item, i) =>
-                                        <li className="file-list-item">
-                                            {item.name}
-                                            <span id={item.name}></span>
-                                            <span onClick={(i) => this.deleteListItem(i)} >
-                                                <FontAwesomeIcon className="delete-button-list" icon={faTimesCircle}/>
-                                            </span>
-                                        </li>
-                                    )}
-                                </ul>
+                                <div className="row">
+                                    <div className="column">
+                                        <input onChange={(e) => this.handleDateInput(e)} type="date"/>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="column">
+                                        <label className="input-file-label" for="lesson-file">Carregar arquivos</label>
+                                        <input onChange={this.handleFileInput}
+                                                type="file"
+                                                id="lesson-file"
+                                                multiple/>
+                                    </div>
+                                </div>
+                                <div className="row row-center">
+                                    <ul className="file-list">
+                                        {this.state.fileList.map((item, i) =>
+                                            <li className="file-list-item">
+                                                {item.name}
+                                                <span id={item.name}></span>
+                                                <span onClick={(i) => this.deleteListItem(i)} >
+                                                    <FontAwesomeIcon className="delete-button-list" icon={faTimesCircle}/>
+                                                </span>
+                                            </li>
+                                        )}
+                                    </ul>
+                                </div>
                             </div>
                         </div>
+                        {/* <div className="column">
+                            <ScheduleCalendar/>
+                            <br/>
+                        </div> */}
                     </div>
-                    <div className="column">
-                        <ScheduleCalendar/>
-                        <br/>
+                    <div className="row">
+                        <div className="column">
+                            <button className="full-width send-lesson-button" onClick={this.handleSubmit}>Enviar</button>
+                            { this.props.hasOwnProperty("modalCondition") ? <button className="full-width" onClick={this.hideParentModal}>Fechar</button> : null }
+                        </div>
                     </div>
-                </div>
-                <div className="row">
-                    <div className="column">
-                        <button className="full-width send-lesson-button" onClick={this.handleSubmit}>Enviar</button>
-                        { this.props.hasOwnProperty("modalCondition") ? <button className="full-width" onClick={this.hideParentModal}>Fechar</button> : null }
-                    </div>
-                </div>
                 </div>
             </div>
         )

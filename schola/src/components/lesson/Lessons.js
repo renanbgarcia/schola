@@ -6,11 +6,16 @@ import { categories, getMaterias } from '../utils/variables';
 import LessonsListf from '../lesson/LessonListf';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTree, faListAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { showCreateLessonModal, showCreateCourseModal, hideCreateLessonModal, hideCreateCourseModal } from '../../actions/modalActions';
+import { showCreateLessonModal,
+         showCreateCourseModal,
+         hideCreateLessonModal,
+         hideCreateCourseModal } from '../../actions/modalActions';
 import { updateFoldersData } from '../../actions/foldersDataAction';
 import Modal from '../utils/modal';
 import CreateLesson from '../lesson/CreateLesson';
 import CreateCourses from '../lesson/CreateCourses';
+import EditLesson from '../lesson/editLesson';
+import EditCourse from '../lesson/editCourse';
 import PopMenu from '../utils/popMenu';
 import { hidePopMenu, showPopMenu } from '../../actions/menuAction';
 import { deleteFolder } from './folderPopMenu';
@@ -20,6 +25,10 @@ class Lessons extends React.Component {
     constructor(props) {
         super(props);
         this.retrieveFoldersData = this.retrieveFoldersData.bind(this);
+        this.hideEditLesson = this.hideEditLesson.bind(this);
+        this.hideEditCourse = this.hideEditCourse.bind(this);
+        this.showLessonEdit = this.showLessonEdit.bind(this);
+        this.showCourseEdit = this.showCourseEdit.bind(this);
     }
 
     state = {
@@ -28,16 +37,53 @@ class Lessons extends React.Component {
         disciplineFilter: '',
         ageFilter: '',
         lastDoc: {},
-        treeData: [{ title: 'Loading', children: [] }]
+        treeData: [{ title: 'Loading', children: [] }],
+        isEditLessonOpen: false,
+        lessonTarget: ''
     }
 
     optionItems = [
         {title: 'Deletar', onClick: () => {deleteFolder(this.props.popMenuTarget); this.retrieveFoldersData()}},
-        {title: 'Editar', onClick: () => this.props.history.push(`/edit/${this.props.popMenuTarget.type}/${this.props.popMenuTarget.id}`)}
+        {title: 'Editar', onClick: () => {
+            this.props.popMenuTarget.type === 'lesson' ?
+            this.showLessonEdit() : this.showCourseEdit()
+        }}
     ]
 
     UNSAFE_componentWillMount() {
         this.retrieveFoldersData();
+    }
+
+    /**
+     * Função a ser passada para um modal para que feche o modal de edição de lição
+     */
+    hideEditLesson() {
+        this.setState({
+            isEditLessonOpen: false
+        })
+    }
+
+    /**
+     * Função a ser passada para um modal para que feche o modal de edição de curso
+     */
+    hideEditCourse() {
+        this.setState({
+            isEditCourseOpen: false
+        })
+    }
+
+    /**
+     * Função para mostrar modal de edição de lição. É passada como propriedade nas opções do component PopMenu
+     */
+    showLessonEdit() {
+        this.setState({isEditLessonOpen: true})
+    }
+
+     /**
+     * Função para mostrar modal de edição de curso. É passada como propriedade nas opções do component PopMenu
+     */
+    showCourseEdit() {
+        this.setState({isEditCourseOpen: true})
     }
 
     retrieveFoldersData() {
@@ -94,31 +140,6 @@ class Lessons extends React.Component {
         })
     }
 
-    //Deprecated
-    getDescendantCount(node) {
-        let count = 0;
-
-        if (node.hasOwnProperty('children')) {
-            node.children.map(lv1 => {
-                if (lv1.hasOwnProperty('children')) {
-                    lv1.children.map(lv2 => {
-                        if (lv2.hasOwnProperty('children')) {
-                            lv2.children.map(lv3 => {
-                                count++
-                            })
-                        } else {
-                            count++
-                        }
-                    })
-                } else {
-                    count++
-                }
-            })
-        }
-        
-        return count
-    }
-
     handleDisciplineFilter(e) {
         this.setState({
             disciplineFilter: e.currentTarget.value
@@ -129,13 +150,6 @@ class Lessons extends React.Component {
         this.setState({
             ageFilter: e.currentTarget.value
         });
-    }
-
-    getButtonCount(node) {
-    const count = this.getDescendantCount(node);
-        if (count > 0) {
-            return <button className="child-counter">{count}</button>
-        }
     }
 
     renderLessonsView(ageArray) {
@@ -162,11 +176,12 @@ class Lessons extends React.Component {
     }
 
     render() {
-        console.log(this.props.popMenuTarget)
         let ageArray = Array.apply(null, Array(18));
         return (
             <div className="home-container">
                 <Modal isOpen={this.props.isCreateLessonOpen} hideFunc={this.props.hideCLModal} Component={<CreateLesson/>}/>
+                <Modal isOpen={this.state.isEditLessonOpen} hideFunc={this.hideEditLesson} Component={<EditLesson lessonId={this.props.popMenuTarget.id}/>}/>
+                <Modal isOpen={this.state.isEditCourseOpen} hideFunc={this.hideEditCourse} Component={<EditCourse courseId={this.props.popMenuTarget.id}/>}/>
                 <Modal isOpen={this.props.isCreateCourseOpen} hideFunc={this.props.hideCCModal} Component={<CreateCourses updateData={this.retrieveFoldersData}/>}/>
                 <div className="choose-view-bar">
                     <span onClick={() => this.setState({view: 'tree'})}><FontAwesomeIcon icon={faTree}/></span>
@@ -177,11 +192,15 @@ class Lessons extends React.Component {
                 <div className="lessons-container">
                     {this.renderLessonsView(ageArray)}
                 </div>
+                <div onClick={this.props.hidePopMenu}>
                 <PopMenu show={this.props.isPopMenuVisible}
                         hideFunc={this.props.hidePopMenu}
                         items={this.optionItems}
+                        target={this.props.popMenuTarget}
                         x={this.props.popMenuX}
                         y={this.props.popMenuY}/>
+                </div>
+
             </div>
         )
     }

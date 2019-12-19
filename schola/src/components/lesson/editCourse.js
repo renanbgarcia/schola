@@ -58,7 +58,7 @@ class EditCourse extends React.Component {
 
     populateForm() {
         const db = firebase.firestore();
-        const docRef = db.collection('courses').doc(this.getIdParam());
+        const docRef = db.collection('courses').doc(this.props.courseId);
         console.log(docRef)
 
         docRef.get().then(doc => {
@@ -81,7 +81,7 @@ class EditCourse extends React.Component {
 
     handleSubmit() {
         const db = firebase.firestore();
-        let doc = db.collection('courses').doc(this.getIdParam());
+        let doc = db.collection('courses').doc(this.props.courseId);
         try {
             doc.update({
                 title: this.state.nameInput,

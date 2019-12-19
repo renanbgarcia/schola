@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import { createBrowserHistory } from 'history';
 
 import './App.css';
@@ -15,8 +15,8 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Navbar from './components/Navbar';
 import CreateLesson from './components/lesson/CreateLesson';
-import EditLesson from './components/lesson/editLesson';
-import EditCourse from './components/lesson/editCourse';
+// import EditLesson from './components/lesson/editLesson';
+// import EditCourse from './components/lesson/editCourse';
 import Lessons from './components/lesson/Lessons';
 import Students from './components/students/Students';
 import RegisterStudent from './components/students/RegisterStudent';
@@ -24,9 +24,6 @@ import RegisterStudent from './components/students/RegisterStudent';
 let history = createBrowserHistory()
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   testeDB() {
     axios.post('http://localhost:3000/savedata');
@@ -62,8 +59,8 @@ class App extends React.Component {
             <Route path='/login' component={this.guard()}/>
             <Route path='/signup' component={Signup}/>
             <Route path='/create/lesson' component={CreateLesson}/>
-            <Route path='/edit/lesson/:id' component={EditLesson}/>
-            <Route path='/edit/course/:id' component={EditCourse}/>
+            {/* <Route path='/edit/lesson/:id' component={EditLesson}/>
+            <Route path='/edit/course/:id' component={EditCourse}/> */}
             <Route path='/lessons' component={Lessons}/>
             <Route path='/students' component={Students}/>
             <Route path='/registerstudent' component={RegisterStudent}/>
