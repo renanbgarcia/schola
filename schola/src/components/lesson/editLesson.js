@@ -1,9 +1,12 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import firebase from '../../firebase';
 import { categories, getMaterias } from '../utils/variables';
 import ScheduleCalendar from '../calendar/scheduleCalendar';
 import { alertbox } from '../utils/alert';
+import { hidePopMenu } from '../../actions/menuAction';
 
+import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 
@@ -12,7 +15,7 @@ class EditLesson extends React.Component {
     constructor(props) {
         super(props);
         this.sendLessonInfo = this.sendLessonInfo.bind(this);
-        this.getIdParam = this.getIdParam.bind(this);
+        // this.getIdParam = this.getIdParam.bind(this);
         this.populateForm = this.populateForm.bind(this);
         this.confirmTags = this.confirmTags.bind(this);
         this.deleteTagPill = this.deleteTagPill.bind(this);
@@ -27,7 +30,8 @@ class EditLesson extends React.Component {
         courses: [],
         tags: [],
         tagsInput: [],
-        coursesInput: []
+        coursesInput: [],
+        dateInput: 0
     }
 
     UNSAFE_componentWillMount() {
@@ -40,7 +44,7 @@ class EditLesson extends React.Component {
         tagsInputElem.addEventListener('keypress', (e) => {
             let key = e.which || e.keyCode;
             console.log(e.keyCode)
-            if (key === 13) { 
+            if (key === 13) {
                 this.confirmTags();
                 tagsInputElem.value = "";
             }
@@ -97,16 +101,18 @@ class EditLesson extends React.Component {
                 tags: doc.data().tags,
                 coursesInput: doc.data().course_id,
                 categoryInput: doc.data().category,
-                scheduled: doc.data().events
+                dateInput: doc.data().scheduled
             })
             return doc
         })
         .then((doc) => {
+            console.log(this.state.scheduled)
             document.querySelector('#description').value = this.state.descriptionInput;
             document.querySelector('#title').value = this.state.titleInput;
             document.querySelector('#age').value = this.state.ageInput;
             document.querySelector('#category').value = this.state.categoryInput;
             document.querySelector('#discipline').value = this.state.disciplineInput;
+            document.querySelector('#date').value = moment(this.state.dateInput).format('YYYY-MM-DD');
             this.getCourses(doc.data().discipline);
         })
     }
@@ -128,7 +134,7 @@ class EditLesson extends React.Component {
                 course_id: this.state.coursesInput,
                 category: this.state.categoryInput,
                 // created_at: firebase.firestore.Timestamp.fromDate(new Date()),
-                // scheduled: this.state.events,
+                scheduled: this.state.dateInput,
                 // author: this.props.userObject.displayName,
                 // author_id: this.props.userObject.uid,
                 // authorProto: 'https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png',
@@ -231,6 +237,13 @@ class EditLesson extends React.Component {
         })
     }
 
+    handleDateInput(e) {
+        console.log(moment(e.target.value).valueOf());
+        this.setState({
+            dateInput: moment(e.target.value).valueOf()
+        })
+    }
+
     renderCoursesCheckboxes(courses) {
         return courses.map((course) => {
             if (this.state.coursesInput.indexOf(course.id) === -1) {
@@ -257,14 +270,16 @@ class EditLesson extends React.Component {
             } catch(err) {
                 console.log(err);
             }
-            alertbox.show('Lição cadastrada!');
+            alertbox.show('Lição atualizada!');
+            this.props.hidePopMenu();
+            this.props.updateData()
         } else {
             alertbox.show('Preencha todos os campos corretamente.')
         }
     }
 
     render() {
-        console.log(this.state)
+        console.log(this.props)
         return (
         <div className="create-lesson-container">
         <div className="row">
@@ -333,6 +348,11 @@ class EditLesson extends React.Component {
                     </div>
                     <div className="row">
                         <div className="column">
+                            <input onChange={(e) => this.handleDateInput(e)} id="date" type="date"/>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="column">
                             <div onChange={this.handleCourseInput}>
                                 <legend>Cursos: </legend>
                                 <div className="create-lesson-checkbox-wrapper">
@@ -378,4 +398,8 @@ class EditLesson extends React.Component {
     }
 }
 
-export default EditLesson;
+const mapDispatchToProps = (dispatch) => ({
+    hidePopMenu: () => dispatch(hidePopMenu()),
+})
+
+export default connect(null, mapDispatchToProps)(EditLesson);

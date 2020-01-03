@@ -16,7 +16,8 @@ class Folder extends React.Component {
     }
 
     getDate = (timestamp) => {
-        let d = new Date(timestamp.seconds * 1000);
+        console.log(timestamp)
+        let d = new Date(timestamp);
         return d.toLocaleDateString();
     }
 
@@ -48,7 +49,8 @@ class Folder extends React.Component {
                     folder.hasOwnProperty('dueDate') && folder.dueDate !== undefined?
                     <div>
                         <span><FontAwesomeIcon icon={faCalendarAlt}/> </span>
-                        {folder.dueDate.map(scl => <span> { this.getDate(scl.start) } </span>)}
+                        {/* {folder.dueDate.map(scl => <span> { this.getDate(scl.start) } </span>)} */}
+                        {<span> { this.getDate(folder.dueDate) } </span>}
                     </div>
                     :
                     null
@@ -62,7 +64,7 @@ class Folder extends React.Component {
                     null
                 }
                 {
-                    folder.hasOwnProperty('type') && folder.type !== 'category' ?
+                    folder.hasOwnProperty('type') && folder.type !== 'category' ? //se é category quer dizer que é course ou lesson
                     <div className="circle-item-menu" onClick={(e) => {
                             this.handleOptionsClick(e); this.props.updatePopMenuTarget(folder)
                         }}><FontAwesomeIcon icon={faEllipsisV}/>

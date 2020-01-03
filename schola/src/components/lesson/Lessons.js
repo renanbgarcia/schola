@@ -51,7 +51,9 @@ class Lessons extends React.Component {
     ]
 
     UNSAFE_componentWillMount() {
-        this.retrieveFoldersData();
+        if (localStorage.getItem('folderState') === null) {
+            this.retrieveFoldersData();
+        }
     }
 
     /**
@@ -179,9 +181,9 @@ class Lessons extends React.Component {
         let ageArray = Array.apply(null, Array(18));
         return (
             <div className="home-container">
-                <Modal isOpen={this.props.isCreateLessonOpen} hideFunc={this.props.hideCLModal} Component={<CreateLesson/>}/>
-                <Modal isOpen={this.state.isEditLessonOpen} hideFunc={this.hideEditLesson} Component={<EditLesson lessonId={this.props.popMenuTarget.id}/>}/>
-                <Modal isOpen={this.state.isEditCourseOpen} hideFunc={this.hideEditCourse} Component={<EditCourse courseId={this.props.popMenuTarget.id}/>}/>
+                <Modal isOpen={this.props.isCreateLessonOpen} hideFunc={this.props.hideCLModal} Component={<CreateLesson updateData={this.retrieveFoldersData}/>}/>
+                <Modal isOpen={this.state.isEditLessonOpen} hideFunc={this.hideEditLesson} Component={<EditLesson lessonId={this.props.popMenuTarget.id} updateData={this.retrieveFoldersData}/>}/>
+                <Modal isOpen={this.state.isEditCourseOpen} hideFunc={this.hideEditCourse} Component={<EditCourse courseId={this.props.popMenuTarget.id} updateData={this.retrieveFoldersData}/>} />
                 <Modal isOpen={this.props.isCreateCourseOpen} hideFunc={this.props.hideCCModal} Component={<CreateCourses updateData={this.retrieveFoldersData}/>}/>
                 <div className="choose-view-bar">
                     <span onClick={() => this.setState({view: 'tree'})}><FontAwesomeIcon icon={faTree}/></span>

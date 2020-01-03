@@ -23,10 +23,11 @@ class LessonsFolder extends React.Component {
 
     componentWillReceiveProps(next) {
 
-        this.setState({
-            actualView: next.data,
-            parents: [{title: 'categorias', children: next.data}],
-        })
+            this.setState({
+                actualView: next.data,
+                parents: [{title: 'categorias', children: next.data}],
+                breadcrumbs: []
+            })
 
         // const ref = firebase.firestore().collection('lessons').get();
         // const ref = firebase.firestore().collection('courses').get();
@@ -50,6 +51,18 @@ class LessonsFolder extends React.Component {
         searchTerm: '',
         actualResults: [],
         resultElemIdx: 0
+    }
+
+    componentDidUpdate() {
+        localStorage.setItem('folderState', JSON.stringify(this.state));
+    }
+
+    UNSAFE_componentWillMount() {
+        if (localStorage.getItem('folderState') !== null) {
+            this.setState({
+                ...JSON.parse(localStorage.getItem('folderState'))
+            })
+        }
     }
 
     renderFolders() {
@@ -184,8 +197,6 @@ class LessonsFolder extends React.Component {
     }
 
     render() {
-        
-        console.log(this.state)
         return (
             <div className="tree-view-wrapper">
 

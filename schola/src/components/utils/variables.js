@@ -15,5 +15,6 @@ export const getMaterias = () => {
         { lessonCount: 0, title: "Gramática", name: "grammar", children: []},
         { lessonCount: 0, title: "Artes", name: "art", children: []},
         { lessonCount: 0, title: "Inglês", name: "english", children: []},
+        { lessonCount: 0, title: "Biologia", name: "biology", children: []},
     ]
 }

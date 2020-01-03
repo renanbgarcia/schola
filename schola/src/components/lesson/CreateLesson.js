@@ -185,10 +185,10 @@ class CreateLesson extends React.Component {
                 course_id: this.state.coursesInput,
                 category: this.state.categoryInput,
                 created_at: firebase.firestore.Timestamp.fromDate(new Date()),
-                // scheduled: this.state.events,
+                scheduled: this.state.dateInput,
                 author: this.props.userObject.displayName,
                 author_id: this.props.userObject.uid,
-                authorProto: 'https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png',
+                authorPhoto: 'https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png',
                 rating: '--'
             });
 
@@ -257,7 +257,7 @@ class CreateLesson extends React.Component {
     handleDateInput(e) {
         console.log(moment(e.target.value).valueOf());
         this.setState({
-            dateInput: e.target.value
+            dateInput: moment(e.target.value).valueOf()
         })
     }
 
