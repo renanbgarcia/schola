@@ -53,7 +53,7 @@ class App extends React.Component {
           <Navbar/>
 
           <div className="Content container">
-            <SidebarFixed/>
+            {/* <SidebarFixed/> */}
             {this.renderSidebar()}
             <Route exact path='/' component={this.guard()}/>
             <Route path='/login' component={this.guard()}/>

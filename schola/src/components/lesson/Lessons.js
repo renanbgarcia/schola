@@ -88,7 +88,15 @@ class Lessons extends React.Component {
         this.setState({isEditCourseOpen: true})
     }
 
+    /**
+     * Necessário para que o o estado dos folder seja atualizado
+     */
+    resetLocalSorage() {
+        localStorage.removeItem('folderState');
+    }
+
     retrieveFoldersData() {
+        this.resetLocalSorage();
         const db = firebase.firestore();
         const courseQ = db.collection('courses').where('author_id', '==', this.props.userObject.uid ).get();
         courseQ.then(snapshot => {

@@ -25,8 +25,8 @@ class PopMenu extends React.Component {
         onClick={this.dismissModal}>
             <div className="element">
                 <div className="pop-menu" style={{
-                top: this.props.y,
-                left: this.props.x
+                top: this.props.y - 60,
+                left: this.props.x + 30
                 }}>
                     <ul>
                         {list.map(item => <li onClick={item.onClick}>{item.title}</li>)}

@@ -2129,61 +2129,66 @@ input[type=file] {
   cursor: pointer;
 }
 
-.sidebar, .sidebar-fixed {
-  width: 35%;
-  max-width: 250px;
+.sidebar {
+  width: 40%;
+  max-width: 300px;
   height: 100%;
   background-color: #e1e1e1;
   z-index: 50;
-  box-shadow: 0 2px 8px 3px rgba(0, 0, 0, 0.425);
+  transition: width 250ms ease-in;
 }
 
-@media (max-width: 750px) {
+.sidebar-narrow {
+  width: 70px;
+}
+.sidebar-narrow .menu-content li {
+  padding: 0;
+}
+.sidebar-narrow .menu-content span {
+  display: none;
+}
+.sidebar-narrow .menu-content svg {
+  margin: auto;
+}
+
+@media (max-width: 400px) {
   .sidebar {
     position: fixed;
-    top: 50px;
+    bottom: 0;
+    height: min-content;
+    width: 100% !important;
+    max-width: unset;
+    padding: 0 20px;
+    overflow: auto;
   }
 
-  .sidebar-fixed {
-    display: none;
+  .menu-content {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
   }
 }
-@media (min-width: 750px) {
-  .sidebar {
-    display: none;
-  }
-}
-.example-enter {
-  opacity: 0.01;
-}
-
-.example-enter.example-enter-active {
-  opacity: 1;
-  transition: opacity 250ms ease-in;
-}
-
-.example-leave {
-  opacity: 1;
-}
-
-.example-leave.example-leave-active {
-  opacity: 0.01;
-  transition: opacity 250ms ease-in;
-}
-
 .menu-content {
   text-align: left;
 }
 .menu-content li {
-  padding-left: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
   height: 50px;
-  border-bottom: solid 1px;
   line-height: 50px;
   vertical-align: middle;
   font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .menu-content li:hover {
   background-color: white;
+}
+.menu-content li svg {
+  margin-right: 10px;
 }
 
 .modal-wrapper {
@@ -2262,15 +2267,12 @@ input[type=file] {
   padding: 0;
   width: 100%;
   max-width: unset !important;
+  background-color: white;
+  display: flex;
+  flex-direction: row;
 }
 
 @media (min-width: 750px) {
-  .Content {
-    background-color: white;
-    display: flex;
-    flex-direction: row;
-  }
-
   .home-container {
     height: calc(100vh - 50px) !important;
     overflow: scroll !important;

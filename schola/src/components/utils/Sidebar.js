@@ -5,25 +5,42 @@ import { menuContent } from './menuContent';
 
 class Sidebar extends React.Component {
 
-    renderSidebar() {
-        console.log(window.innerWidth)
-        if (this.props.isOpen || window.innerWidth > 750) {
-            return <div key="sidebar" className="sidebar">
-                    {menuContent()}
-                   </div>
+    // renderSidebar() {
+    //     console.log(window.innerWidth)
+    //     if (this.props.isOpen || window.innerWidth > 750) {
+    //         return <div key="sidebar" className="sidebar">
+    //                 {menuContent()}
+    //                </div>
+    //     } else {
+    //         return <div key="sidebar" className="sidebar sidebar-narrow">
+    //             {menuContent()}
+    //         </div>
+    //     }
+    // }
+
+    UNSAFE_componentWillReceiveProps() {
+        this.toggleSidebar();
+    }
+
+    toggleSidebar() {
+        let bar = document.querySelector('.sidebar');
+        if (this.props.isOpen) {
+            bar.classList.remove('sidebar-narrow');
         } else {
-            return null
+            bar.classList.add('sidebar-narrow');
         }
     }
 
     render() {
         return (               
-            <ReactCSSTransitionGroup
-            transitionName="example"
-            transitionEnterTimeout={250}
-            transitionLeaveTimeout={250}>
-                {this.renderSidebar()}
-            </ReactCSSTransitionGroup>
+            // <ReactCSSTransitionGroup
+            // transitionName="example"
+            // transitionEnterTimeout={250}
+            // transitionLeaveTimeout={250}>
+                <div key="sidebar" className="sidebar sidebar-narrow">
+                    {menuContent()}
+                </div>
+            // </ReactCSSTransitionGroup>
         )
     }
 }

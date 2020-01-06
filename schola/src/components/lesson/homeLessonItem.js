@@ -7,7 +7,7 @@ const HomeLessonItem = (props) => {
     if (!content) {
         return <div>Nada</div>
     }
-    const photo = content.authorProto
+    const photo = content.authorPhoto
     const title = content.title;
     const description = content.desc;
     const style = props.style;

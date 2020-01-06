@@ -96,6 +96,7 @@ class EditCourse extends React.Component {
             alertbox.show("Ocorreu um erro :(")
             throw err
         }
+        this.props.updateData();
     }
 
     render() {

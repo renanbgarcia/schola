@@ -46,6 +46,8 @@ class CreateLesson extends React.Component {
         categoryInput: '',
         tagsInput: [],
         tags: [],
+        dateInput: '',
+        timeInput: '',
         courses: [],
         coursesInput: []
     }
@@ -186,13 +188,14 @@ class CreateLesson extends React.Component {
                 category: this.state.categoryInput,
                 created_at: firebase.firestore.Timestamp.fromDate(new Date()),
                 scheduled: this.state.dateInput,
+
                 author: this.props.userObject.displayName,
                 author_id: this.props.userObject.uid,
                 authorPhoto: 'https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png',
                 rating: '--'
             });
 
-            // this.DoSchedule();
+            this.DoSchedule();
 
             return docID
         } catch(error) {
@@ -210,7 +213,13 @@ class CreateLesson extends React.Component {
             docRef.set({
                 id: docID,
                 author_id: this.props.userObject.uid,
-                events: this.state.events
+                events: [
+                    {
+                        title: this.state.titleInput,
+                        start: this.state.dateInput + this.state.timeInput,
+                        end: this.state.dateInput + this.state.timeInput
+                    }
+                ]
             });
         } catch(error) {
             console.log(error);
@@ -255,9 +264,14 @@ class CreateLesson extends React.Component {
     }
 
     handleDateInput(e) {
-        console.log(moment(e.target.value).valueOf());
         this.setState({
-            dateInput: moment(e.target.value).valueOf()
+            dateInput: moment(e.target.value).unix()
+        })
+    }
+
+    handleTimeInput(e) {
+        this.setState({
+            timeInput: moment.duration(e.target.value, 'HH:mm').asSeconds()
         })
     }
 
@@ -284,7 +298,8 @@ class CreateLesson extends React.Component {
                 console.log(err);
             }
             alertbox.show('Lição cadastrada!');
-            this.hideParentModal()
+            this.props.updateData();
+            this.hideParentModal();
         } else {
             alertbox.show('Preencha todos os campos corretamente.')
         }
@@ -372,6 +387,9 @@ class CreateLesson extends React.Component {
                                 <div className="row">
                                     <div className="column">
                                         <input onChange={(e) => this.handleDateInput(e)} type="date"/>
+                                    </div>
+                                    <div className="column">
+                                        <input onChange={(e) => this.handleTimeInput(e)} type="time"/>
                                     </div>
                                 </div>
                                 <div className="row">

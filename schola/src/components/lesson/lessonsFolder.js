@@ -73,6 +73,7 @@ class LessonsFolder extends React.Component {
 
     goToFolder(folder) {
         console.log(folder)
+        this.removeHighlight();
         if (folder.hasOwnProperty('children')) {
             this.addCrumb(folder);
             this.setState({
@@ -117,6 +118,14 @@ class LessonsFolder extends React.Component {
         }
     }
 
+    removeHighlight() {
+        this.resetResults();
+        const highlighted = document.querySelectorAll('.highlighted');
+        for (let el of highlighted) {
+            el.classList.remove('highlighted');
+        }
+    }
+
     addCrumb(folder) {
         this.setState({
             breadcrumbs: [...this.state.breadcrumbs, folder.title]
@@ -134,6 +143,7 @@ class LessonsFolder extends React.Component {
     goBack() {
         const newView = this.state.parents;
         console.log(newView)
+        this.removeHighlight();
         if (newView.length > 1) {
             newView.pop();
             this.removeCrumbs();
@@ -153,7 +163,11 @@ class LessonsFolder extends React.Component {
 
 
         let res = this.state.actualView.filter((item) => {
+            console.log(item)
                     const re = new RegExp(this.state.searchTerm, 'i');
+                    if (!item.hasOwnProperty('description')) {
+                        item.description = "";
+                    }
                     if (item.title.search(re) !== -1 || item.description.search(re) !== -1) {
                         return item.id
                     }
@@ -174,6 +188,13 @@ class LessonsFolder extends React.Component {
         } else {
             alertbox.show('Nada encontrado :(')
         }
+    }
+
+    resetResults() {
+        this.setState({
+            actualResults: [],
+            resultElemIdx: 0
+        })
     }
 
     goToNextResult() {

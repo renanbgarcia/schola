@@ -37,11 +37,15 @@ class AllEvents extends React.Component {
             snapshot.docs.map(doc => {
                 let prevState = this.state.events;
                 doc.data().events.map(ev => {
-                    let parsedEnd = moment.unix(ev.end.seconds).format();
-                    let parsedStart = moment.unix(ev.start.seconds).format()
+                    // let parsedEnd = moment.unix(ev.end.seconds).format();
+                    // let parsedStart = moment.unix(ev.start.seconds).format()
+                    let parsedEnd = new Date(moment.unix(ev.end).format());
+                    let parsedStart = new Date(moment.unix(ev.start).format());
                     ev.end = parsedEnd;
                     ev.start = parsedStart;
+                    ev.allDay = false;
                     prevState.push(ev)
+                    console.log(ev)
                 });
                 this.setState({ events: prevState });
             })
@@ -49,6 +53,7 @@ class AllEvents extends React.Component {
     }
 
     render() {
+        console.log(this.state)
         return (
             <Calendar
             defaultDate={new Date()}

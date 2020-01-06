@@ -43,14 +43,17 @@ textarea {
   padding: 0;
   width: 100%;
   max-width: unset !important;
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  flex-direction: row;
 }
 
 @media (min-width: 750px) {
-  .Content {
-    background-color: rgb(255, 255, 255);
-    display: flex;
-    flex-direction: row;
-  }
+  // .Content {
+  //   background-color: rgb(255, 255, 255);
+  //   display: flex;
+  //   flex-direction: row;
+  // }
 
   .home-container {
     height: calc(100vh - 50px) !important;
