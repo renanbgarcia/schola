@@ -18,6 +18,7 @@ import CreateLesson from './components/lesson/CreateLesson';
 // import EditLesson from './components/lesson/editLesson';
 // import EditCourse from './components/lesson/editCourse';
 import Lessons from './components/lesson/Lessons';
+import Profile from './components/profile/Profile';
 import Students from './components/students/Students';
 import RegisterStudent from './components/students/RegisterStudent';
 
@@ -62,6 +63,7 @@ class App extends React.Component {
             {/* <Route path='/edit/lesson/:id' component={EditLesson}/>
             <Route path='/edit/course/:id' component={EditCourse}/> */}
             <Route path='/lessons' component={Lessons}/>
+            <Route path='/profile' component={Profile}/>
             <Route path='/students' component={Students}/>
             <Route path='/registerstudent' component={RegisterStudent}/>
             

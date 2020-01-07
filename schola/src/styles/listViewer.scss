@@ -30,7 +30,11 @@
 }
 
 .list-title {
-    margin-top: 15px;
+    // margin-top: 15px;
+    display: inline-block;
+    max-width: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .list {

@@ -15,7 +15,7 @@ const HomeLessonItem = (props) => {
                     <div id={'sel' + index} className="list" >
                         <img src={photo} title={content.author} className="list-author-photo"/>
                         <div className="listview-content-container">
-                            <p><strong>{title}</strong></p>
+                            <p><strong><span className="list-title">{title}</span></strong></p>
                             <p>{description}</p>
                             <div className="files-preview-container">
                                 {previewFiles(content, index)}
