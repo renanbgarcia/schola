@@ -23,13 +23,14 @@ class Navbar extends React.Component {
     render() {
 
         const { isLogged, user } = this.props;
-        console.log(user + ' ' + isLogged)
+        console.log(user.displayName + ' ' + isLogged)
 
         return (
             <nav>
                 <MenuButton/>
                 <div className="nav-wrapper">
-                    { isLogged? <div id="nav-username">{user}</div> : '' }
+                    {/* { isLogged? <div id="nav-username">{user.displayName}</div> : '' } */}
+                    { isLogged? <img src={user.photoURL} id="nav-user-pic"/> : '' }
                     <ul>
                         { isLogged?
                             <li onClick={this.doLogout}>Logout</li> :
@@ -42,12 +43,12 @@ class Navbar extends React.Component {
                 </div>
             </nav>
         )
-     }
+    }
 }
 
 const mapStateToProps = (store) => ({
     isLogged: store.authReducer.isLogged,
-    user: store.authReducer.currentUser,
+    user: store.authReducer.user,
 });
 
 const mapDispatchToProps = (dispatch) => ({

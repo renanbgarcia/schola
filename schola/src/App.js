@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import firebase from './firebase';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { createBrowserHistory } from 'history';
 
@@ -26,15 +27,17 @@ let history = createBrowserHistory()
 
 class App extends React.Component {
 
-  testeDB() {
-    axios.post('http://localhost:3000/savedata');
+  UNSAFE_componentWillMount() {
+    firebase.auth().onAuthStateChanged((res) => {
+      localStorage.clear();
+    })
   }
 
   guard() {
-    if (this.props.isLogged === true) {
-      return Home
-    } else {
+    if (this.props.isLogged === false || this.props.user === undefined) {
       return Login
+    } else {
+      return Home
     }
   }
 
@@ -76,7 +79,7 @@ class App extends React.Component {
 }
 
 const mapStateToProps = (store) => ({
-  user: store.authReducer.currentUser,
+  user: store.authReducer.user,
   isLogged: store.authReducer.isLogged
 });
 

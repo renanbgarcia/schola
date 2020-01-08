@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { userSignedIn } from '../actions/authAction';
 import { connect } from 'react-redux'; 
 import axios from 'axios';
+import firebase from '../firebase';
 import config from '../appConfig';
 
 import './utils/alert.css';
@@ -37,18 +38,24 @@ class Signup extends React.Component {
         if (this.state.nameInput &&
             this.state.emailInput &&
             this.state.passInput !== '') {
-            axios.post(`${config.API_URL}/signup`, {
-                email: this.state.emailInput,
-                password: this.state.passInput,
-                displayName: this.state.nameInput
+            firebase.auth().createUserWithEmailAndPassword(this.state.emailInput, this.state.passInput)
+            .then((res) => {
+                console.log(res)
+                let db = firebase.firestore();
+                let docRef = db.collection('users').doc(res.user.uid);
+                docRef.set({
+                  uid: res.user.uid,
+                  displayName: this.state.nameInput,
+                  email: this.state.emailInput,
+                  photoURL: 'http://4.bp.blogspot.com/-7vZF8swhwNs/U9-regTYTbI/AAAAAAAAAEs/PTca5aWvIFQ/s1600/pattern.jpg'
+                });
+                this.props.history.push('/login');
+                alertbox.show("Usuário criado!");
             })
-            .then(res => {
-                if (res.status === 200) {
-                    console.log(res);
-                    this.props.history.push('/login');
-                }
-                alertbox.show(res.data.message);
-            })
+            .catch((error) => {
+                console.log(error);
+                alertbox.show('Ocorreu um erro');
+                });
         } else {
             alertbox.show('Preencha todos os campos!');
         }
@@ -86,12 +93,12 @@ class Signup extends React.Component {
 }
 
 const mapStateToProps = (store) => ({
-    user: store.authReducer.currentUser,
+    user: store.authReducer.user,
     isLogged: store.authReducer.isLogged
   });
   
 const mapDispatchToProps = dispatch => ({
-signIn: (user) => dispatch(userSignedIn(user))
+    signIn: (user) => dispatch(userSignedIn(user))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Signup)

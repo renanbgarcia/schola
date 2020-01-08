@@ -36,7 +36,9 @@ class Login extends React.Component {
             console.log(res);
             alertbox.show('Logado!');
             firebase.auth().onAuthStateChanged(user => {
-            this.props.signIn(user);
+                firebase.firestore().collection('users').doc(user.uid).get().then(doc => {
+                    this.props.signIn(doc.data());
+                })
           });
         });
     }

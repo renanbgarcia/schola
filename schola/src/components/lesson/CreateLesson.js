@@ -84,6 +84,7 @@ class CreateLesson extends React.Component {
         firebase.firestore()
                 .collection('courses')
                 .where('discipline', '==', discipline)
+                .where('author_id', '==', this.props.userObject.uid)
                 .get()
                 .then(snap => {
                     let courses = [];

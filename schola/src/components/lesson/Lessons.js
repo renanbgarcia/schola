@@ -12,6 +12,7 @@ import { showCreateLessonModal,
          hideCreateCourseModal } from '../../actions/modalActions';
 import { updateFoldersData } from '../../actions/foldersDataAction';
 import Modal from '../utils/modal';
+import { alertbox } from '../utils/alert';
 import CreateLesson from '../lesson/CreateLesson';
 import CreateCourses from '../lesson/CreateCourses';
 import EditLesson from '../lesson/editLesson';
@@ -29,6 +30,7 @@ class Lessons extends React.Component {
         this.hideEditCourse = this.hideEditCourse.bind(this);
         this.showLessonEdit = this.showLessonEdit.bind(this);
         this.showCourseEdit = this.showCourseEdit.bind(this);
+        this.handleCreateLesson = this.handleCreateLesson.bind(this);
     }
 
     state = {
@@ -37,7 +39,7 @@ class Lessons extends React.Component {
         disciplineFilter: '',
         ageFilter: '',
         lastDoc: {},
-        treeData: [{ title: 'Loading', children: [] }],
+        treeData: [{ title: 'Loading', children: [categories] }],
         isEditLessonOpen: false,
         lessonTarget: ''
     }
@@ -100,7 +102,13 @@ class Lessons extends React.Component {
         const db = firebase.firestore();
         const courseQ = db.collection('courses').where('author_id', '==', this.props.userObject.uid ).get();
         courseQ.then(snapshot => {
+            console.log('atualizando', this.props.userObject.uid, snapshot)
             let _materias = getMaterias();
+            if (snapshot.size === 0) {
+                this.props.setFoldersData(_materias);
+                alertbox.show('Você ainda não possui material. Crie um curso para começar.')
+                return
+            }
             for(let doc of snapshot.docs) {
                 for( let materia of _materias ) {
                     if (doc.data().discipline === materia.name) {
@@ -131,7 +139,7 @@ class Lessons extends React.Component {
                             return snapshot.size
                         })
                         .then((count) => {
-                            console.log(materia)
+                            console.log(_materias)
                             materia.children.push({
                                 title: doc.data().title,
                                 id: doc.data().course_id,
@@ -160,6 +168,21 @@ class Lessons extends React.Component {
         this.setState({
             ageFilter: e.currentTarget.value
         });
+    }
+
+    handleCreateLesson() {
+        firebase.firestore()
+                .collection('courses')
+                .where('author_id', '==', this.props.userObject.uid)
+                .get()
+                .then((snap) => {
+                    if (snap.size === 0) {
+                        alertbox.show('Você não tem cursos.\n Crie um curso primeiro.')
+                    } else {
+                        this.props.showCLmodal()
+                    }
+                })
+        
     }
 
     renderLessonsView(ageArray) {
@@ -196,7 +219,7 @@ class Lessons extends React.Component {
                 <div className="choose-view-bar">
                     <span onClick={() => this.setState({view: 'tree'})}><FontAwesomeIcon icon={faTree}/></span>
                     <span onClick={() => this.setState({view: 'list'})}><FontAwesomeIcon icon={faListAlt}/></span>
-                    <span onClick={this.props.showCLmodal} ><FontAwesomeIcon icon={faPlus}/> Lição</span>
+                    <span onClick={this.handleCreateLesson} ><FontAwesomeIcon icon={faPlus}/> Lição</span>
                     <span onClick={this.props.showCCmodal} ><FontAwesomeIcon icon={faPlus}/> Curso</span>
                 </div>
                 <div className="lessons-container">

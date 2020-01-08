@@ -1,14 +1,15 @@
-import { SIGNIN_SUCCESS, SIGNOUT_SUCCESS } from '../actions/types';
+import { SIGNIN_SUCCESS, SIGNOUT_SUCCESS, UPDATE_USER } from '../actions/types';
 
 const initialState = {
-    currentUser: 'Loading'
+    currentUser: 'Loading',
+    user: 'Loading'
   };
 
 function authReducer(state = initialState, action) {
     if (action.type === SIGNIN_SUCCESS) {
       console.log(action.user);
       return Object.assign({}, state, {
-          currentUser: action.user.email,
+          // currentUser: action.user.email,
           user: action.user,
           isLogged: true
       })
@@ -16,9 +17,14 @@ function authReducer(state = initialState, action) {
     else if (action.type === SIGNOUT_SUCCESS) {
       console.log(action.user);
       return Object.assign({}, state, {
-          currentUser: action.user,
+          // currentUser: action.user,
           user: action.user,
           isLogged: false
+      })
+    } else if (action.type === UPDATE_USER) {
+      console.log(action.user);
+      return Object.assign({}, state, {
+          user: action.user,
       })
     }
     return state;
