@@ -1,6 +1,6 @@
 import React from 'react';
 import { List, AutoSizer, CellMeasurer, CellMeasurerCache, InfiniteLoader } from 'react-virtualized'
-import HomeLessonItem from '../lesson/homeLessonItem';
+import HomeLessonItem from './homeLessonItem';
 import PlaceHolderListItem from '../utils/placeHolderListItem';
 
 const STATUS_LOADING = 1;

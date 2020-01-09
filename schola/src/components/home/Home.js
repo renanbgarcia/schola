@@ -64,7 +64,6 @@ class Home extends React.Component {
 
     docRef = (startAfter) => 
         firebase.firestore().collection(`lessons`)
-        // .where('author_id', '==', this.props.userObject.uid )
         .orderBy('created_at', "desc")
         .startAfter(startAfter)
         .limit(10)

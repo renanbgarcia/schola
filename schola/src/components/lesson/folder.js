@@ -1,10 +1,9 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook, faBookOpen, faCalendarAlt, faStar, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
-import PopMenu, { offset } from '../utils/popMenu';
+import { offset } from '../utils/popMenu';
 import { connect } from 'react-redux';
 import { hidePopMenu, showPopMenu, updatePopMenuPosition, updatePopMenuTarget } from '../../actions/menuAction';
-import Modal from '../utils/modal';
 
 class Folder extends React.Component {
 
@@ -17,7 +16,7 @@ class Folder extends React.Component {
 
     getDate = (timestamp) => {
         console.log(timestamp)
-        let d = new Date(timestamp);
+        let d = new Date(timestamp*1000);
         return d.toLocaleDateString();
     }
 
@@ -64,7 +63,7 @@ class Folder extends React.Component {
                     null
                 }
                 {
-                    folder.hasOwnProperty('type') && folder.type !== 'category' ? //se é category quer dizer que é course ou lesson
+                    folder.type === 'course' ||  folder.type === 'lesson' ? //se é category quer dizer que é course ou lesson
                     <div className="circle-item-menu" onClick={(e) => {
                             this.handleOptionsClick(e); this.props.updatePopMenuTarget(folder)
                         }}><FontAwesomeIcon icon={faEllipsisV}/>
@@ -92,8 +91,7 @@ class Folder extends React.Component {
             <div className="lessons-folder-item "  id={"item-" + folder.id} >
                 <div className="lesson-folder-content" onClick={this.props.onClick}>
                     <div className="lessons-folder-title">{ folder.title }</div>
-                    <div className="lessons-folder-description">{ folder.description }</div>
-
+                    {folder.hasOwnProperty('description')? <div className="lessons-folder-description">{ folder.description }</div> : ''}
                 </div>
                 {this.renderBar(folder)}
                 

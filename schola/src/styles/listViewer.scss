@@ -47,9 +47,16 @@
     overflow: hidden;
 }
 
+.list-author-photo-wrapper {
+    display: inline-flex;
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
 .list-author-photo {
-    display: block;
-    width: 30px;
+    object-fit: cover;
 }
 
 .listview-content-container {

@@ -29,15 +29,16 @@ class App extends React.Component {
 
   UNSAFE_componentWillMount() {
     firebase.auth().onAuthStateChanged((res) => {
+      console.log(res)
       localStorage.clear();
     })
   }
 
-  guard() {
-    if (this.props.isLogged === false || this.props.user === undefined) {
+  guard(View) {
+    if (this.props.isLogged === false || this.props.user.uid === undefined) {
       return Login
     } else {
-      return Home
+      return View
     }
   }
 
@@ -59,15 +60,15 @@ class App extends React.Component {
           <div className="Content container">
             {/* <SidebarFixed/> */}
             {this.renderSidebar()}
-            <Route exact path='/' component={this.guard()}/>
-            <Route path='/login' component={this.guard()}/>
+            <Route exact path='/' component={this.guard(Home)}/>
+            <Route path='/login' component={this.guard(Home)}/>
             <Route path='/signup' component={Signup}/>
-            <Route path='/create/lesson' component={CreateLesson}/>
+            <Route path='/create/lesson' component={this.guard(CreateLesson)}/>
             {/* <Route path='/edit/lesson/:id' component={EditLesson}/>
             <Route path='/edit/course/:id' component={EditCourse}/> */}
-            <Route path='/lessons' component={Lessons}/>
-            <Route path='/profile' component={Profile}/>
-            <Route path='/students' component={Students}/>
+            <Route path='/lessons' component={this.guard(Lessons)}/>
+            <Route path='/profile' component={this.guard(Profile)}/>
+            <Route path='/students' component={this.guard(Students)}/>
             <Route path='/registerstudent' component={RegisterStudent}/>
             
           </div>

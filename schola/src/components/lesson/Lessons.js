@@ -127,7 +127,7 @@ class Lessons extends React.Component {
                                             description: lesson.data().desc,
                                             rating: lesson.data().rating,
                                             dueDate: lesson.data().scheduled,
-                                            id: lesson.data().lessonId,
+                                            id: lesson.data().lesson_id,
                                             type: 'lesson'
                                         });                                    
                                     }
@@ -187,7 +187,7 @@ class Lessons extends React.Component {
 
     renderLessonsView(ageArray) {
         return this.state.view === 'tree' ?
-            <LessonsFolder data={this.props.treeData}/>
+            <LessonsFolder data={this.props.treeData} retrieveFoldersData={this.retrieveFoldersData}/>
             :
             <>
                 <label>Idade:</label>
@@ -209,18 +209,19 @@ class Lessons extends React.Component {
     }
 
     render() {
+        console.log(this.props.popMenuTarget)
         let ageArray = Array.apply(null, Array(18));
         return (
             <div className="home-container">
-                <Modal isOpen={this.props.isCreateLessonOpen} hideFunc={this.props.hideCLModal} Component={<CreateLesson updateData={this.retrieveFoldersData}/>}/>
+                {/* <Modal isOpen={this.props.isCreateLessonOpen} hideFunc={this.props.hideCLModal} Component={<CreateLesson updateData={this.retrieveFoldersData}/>}/> */}
                 <Modal isOpen={this.state.isEditLessonOpen} hideFunc={this.hideEditLesson} Component={<EditLesson lessonId={this.props.popMenuTarget.id} updateData={this.retrieveFoldersData}/>}/>
                 <Modal isOpen={this.state.isEditCourseOpen} hideFunc={this.hideEditCourse} Component={<EditCourse courseId={this.props.popMenuTarget.id} updateData={this.retrieveFoldersData}/>} />
-                <Modal isOpen={this.props.isCreateCourseOpen} hideFunc={this.props.hideCCModal} Component={<CreateCourses updateData={this.retrieveFoldersData}/>}/>
+                {/* <Modal isOpen={this.props.isCreateCourseOpen} hideFunc={this.props.hideCCModal} Component={<CreateCourses updateData={this.retrieveFoldersData}/>}/> */}
                 <div className="choose-view-bar">
                     <span onClick={() => this.setState({view: 'tree'})}><FontAwesomeIcon icon={faTree}/></span>
                     <span onClick={() => this.setState({view: 'list'})}><FontAwesomeIcon icon={faListAlt}/></span>
-                    <span onClick={this.handleCreateLesson} ><FontAwesomeIcon icon={faPlus}/> Lição</span>
-                    <span onClick={this.props.showCCmodal} ><FontAwesomeIcon icon={faPlus}/> Curso</span>
+                    {/* <span onClick={this.handleCreateLesson} ><FontAwesomeIcon icon={faPlus}/> Lição</span>
+                    <span onClick={this.props.showCCmodal} ><FontAwesomeIcon icon={faPlus}/> Curso</span> */}
                 </div>
                 <div className="lessons-container">
                     {this.renderLessonsView(ageArray)}
@@ -242,8 +243,8 @@ class Lessons extends React.Component {
 const mapStateToProps = (store) => ({
     userObject: store.authReducer.user,
     treeData: store.foldersDataReducer.categories,
-    isCreateLessonOpen: store.modalReducer.isCLOpen,
-    isCreateCourseOpen: store.modalReducer.isCCOpen,
+    // isCreateLessonOpen: store.modalReducer.isCLOpen,
+    // isCreateCourseOpen: store.modalReducer.isCCOpen,
     isPopMenuVisible: store.menuReducer.isPopMenuVisible,
     popMenuX: store.menuReducer.popMenuPositionX,
     popMenuY: store.menuReducer.popMenuPositionY,
@@ -251,10 +252,10 @@ const mapStateToProps = (store) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    showCLmodal: () => dispatch(showCreateLessonModal()),
-    showCCmodal: () => dispatch(showCreateCourseModal()),
-    hideCLModal: () => dispatch(hideCreateLessonModal()),
-    hideCCModal: () => dispatch(hideCreateCourseModal()),
+    // showCLmodal: () => dispatch(showCreateLessonModal()),
+    // showCCmodal: () => dispatch(showCreateCourseModal()),
+    // hideCLModal: () => dispatch(hideCreateLessonModal()),
+    // hideCCModal: () => dispatch(hideCreateCourseModal()),
     setFoldersData: (data) => dispatch(updateFoldersData(data)),
     hidePopMenu: () => dispatch(hidePopMenu()),
     showPopMenu: () => dispatch(showPopMenu()),

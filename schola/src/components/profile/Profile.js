@@ -26,7 +26,6 @@ class Profile extends React.Component {
         showNameEdit: false,
         nameEditInput: '',
         photoFile: '',
-        photoURL: ''
     }
 
     UNSAFE_componentWillMount() {
@@ -43,9 +42,9 @@ class Profile extends React.Component {
         // }
     }
 
-    UNSAFE_componentWillReceiveProps() {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         this.setState({
-            userPhoto: this.props.user.photoURL
+            userPhoto: nextProps.user.photoURL
         })
     }
 
@@ -69,16 +68,33 @@ class Profile extends React.Component {
         uploadTask.snapshot.ref.getDownloadURL()
             .then(function(downloadURL) {
                 console.log('File available at', downloadURL);
+
+                //atualiza o user com a url da foto
                 docRef.update({
                     photoURL: downloadURL
                 })
-                self.setState({
-                    userPhoto: downloadURL
-                })
-                let newUser = self.props.user;
-                newUser.photoURL = self.state.photoURL;
+                let newUser = Object.assign({}, self.props.user, {photoURL: downloadURL});
                 console.log(newUser, self.state)
                 self.props.updateUser(newUser);
+
+                //atualiza as lições do user pra que use a nova foto
+                try {
+                db.collection('lessons')
+                .where('author_id', '==', self.props.user.uid)
+                .get()
+                .then(snap => {
+                    if (snap.size > 0) {
+                        snap.docs.map(doc => {
+                            console.log(doc.data())
+                            db.collection('lessons').doc(doc.data().lessonId).update({ authorPhoto: downloadURL});
+                        })
+                    } else {
+                        console.log('No lessons to update')
+                    }
+                })
+                } catch (err) {
+                    console.log(err);
+                }
             });
         });
     }
@@ -141,7 +157,7 @@ class Profile extends React.Component {
             <div className="home-container">
                 <div className="user-photo-wrapper-wrapper">
                     <div className="user-photo-wrapper">
-                        <img className="user-photo" alt="profile picture" src={this.props.user.photoURL}/>
+                        <img className="user-photo" alt="profile picture" src={this.state.userPhoto}/>
                     </div>
                     <label for="photoInput" className="change-photo-icon">
                         <FontAwesomeIcon  icon={faWrench} size="2x"/>

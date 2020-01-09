@@ -1526,6 +1526,10 @@ button.rbc-input::-moz-focus-inner {
   z-index: 2;
 }
 
+.lessons-folder-item-button {
+  margin-bottom: 10px !important;
+}
+
 .lessons-folder-items-wrapper {
   display: flex;
   flex-wrap: wrap;
@@ -1628,11 +1632,20 @@ nav .nav-wrapper ul {
 }
 nav .nav-wrapper ul li {
   margin-right: 15px;
+  cursor: pointer;
 }
-nav .nav-wrapper #nav-user-pic {
-  width: 20px;
+
+.nav-user-photo-wrapper {
+  display: inline-flex;
+  width: 30px !important;
+  height: 30px !important;
   border-radius: 50%;
-  margin-right: 5px;
+  overflow: hidden;
+  margin-right: 5px !important;
+}
+
+.nav-user-photo {
+  object-fit: cover;
 }
 
 .menu-button {
@@ -2035,9 +2048,16 @@ input[type=file] {
   overflow: hidden;
 }
 
+.list-author-photo-wrapper {
+  display: inline-flex;
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
 .list-author-photo {
-  display: block;
-  width: 30px;
+  object-fit: cover;
 }
 
 .listview-content-container {

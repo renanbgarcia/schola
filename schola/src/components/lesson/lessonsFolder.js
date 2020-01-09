@@ -5,7 +5,12 @@ import { alertbox } from '../utils/alert';
 import { connect } from 'react-redux';
 import { showCreateLessonModal } from '../../actions/modalActions';
 import { hideCreateLessonModal } from '../../actions/modalActions';
+import { showCreateCourseModal } from '../../actions/modalActions';
+import { hideCreateCourseModal } from '../../actions/modalActions';
 import Folder from './folder';
+import Modal from '../utils/modal';
+import CreateLesson from '../lesson/CreateLesson';
+import CreateCourses from '../lesson/CreateCourses';
 
 class LessonsFolder extends React.Component {
 
@@ -23,11 +28,12 @@ class LessonsFolder extends React.Component {
 
     componentWillReceiveProps(next) {
 
-            this.setState({
-                actualView: next.data,
-                parents: [{title: 'categorias', children: next.data}],
-                breadcrumbs: []
-            })
+        this.setState({
+            actualView: next.data,
+            parents: [{title: 'categorias', children: next.data}],
+            breadcrumbs: [],
+            _breadcrumbs: []
+        })
 
         // const ref = firebase.firestore().collection('lessons').get();
         // const ref = firebase.firestore().collection('courses').get();
@@ -45,16 +51,21 @@ class LessonsFolder extends React.Component {
 
     state = {
         breadcrumbs: [],
+        _breadcrumbs:[],
         actualView: this.props.data,
         parents: [{title: 'categorias', children: []}],
         showSearchBar: false,
         searchTerm: '',
         actualResults: [],
-        resultElemIdx: 0
+        resultElemIdx: 0,
+        isLoading: true
     }
 
     componentDidUpdate() {
         localStorage.setItem('folderState', JSON.stringify(this.state));
+        if (this.state.isLoading === true) {
+            this.setState({isLoading: false})
+        }
     }
 
     UNSAFE_componentWillMount() {
@@ -66,9 +77,25 @@ class LessonsFolder extends React.Component {
     }
 
     renderFolders() {
-        return this.state.actualView.map( folder => 
-            <Folder folder={folder} onClick={() => this.goToFolder(folder) }/>
+        if (this.state.isLoading === true) {
+            return <h2>Loading</h2>
+        }
+
+        let foldersArray = [];
+        if (this.state.parents.length > 1 && this.state.parents[this.state.parents.length - 1].type === 'discipline') {
+            foldersArray.push(
+                <div className="lessons-folder-item lessons-folder-item-button" onClick={this.props.showCCmodal}>Criar curso</div>
+            )
+        } else if (this.state.parents.length > 1 && this.state.parents[this.state.parents.length - 1].type === 'category') {
+            foldersArray.push(
+                <div className="lessons-folder-item lessons-folder-item-button" onClick={this.props.showCLmodal}>Criar Lição</div>
+            )
+        }
+        this.state.actualView.forEach(folder => 
+            foldersArray.push(<Folder folder={folder} onClick={() => this.goToFolder(folder) }/>)
         )
+
+        return foldersArray
     }
 
     goToFolder(folder) {
@@ -127,16 +154,22 @@ class LessonsFolder extends React.Component {
     }
 
     addCrumb(folder) {
+        console.log(folder)
         this.setState({
-            breadcrumbs: [...this.state.breadcrumbs, folder.title]
+            breadcrumbs: [...this.state.breadcrumbs, folder.title],
+            _breadcrumbs: [...this.state._breadcrumbs, folder.name]
         })
     }
 
     removeCrumbs() {
         const newCrumbs = this.state.breadcrumbs;
+        const new_Crumbs = this.state._breadcrumbs;
+
         newCrumbs.pop();
+        new_Crumbs.pop();
         this.setState({
-            breadcrumbs: newCrumbs
+            breadcrumbs: newCrumbs,
+            _breadcrumbs: new_Crumbs
         })
     }
 
@@ -160,7 +193,6 @@ class LessonsFolder extends React.Component {
         for (let el of highlightedElms) {
             el.classList.remove('highlighted');
         }
-
 
         let res = this.state.actualView.filter((item) => {
             console.log(item)
@@ -217,10 +249,14 @@ class LessonsFolder extends React.Component {
         }
     }
 
+    getActualDiscipline() {
+        return this.state._breadcrumbs
+    }
+
     render() {
         return (
             <div className="tree-view-wrapper">
-
+                <p>{this.state._breadcrumbs.map(el => <span>{el}</span>)}</p>
                 <div className="lessons-folder-toolbar">
                     <span className="lessons-folder-back-arrow"
                           onClick={this.goBack}>
@@ -236,14 +272,27 @@ class LessonsFolder extends React.Component {
                 <div className="lessons-folder-items-wrapper">
                     {this.renderFolders()}
                 </div>
+                <Modal isOpen={this.props.isCreateLessonOpen}
+                       hideFunc={this.props.hideCLModal}
+                       Component={<CreateLesson updateData={this.props.retrieveFoldersData} discipline={this.getActualDiscipline()}/>}/>
+                <Modal isOpen={this.props.isCreateCourseOpen}
+                       hideFunc={this.props.hideCCModal}
+                       Component={<CreateCourses updateData={this.props.retrieveFoldersData}/>}/>
             </div>
         )
     }
 }
 
+const mapStateToProps = (store) => ({
+    isCreateLessonOpen: store.modalReducer.isCLOpen,
+    isCreateCourseOpen: store.modalReducer.isCCOpen,
+})
+
 const mapDispatchToProps = (dispatch) => ({
     showCLmodal: () => dispatch(showCreateLessonModal()),
-    hideCLmodal: () => dispatch(hideCreateLessonModal()),
+    showCCmodal: () => dispatch(showCreateCourseModal()),
+    hideCLModal: () => dispatch(hideCreateLessonModal()),
+    hideCCModal: () => dispatch(hideCreateCourseModal()),
 });
 
-export default connect(null, mapDispatchToProps)(LessonsFolder);
+export default connect(mapStateToProps, mapDispatchToProps)(LessonsFolder);

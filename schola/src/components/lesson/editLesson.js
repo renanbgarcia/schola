@@ -57,6 +57,7 @@ class EditLesson extends React.Component {
         firebase.firestore()
                 .collection('courses')
                 .where('discipline', '==', discipline)
+                .where('author_id', '==', this.props.user.uid)
                 .get()
                 .then(snap => {
                     let courses = [];
@@ -74,7 +75,6 @@ class EditLesson extends React.Component {
                     let checkedElems = document.querySelectorAll('.checkbox-elem-wrapper input');
                         checkedElems.forEach((elem) => {
                             if (this.state.coursesInput.indexOf(elem.value ) !== -1) {
-                                console.log('foi')
                                 elem.setAttribute('checked', 'checked');
                             } else {
                                 elem.removeAttribute('checked');
@@ -89,7 +89,7 @@ class EditLesson extends React.Component {
 
     populateForm() {
         const db = firebase.firestore();
-        console.log(this.props.lessonId)
+        console.log(this.props)
         const docRef = db.collection('lessons').doc(this.props.lessonId);
 
         docRef.get().then(doc => {
@@ -106,26 +106,27 @@ class EditLesson extends React.Component {
             return doc
         })
         .then((doc) => {
-            console.log(this.state.scheduled)
+            console.log(doc.data())
             document.querySelector('#description').value = this.state.descriptionInput;
             document.querySelector('#title').value = this.state.titleInput;
             document.querySelector('#age').value = this.state.ageInput;
             document.querySelector('#category').value = this.state.categoryInput;
             document.querySelector('#discipline').value = this.state.disciplineInput;
-            document.querySelector('#date').value = moment(this.state.dateInput).format('YYYY-MM-DD');
+            document.querySelector('#date').value = moment.unix(this.state.dateInput).format('YYYY-MM-DD');
             this.getCourses(doc.data().discipline);
         })
     }
 
     sendLessonInfo() {
         try {
-            const db = firebase.firestore();
-            const docRef = db.collection('lessons').doc(this.props.lessonId);
-            const docID = docRef.id;
+            let db = firebase.firestore();
+            let docRef = db.collection('lessons').doc();
+            let docID = docRef.id;
 
-            docRef.get().then(doc => console.log(doc.data()))
-
-            docRef.update({
+            this.DoSchedule(docID);
+    
+            docRef.set({
+                lesson_id: docID,
                 title: this.state.titleInput,
                 targetAge: this.state.ageInput,
                 discipline: this.state.disciplineInput,
@@ -133,37 +134,41 @@ class EditLesson extends React.Component {
                 tags: this.state.tags,
                 course_id: this.state.coursesInput,
                 category: this.state.categoryInput,
-                // created_at: firebase.firestore.Timestamp.fromDate(new Date()),
                 scheduled: this.state.dateInput,
-                // author: this.props.userObject.displayName,
-                // author_id: this.props.userObject.uid,
-                // authorProto: 'https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png',
-                // rating: '--'
-            });
-
-            // this.DoSchedule();
+            });        
 
             return docID
         } catch(error) {
             console.log(error);
             alertbox.show('Ocorreu um erro :(')
         }
-        alertbox.show('Atualizado com sucesso :)')
     }
 
-    DoSchedule() {
-        // try {
-        //     let db = firebase.firestore();
-        //     let docRef = db.collection('events').where('author_id', '==', this.getIdParam());
-        //     docRef.then((snapshot) => {
-        //         snapshot.docs.for
-        //     })
-        //     docRef.update({events: this.state.events})
-        // } catch(error) {
-        //     console.log(error);
-        //     alertbox.show('Ocorreu um erro :(')
-        //     throw error;
-        // }
+    DoSchedule(lessonId) {
+        try {
+            let db = firebase.firestore();
+            let docRef = db.collection('events').doc();
+            let docID = docRef.id;
+    
+            docRef.set({
+                id: docID,
+                author_id: this.props.user.uid,
+                lesson_id: lessonId,
+                events: [
+                    {
+                        title: this.state.titleInput,
+                        start: this.state.dateInput + this.state.timeInput,
+                        end: this.state.dateInput + this.state.timeInput
+                    }
+                ]
+            });
+
+            return docID
+        } catch(error) {
+            console.log(error);
+            alertbox.show('Ocorreu um erro :(')
+            throw error;
+        }
     }
     
     handleTitleInput(e) {
@@ -175,7 +180,7 @@ class EditLesson extends React.Component {
     }
 
     handleDisciplineInput(e) {
-        this.setState({ disciplineInput: e.currentTarget.value }, this.getCourses(e.currentTarget.value));
+        this.setState({ disciplineInput: e.currentTarget.value }, this.getCourses(e.currentTarget.value, this.props.user.uid));
     }
 
     handleDescriptionInput(e) {
@@ -259,6 +264,10 @@ class EditLesson extends React.Component {
     }
 
     handleSubmit() {
+        if (this.state.coursesInput.length === 0) {
+            alertbox.show('Você escolheu uma disciplina que não possui cursos.\nCrie um curso para essa dsiciplina antes de criar um material.');
+            return
+        }
         if (this.state.titleInput &&
             this.state.ageInput &&
             this.state.disciplineInput &&
@@ -366,28 +375,6 @@ class EditLesson extends React.Component {
                             </div>
                         </div>
                     </div>
-                    {/* <div className="row">
-                        <div className="column">
-                            <label className="input-file-label" for="lesson-file">Carregar arquivos</label>
-                            <input onChange={this.handleFileInput}
-                                    type="file"
-                                    id="lesson-file"
-                                    multiple/>
-                        </div>
-                    </div> */}
-                    {/* <div className="row row-center">
-                        <ul className="file-list">
-                            {this.state.fileList.map((item, i) =>
-                                <li className="file-list-item">
-                                    {item.name}
-                                    <span id={item.name}></span>
-                                    <span onClick={(i) => this.deleteListItem(i)} >
-                                        <FontAwesomeIcon className="delete-button-list" icon={faTimesCircle}/>
-                                    </span>
-                                </li>
-                            )}
-                        </ul>
-                    </div> */}
                 </div>
                 <button className="full-width" onClick={this.handleSubmit}>Atualizar</button>
             </div>
@@ -398,8 +385,12 @@ class EditLesson extends React.Component {
     }
 }
 
+const mapStateToProps = (store) => ({
+    user: store.authReducer.user
+})
+
 const mapDispatchToProps = (dispatch) => ({
     hidePopMenu: () => dispatch(hidePopMenu()),
 })
 
-export default connect(null, mapDispatchToProps)(EditLesson);
+export default connect(mapStateToProps, mapDispatchToProps)(EditLesson);
