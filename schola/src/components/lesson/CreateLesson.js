@@ -49,7 +49,16 @@ class CreateLesson extends React.Component {
         dateInput: '',
         timeInput: '',
         courses: [],
-        coursesInput: []
+        courseInput: []
+    }
+
+    UNSAFE_componentWillMount() {
+        console.log(this.props)
+        this.setState({
+            disciplineInput: this.props._breadcrumbs[0],
+            courseInput: this.props._breadcrumbs[1],
+            categoryInput: this.props._breadcrumbs[2]
+        })
     }
 
     componentDidMount() {
@@ -178,7 +187,7 @@ class CreateLesson extends React.Component {
             let docRef = db.collection('lessons').doc();
             let docID = docRef.id;
 
-            this.DoSchedule(docID);
+            const eventId = this.DoSchedule(docID);
     
             docRef.set({
                 lesson_id: docID,
@@ -187,10 +196,11 @@ class CreateLesson extends React.Component {
                 discipline: this.state.disciplineInput,
                 desc: this.state.descriptionInput,
                 tags: this.state.tags,
-                course_id: this.state.coursesInput,
+                course_id: [this.state.courseInput],
                 category: this.state.categoryInput,
                 created_at: firebase.firestore.Timestamp.fromDate(new Date()),
                 scheduled: this.state.dateInput,
+                event: eventId,
                 author: this.props.userObject.displayName,
                 author_id: this.props.userObject.uid,
                 authorPhoto: this.props.userObject.photoURL,
@@ -214,11 +224,14 @@ class CreateLesson extends React.Component {
                 id: docID,
                 author_id: this.props.userObject.uid,
                 lesson_id: lessonId,
+                created_at: firebase.firestore.Timestamp.fromDate(new Date()),
                 events: [
                     {
                         title: this.state.titleInput,
                         start: this.state.dateInput + this.state.timeInput,
-                        end: this.state.dateInput + this.state.timeInput
+                        end: this.state.dateInput + this.state.timeInput,
+                        time: this.state.timeInput,
+                        date: this.state.dateInput
                     }
                 ]
             });
@@ -319,7 +332,6 @@ class CreateLesson extends React.Component {
     }
 
     render() {
-        console.log(this.props.discipline)
         return (
             <div className="create-lesson-container">
                 <div>

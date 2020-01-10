@@ -41,6 +41,7 @@ class Lessons extends React.Component {
         lastDoc: {},
         treeData: [{ title: 'Loading', children: [categories] }],
         isEditLessonOpen: false,
+        isEditCourseOpen: false,
         lessonTarget: ''
     }
 
@@ -53,9 +54,9 @@ class Lessons extends React.Component {
     ]
 
     UNSAFE_componentWillMount() {
-        if (localStorage.getItem('folderState') === null) {
+        // if (localStorage.getItem('folderState') === null) {
             this.retrieveFoldersData();
-        }
+        // }
     }
 
     /**
@@ -120,7 +121,8 @@ class Lessons extends React.Component {
                             for (let cat of innerCategories) {
                                 cat.children = []
                                 for (let lesson of snapshot.docs) {
-                                    if (lesson.data().category === cat.title) {
+                                    console.log(lesson.data())
+                                    if (lesson.data().category === cat.name) {
                                         console.log(lesson.data())
                                         cat.children.push({
                                             title: lesson.data().title,
@@ -128,18 +130,20 @@ class Lessons extends React.Component {
                                             rating: lesson.data().rating,
                                             dueDate: lesson.data().scheduled,
                                             id: lesson.data().lesson_id,
+                                            category: cat.name,
+                                            discipline: materia.name,
                                             type: 'lesson'
                                         });                                    
                                     }
                                 }
                                 if (courseChildren.map(categ => categ.title === cat.title).indexOf(true) === -1) {
-                                    courseChildren.push({ title: cat.title, children: cat.children, lessonCount: cat.children.length, type: 'category' });
+                                    courseChildren.push({ title: cat.title, children: cat.children, lessonCount: cat.children.length, name: cat.name, type: 'category' });
                                 }
                             }
                             return snapshot.size
                         })
                         .then((count) => {
-                            console.log(_materias)
+                            // console.log(_materias)
                             materia.children.push({
                                 title: doc.data().title,
                                 id: doc.data().course_id,
@@ -148,6 +152,7 @@ class Lessons extends React.Component {
                                 children: courseChildren,
                                 lessonCount: count,
                                 rating: doc.data().rating,
+                                discipline: materia.name,
                                 type: 'course'
                             })
                         })
@@ -182,7 +187,6 @@ class Lessons extends React.Component {
                         this.props.showCLmodal()
                     }
                 })
-        
     }
 
     renderLessonsView(ageArray) {
@@ -214,8 +218,8 @@ class Lessons extends React.Component {
         return (
             <div className="home-container">
                 {/* <Modal isOpen={this.props.isCreateLessonOpen} hideFunc={this.props.hideCLModal} Component={<CreateLesson updateData={this.retrieveFoldersData}/>}/> */}
-                <Modal isOpen={this.state.isEditLessonOpen} hideFunc={this.hideEditLesson} Component={<EditLesson lessonId={this.props.popMenuTarget.id} updateData={this.retrieveFoldersData}/>}/>
-                <Modal isOpen={this.state.isEditCourseOpen} hideFunc={this.hideEditCourse} Component={<EditCourse courseId={this.props.popMenuTarget.id} updateData={this.retrieveFoldersData}/>} />
+                <Modal isOpen={this.state.isEditLessonOpen} hideFunc={this.hideEditLesson} componentName="EditLesson" Component={<EditLesson lessonId={this.props.popMenuTarget.id} updateData={this.retrieveFoldersData}/>}/>
+                <Modal isOpen={this.state.isEditCourseOpen} hideFunc={this.hideEditCourse} componentName="EditCourse" Component={<EditCourse courseId={this.props.popMenuTarget.id} updateData={this.retrieveFoldersData}/>} />
                 {/* <Modal isOpen={this.props.isCreateCourseOpen} hideFunc={this.props.hideCCModal} Component={<CreateCourses updateData={this.retrieveFoldersData}/>}/> */}
                 <div className="choose-view-bar">
                     <span onClick={() => this.setState({view: 'tree'})}><FontAwesomeIcon icon={faTree}/></span>
@@ -234,7 +238,6 @@ class Lessons extends React.Component {
                         x={this.props.popMenuX}
                         y={this.props.popMenuY}/>
                 </div>
-
             </div>
         )
     }

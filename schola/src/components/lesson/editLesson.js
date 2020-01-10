@@ -31,7 +31,9 @@ class EditLesson extends React.Component {
         tags: [],
         tagsInput: [],
         coursesInput: [],
-        dateInput: 0
+        dateInput: 0,
+        timeInput: '',
+        event: '',
     }
 
     UNSAFE_componentWillMount() {
@@ -91,8 +93,18 @@ class EditLesson extends React.Component {
         const db = firebase.firestore();
         console.log(this.props)
         const docRef = db.collection('lessons').doc(this.props.lessonId);
+        let eventRef;
 
         docRef.get().then(doc => {
+            if (doc.data().event === undefined || doc.data().event === 0) {
+                eventRef = db.collection('events').doc();
+            } else {
+                eventRef = db.collection('events').doc(doc.data().event);
+            }
+            eventRef.get().then(doc => {
+                this.setState({timeInput: doc.data().events[0].time});
+                document.querySelector('#time').value = moment.utc(moment.duration(doc.data().events[0].time, "seconds").asMilliseconds()).format("HH:mm");
+            })
             this.setState({
                 titleInput: doc.data().title,
                 ageInput: doc.data().targetAge,
@@ -101,7 +113,10 @@ class EditLesson extends React.Component {
                 tags: doc.data().tags,
                 coursesInput: doc.data().course_id,
                 categoryInput: doc.data().category,
-                dateInput: doc.data().scheduled
+                dateInput: doc.data().scheduled,
+                event: doc.data().event ? doc.data().event : 0,
+
+                // lesson_id: doc.data().lesson_id
             })
             return doc
         })
@@ -120,13 +135,13 @@ class EditLesson extends React.Component {
     sendLessonInfo() {
         try {
             let db = firebase.firestore();
-            let docRef = db.collection('lessons').doc();
-            let docID = docRef.id;
+            let docRef = db.collection('lessons').doc(this.props.lessonId);
+            // let docID = docRef.id;
 
-            this.DoSchedule(docID);
+            this.DoSchedule(this.props.lessonId);
     
-            docRef.set({
-                lesson_id: docID,
+            docRef.update({
+                // lesson_id: docID,
                 title: this.state.titleInput,
                 targetAge: this.state.ageInput,
                 discipline: this.state.disciplineInput,
@@ -135,9 +150,10 @@ class EditLesson extends React.Component {
                 course_id: this.state.coursesInput,
                 category: this.state.categoryInput,
                 scheduled: this.state.dateInput,
+                event: this.state.event
             });        
 
-            return docID
+            // return this.state.lesson_id
         } catch(error) {
             console.log(error);
             alertbox.show('Ocorreu um erro :(')
@@ -146,24 +162,33 @@ class EditLesson extends React.Component {
 
     DoSchedule(lessonId) {
         try {
+            let docRef;
             let db = firebase.firestore();
-            let docRef = db.collection('events').doc();
-            let docID = docRef.id;
+            if (this.state.event === undefined || this.state.event === 0) {
+                docRef = db.collection('events').doc();
+            } else {
+                docRef = db.collection('events').doc(this.state.event);
+            }
+
+            // let docID = docRef.id;
     
             docRef.set({
-                id: docID,
+                id: docRef.id,
                 author_id: this.props.user.uid,
                 lesson_id: lessonId,
+
                 events: [
                     {
                         title: this.state.titleInput,
                         start: this.state.dateInput + this.state.timeInput,
-                        end: this.state.dateInput + this.state.timeInput
+                        end: this.state.dateInput + this.state.timeInput,
+                        time: this.state.timeInput,
+                        date: this.state.dateInput
                     }
                 ]
             });
 
-            return docID
+            // return docID
         } catch(error) {
             console.log(error);
             alertbox.show('Ocorreu um erro :(')
@@ -243,9 +268,14 @@ class EditLesson extends React.Component {
     }
 
     handleDateInput(e) {
-        console.log(moment(e.target.value).valueOf());
         this.setState({
-            dateInput: moment(e.target.value).valueOf()
+            dateInput: moment(e.target.value).unix()
+        })
+    }
+
+    handleTimeInput(e) {
+        this.setState({
+            timeInput: moment.duration(e.target.value, 'HH:mm').asSeconds()
         })
     }
 
@@ -273,8 +303,8 @@ class EditLesson extends React.Component {
             this.state.disciplineInput &&
             this.state.descriptionInput !== '') {
             try {
-                let lessonID = this.sendLessonInfo();
-                this.uploadFiles(lessonID);
+                this.sendLessonInfo();
+                // this.uploadFiles(this.props.lessonId);
 
             } catch(err) {
                 console.log(err);
@@ -288,7 +318,7 @@ class EditLesson extends React.Component {
     }
 
     render() {
-        console.log(this.props)
+
         return (
         <div className="create-lesson-container">
         <div className="row">
@@ -358,6 +388,9 @@ class EditLesson extends React.Component {
                     <div className="row">
                         <div className="column">
                             <input onChange={(e) => this.handleDateInput(e)} id="date" type="date"/>
+                        </div>
+                        <div className="column">
+                            <input onChange={(e) => this.handleTimeInput(e)} id ="time" type="time"/>
                         </div>
                     </div>
                     <div className="row">

@@ -16,6 +16,9 @@ class Folder extends React.Component {
 
     getDate = (timestamp) => {
         console.log(timestamp)
+        if (timestamp === "") {
+            return "--"
+        }
         let d = new Date(timestamp*1000);
         return d.toLocaleDateString();
     }

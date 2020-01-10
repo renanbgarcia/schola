@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faSearch, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { alertbox } from '../utils/alert';
 import { connect } from 'react-redux';
 import { showCreateLessonModal } from '../../actions/modalActions';
@@ -27,14 +27,13 @@ class LessonsFolder extends React.Component {
     }
 
     componentWillReceiveProps(next) {
-
+        console.log(next)
         this.setState({
             actualView: next.data,
             parents: [{title: 'categorias', children: next.data}],
             breadcrumbs: [],
             _breadcrumbs: []
         })
-
         // const ref = firebase.firestore().collection('lessons').get();
         // const ref = firebase.firestore().collection('courses').get();
         // const ref = firebase.firestore().collection('lessons').where('course_id', 'array-contains', 'jeTHbFK4pJMJk4P8QKbH' ).get();
@@ -78,7 +77,7 @@ class LessonsFolder extends React.Component {
 
     renderFolders() {
         if (this.state.isLoading === true) {
-            return <h2>Loading</h2>
+            return <div className="lessons-folder-spinner"><FontAwesomeIcon icon={faSpinner} size="5x" spin /></div>
         }
 
         let foldersArray = [];
@@ -155,9 +154,16 @@ class LessonsFolder extends React.Component {
 
     addCrumb(folder) {
         console.log(folder)
+        let _crumb = '';
+        if (folder.hasOwnProperty('id')) {
+            _crumb = folder.id;
+        } else {
+            _crumb = folder.name
+        }
+
         this.setState({
             breadcrumbs: [...this.state.breadcrumbs, folder.title],
-            _breadcrumbs: [...this.state._breadcrumbs, folder.name]
+            _breadcrumbs: [...this.state._breadcrumbs, _crumb]
         })
     }
 
@@ -249,14 +255,9 @@ class LessonsFolder extends React.Component {
         }
     }
 
-    getActualDiscipline() {
-        return this.state._breadcrumbs
-    }
-
     render() {
         return (
             <div className="tree-view-wrapper">
-                <p>{this.state._breadcrumbs.map(el => <span>{el}</span>)}</p>
                 <div className="lessons-folder-toolbar">
                     <span className="lessons-folder-back-arrow"
                           onClick={this.goBack}>
@@ -272,21 +273,22 @@ class LessonsFolder extends React.Component {
                 <div className="lessons-folder-items-wrapper">
                     {this.renderFolders()}
                 </div>
-                <Modal isOpen={this.props.isCreateLessonOpen}
-                       hideFunc={this.props.hideCLModal}
-                       Component={<CreateLesson updateData={this.props.retrieveFoldersData} discipline={this.getActualDiscipline()}/>}/>
-                <Modal isOpen={this.props.isCreateCourseOpen}
-                       hideFunc={this.props.hideCCModal}
-                       Component={<CreateCourses updateData={this.props.retrieveFoldersData}/>}/>
+                <Modal hideFunc={this.props.hideCLModal}
+                       componentName="CreateLesson"
+                       Component={<CreateLesson updateData={this.props.retrieveFoldersData} _breadcrumbs={this.state._breadcrumbs}/>}/>
+                <Modal hideFunc={this.props.hideCCModal}
+                       componentName="CreateCourse"
+                       Component={<CreateCourses updateData={this.props.retrieveFoldersData} _breadcrumbs={this.state._breadcrumbs}/>}/>
             </div>
         )
     }
 }
 
-const mapStateToProps = (store) => ({
-    isCreateLessonOpen: store.modalReducer.isCLOpen,
-    isCreateCourseOpen: store.modalReducer.isCCOpen,
-})
+// const mapStateToProps = (store) => ({
+    // isCreateLessonOpen: store.modalReducer.isCLOpen,
+    // isCreateCourseOpen: store.modalReducer.isCCOpen,
+    // foldersData: store.foldersDataReducer.categories
+// })
 
 const mapDispatchToProps = (dispatch) => ({
     showCLmodal: () => dispatch(showCreateLessonModal()),
@@ -295,4 +297,4 @@ const mapDispatchToProps = (dispatch) => ({
     hideCCModal: () => dispatch(hideCreateCourseModal()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(LessonsFolder);
+export default connect(null, mapDispatchToProps)(LessonsFolder);

@@ -1526,6 +1526,13 @@ button.rbc-input::-moz-focus-inner {
   z-index: 2;
 }
 
+.lessons-folder-spinner {
+  margin-top: 100px;
+  flex: auto;
+  justify-content: center;
+  overflow: hidden;
+}
+
 .lessons-folder-item-button {
   margin-bottom: 10px !important;
 }

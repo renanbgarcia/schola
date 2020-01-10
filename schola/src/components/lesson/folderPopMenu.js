@@ -10,6 +10,14 @@ export const deleteFolder = (folder) => {
     try {
         if (folder.hasOwnProperty('type')) {
             db.collection(`${folder.type}s`).doc(folder.id).delete();
+            if (folder.type === 'lesson') {
+                db.collection('events')
+                   .where('lesson_id', '==', folder.id)
+                   .get()
+                   .then(snap => {
+                        snap.docs.forEach(doc => db.collection('events').doc(doc.data().id).delete());
+                    })
+            }
         }
 
     } catch (err) {

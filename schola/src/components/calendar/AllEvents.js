@@ -31,25 +31,26 @@ class AllEvents extends React.Component {
     }
 
     getEvents() { 
-        const docRef = firebase.firestore().collection('events')
-                                .where('author_id', '==', this.props.userObject.uid);
-        docRef.get().then(snapshot => {
-            snapshot.docs.map(doc => {
-                let prevState = this.state.events;
-                doc.data().events.map(ev => {
-                    // let parsedEnd = moment.unix(ev.end.seconds).format();
-                    // let parsedStart = moment.unix(ev.start.seconds).format()
-                    let parsedEnd = new Date(moment.unix(ev.end).format());
-                    let parsedStart = new Date(moment.unix(ev.start).format());
-                    ev.end = parsedEnd;
-                    ev.start = parsedStart;
-                    ev.allDay = false;
-                    prevState.push(ev)
-                    console.log(ev)
-                });
-                this.setState({ events: prevState });
-            })
-        })
+        firebase.firestore()
+                .collection('events')
+                .where('author_id', '==', this.props.userObject.uid)
+                .get().then(snapshot => {
+                    snapshot.docs.map(doc => {
+                        let prevState = this.state.events;
+                        doc.data().events.map(ev => {
+                            // let parsedEnd = moment.unix(ev.end.seconds).format();
+                            // let parsedStart = moment.unix(ev.start.seconds).format()
+                            let parsedEnd = new Date(moment.unix(ev.end).format());
+                            let parsedStart = new Date(moment.unix(ev.start).format());
+                            ev.end = parsedEnd;
+                            ev.start = parsedStart;
+                            ev.allDay = false;
+                            prevState.push(ev)
+                            console.log(ev)
+                        });
+                        this.setState({ events: prevState });
+                    })
+                })
     }
 
     render() {

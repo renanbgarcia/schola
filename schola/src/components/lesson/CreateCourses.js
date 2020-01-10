@@ -11,15 +11,21 @@ class CreateCourses extends React.Component {
         this.handleName = this.handleName.bind(this);
         this.handleAge = this.handleAge.bind(this);
         this.handleDescription = this.handleDescription.bind(this);
-        this.handleDiscipline = this.handleDiscipline.bind(this);
+        // this.handleDiscipline = this.handleDiscipline.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     state = {
         nameInput: '',
         descInput: '',
-        disciplineInput: 'math',
+        disciplineInput: '',
         ageInput: 18
+    }
+
+    UNSAFE_componentWillMount() {
+        this.setState({
+            disciplineInput: this.props._breadcrumbs[0]
+        })
     }
 
     handleName(e) {
@@ -40,11 +46,11 @@ class CreateCourses extends React.Component {
         })
     }
 
-    handleDiscipline(e) {
-        this.setState({
-            disciplineInput: e.target.value
-        })
-    }
+    // handleDiscipline(e) {
+    //     this.setState({
+    //         disciplineInput: e.target.value
+    //     })
+    // }
 
     handleSubmit() {
         const db = firebase.firestore();
@@ -78,14 +84,14 @@ class CreateCourses extends React.Component {
                 <input onChange={(e) => this.handleName(e)} type="text"/>
                 <label>Descrição:</label>
                 <input onChange={(e) => this.handleDescription(e)} type="text"/>
-                <label>Matéria:</label>
+                {/* <label>Matéria:</label>
                 <select onChange={(e) => this.handleDiscipline(e)}>
                     <option value="math">Matemática</option>
                     <option value="grammar">Gramática</option>
                     <option value="english">Inglês</option>
                     <option value="history">História</option>
                     <option value="biology">Biologia</option>
-                </select>
+                </select> */}
                 <label>Idade:</label>
                 <div class="range-value">{this.state.ageInput}</div>
                 <input onChange={(e) => this.handleAge(e)} type="range" max="18" min="0"/>

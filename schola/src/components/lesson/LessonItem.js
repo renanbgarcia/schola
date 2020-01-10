@@ -8,6 +8,7 @@ const LessonItem = (props) => {
     if (!content) {
         return <div>Nada</div>
     }
+    console.log(content)
     const deleteLesson = props.deleteLesson;
     const title = content.title;
     const style = props.style;
@@ -22,7 +23,7 @@ const LessonItem = (props) => {
                     {/* <td>{description}</td> */}
                     <td className="age">{age}</td>
                     <td className="discipline">{discipline} </td>
-                    <td className="close-btn" onClick={() => deleteLesson(content.lessonId)} >
+                    <td className="close-btn" onClick={() => deleteLesson(content.lesson_id)} >
                         <FontAwesomeIcon icon={faWindowClose}/>
                     </td>
                 </tr>
