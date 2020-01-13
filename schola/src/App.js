@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import firebase from './firebase';
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Router, Route } from "react-router-dom";
 import { createBrowserHistory } from 'history';
 
 import './App.css';
@@ -22,8 +22,9 @@ import Lessons from './components/lesson/Lessons';
 import Profile from './components/profile/Profile';
 import Students from './components/students/Students';
 import RegisterStudent from './components/students/RegisterStudent';
+import LessonPage from './components/lesson/LessonPage';
 
-let history = createBrowserHistory()
+export let _history = createBrowserHistory();
 
 class App extends React.Component {
 
@@ -43,7 +44,7 @@ class App extends React.Component {
   }
 
   renderSidebar() {
-    console.log(history.location)
+    console.log(_history.location)
     if (this.props.isLogged === false) {
       return null
     } else {
@@ -54,7 +55,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="App" id="app">
-        <Router history={history}>
+        <Router history={_history}>
           <Navbar/>
 
           <div className="Content container">
@@ -69,6 +70,7 @@ class App extends React.Component {
             <Route path='/lessons' component={this.guard(Lessons)}/>
             <Route path='/profile' component={this.guard(Profile)}/>
             <Route path='/students' component={this.guard(Students)}/>
+            <Route path='/lessonpage/:id' component={this.guard(LessonPage)}/>
             <Route path='/registerstudent' component={RegisterStudent}/>
             
           </div>

@@ -54,9 +54,7 @@ class Lessons extends React.Component {
     ]
 
     UNSAFE_componentWillMount() {
-        // if (localStorage.getItem('folderState') === null) {
-            this.retrieveFoldersData();
-        // }
+        this.retrieveFoldersData();
     }
 
     /**
@@ -217,10 +215,12 @@ class Lessons extends React.Component {
         let ageArray = Array.apply(null, Array(18));
         return (
             <div className="home-container">
-                {/* <Modal isOpen={this.props.isCreateLessonOpen} hideFunc={this.props.hideCLModal} Component={<CreateLesson updateData={this.retrieveFoldersData}/>}/> */}
-                <Modal isOpen={this.state.isEditLessonOpen} hideFunc={this.hideEditLesson} componentName="EditLesson" Component={<EditLesson lessonId={this.props.popMenuTarget.id} updateData={this.retrieveFoldersData}/>}/>
-                <Modal isOpen={this.state.isEditCourseOpen} hideFunc={this.hideEditCourse} componentName="EditCourse" Component={<EditCourse courseId={this.props.popMenuTarget.id} updateData={this.retrieveFoldersData}/>} />
-                {/* <Modal isOpen={this.props.isCreateCourseOpen} hideFunc={this.props.hideCCModal} Component={<CreateCourses updateData={this.retrieveFoldersData}/>}/> */}
+                <Modal isOpen={this.state.isEditLessonOpen} hideFunc={this.hideEditLesson} componentName="EditLesson">
+                    <EditLesson lessonId={this.props.popMenuTarget.id} updateData={this.retrieveFoldersData}/>
+                </Modal>
+                <Modal isOpen={this.state.isEditCourseOpen} hideFunc={this.hideEditCourse} componentName="EditCourse">
+                    <EditCourse courseId={this.props.popMenuTarget.id} updateData={this.retrieveFoldersData}/>
+                </Modal>
                 <div className="choose-view-bar">
                     <span onClick={() => this.setState({view: 'tree'})}><FontAwesomeIcon icon={faTree}/></span>
                     <span onClick={() => this.setState({view: 'list'})}><FontAwesomeIcon icon={faListAlt}/></span>
@@ -246,8 +246,6 @@ class Lessons extends React.Component {
 const mapStateToProps = (store) => ({
     userObject: store.authReducer.user,
     treeData: store.foldersDataReducer.categories,
-    // isCreateLessonOpen: store.modalReducer.isCLOpen,
-    // isCreateCourseOpen: store.modalReducer.isCCOpen,
     isPopMenuVisible: store.menuReducer.isPopMenuVisible,
     popMenuX: store.menuReducer.popMenuPositionX,
     popMenuY: store.menuReducer.popMenuPositionY,
@@ -255,10 +253,6 @@ const mapStateToProps = (store) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    // showCLmodal: () => dispatch(showCreateLessonModal()),
-    // showCCmodal: () => dispatch(showCreateCourseModal()),
-    // hideCLModal: () => dispatch(hideCreateLessonModal()),
-    // hideCCModal: () => dispatch(hideCreateCourseModal()),
     setFoldersData: (data) => dispatch(updateFoldersData(data)),
     hidePopMenu: () => dispatch(hidePopMenu()),
     showPopMenu: () => dispatch(showPopMenu()),

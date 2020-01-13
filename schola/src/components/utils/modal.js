@@ -46,7 +46,7 @@ class Modal extends React.Component {
         className="modal-wrapper"
         onClick={this.dismissModal}>
             <div className="element">
-                {this.props.Component}
+                {this.props.children}
             </div>
         </div> : null
     }

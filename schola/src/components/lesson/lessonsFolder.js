@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faSearch, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { alertbox } from '../utils/alert';
 import { connect } from 'react-redux';
+import { _history } from '../../App';
 import { showCreateLessonModal } from '../../actions/modalActions';
 import { hideCreateLessonModal } from '../../actions/modalActions';
 import { showCreateCourseModal } from '../../actions/modalActions';
@@ -90,8 +91,9 @@ class LessonsFolder extends React.Component {
                 <div className="lessons-folder-item lessons-folder-item-button" onClick={this.props.showCLmodal}>Criar Lição</div>
             )
         }
+
         this.state.actualView.forEach(folder => 
-            foldersArray.push(<Folder folder={folder} onClick={() => this.goToFolder(folder) }/>)
+        foldersArray.push(<Folder folder={folder} onClick={() => {folder.type === 'lesson'? _history.push(`/lessonpage/${folder.id}`) : this.goToFolder(folder)} }/>)
         )
 
         return foldersArray
@@ -256,6 +258,7 @@ class LessonsFolder extends React.Component {
     }
 
     render() {
+        console.log(_history)
         return (
             <div className="tree-view-wrapper">
                 <div className="lessons-folder-toolbar">
@@ -274,11 +277,13 @@ class LessonsFolder extends React.Component {
                     {this.renderFolders()}
                 </div>
                 <Modal hideFunc={this.props.hideCLModal}
-                       componentName="CreateLesson"
-                       Component={<CreateLesson updateData={this.props.retrieveFoldersData} _breadcrumbs={this.state._breadcrumbs}/>}/>
+                       componentName="CreateLesson">
+                    <CreateLesson updateData={this.props.retrieveFoldersData} _breadcrumbs={this.state._breadcrumbs}/>
+                </Modal>
                 <Modal hideFunc={this.props.hideCCModal}
-                       componentName="CreateCourse"
-                       Component={<CreateCourses updateData={this.props.retrieveFoldersData} _breadcrumbs={this.state._breadcrumbs}/>}/>
+                       componentName="CreateCourse">
+                    <CreateCourses updateData={this.props.retrieveFoldersData} _breadcrumbs={this.state._breadcrumbs}/>
+                </Modal>
             </div>
         )
     }

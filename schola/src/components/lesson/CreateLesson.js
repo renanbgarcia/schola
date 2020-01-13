@@ -167,7 +167,7 @@ class CreateLesson extends React.Component {
             uploadTask.snapshot.ref.getDownloadURL()
                 .then(function(downloadURL) {
                     console.log('File available at', downloadURL);
-                    let updatedArray = firebase.firestore.FieldValue.arrayUnion(downloadURL)
+                    let updatedArray = firebase.firestore.FieldValue.arrayUnion({url: downloadURL, name: file.name})
                     docRef.update({
                         filesURLs: updatedArray
                     })

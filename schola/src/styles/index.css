@@ -2353,6 +2353,10 @@ input[type=file] {
   margin-right: 5px;
 }
 
+.previewer-wrapper canvas {
+  width: 80%;
+}
+
 .Content {
   height: calc(100vh - 50px);
   padding: 0;
