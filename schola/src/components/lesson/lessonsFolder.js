@@ -93,7 +93,12 @@ class LessonsFolder extends React.Component {
         }
 
         this.state.actualView.forEach(folder => 
-        foldersArray.push(<Folder folder={folder} onClick={() => {folder.type === 'lesson'? _history.push(`/lessonpage/${folder.id}`) : this.goToFolder(folder)} }/>)
+            foldersArray.push(
+                <Folder folder={folder}
+                        onClick={() => {
+                            folder.type === 'lesson'? _history.push(`/lessonpage/${folder.id}`) : this.goToFolder(folder)
+                        } }/>
+            )
         )
 
         return foldersArray

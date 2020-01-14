@@ -1,9 +1,67 @@
-// .file-viewer {
-//     max-width: 50%;
-// }
+.lesson-info {
+    padding: 15px;
+    background-color: $color-quaternary;
+    margin: 15px 0;
+    p {
+        text-align: left;
+    }
+    .lesson-info-details {
+        border: solid $color-initial 1px;
+        margin-top: 15px;
+        div {
+            margin: 10px 0 10px;
+        }
+        span:not(.tag-pill){
+            padding: 5px;
+            background-color: $color-quinary;
+            border-radius: 10px;
+            margin-right: 10px;
+        }
+    }
+}
+
+
 
 .previewer-wrapper {
-    canvas {
-        width: 80%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.file-wrapper-container {
+    background-color: $color-tertiary;
+    padding: 15px;
+}
+
+.file-wrapper {
+    height: 300px;
+    min-height: min-content;
+    margin-bottom: 15px;
+}
+
+@media (min-width: 1000px) {
+    .lesson-container {
+        display: flex;
+        margin: 15px;
+        justify-content: center;
+    }
+
+    .file-wrapper-container {
+        margin: 0 15px 15px 0;
+        flex-grow: 1;
+    }
+
+    .lesson-info {
+        min-width: 450px;
+        margin: 0 15px 15px 0;
+    }
+}
+
+@media (max-width: 999px) {
+    .file-wrapper {
+        width: 100%;
+    }
+    .file-wrapper-container {
+        width: 100%;
+        margin-bottom: 15px;
     }
 }

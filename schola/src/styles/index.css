@@ -2353,10 +2353,71 @@ input[type=file] {
   margin-right: 5px;
 }
 
-.previewer-wrapper canvas {
-  width: 80%;
+.lesson-info {
+  padding: 15px;
+  background-color: #d1d1d1;
+  margin: 15px 0;
+}
+.lesson-info p {
+  text-align: left;
+}
+.lesson-info .lesson-info-details {
+  border: solid #fff 1px;
+  margin-top: 15px;
+}
+.lesson-info .lesson-info-details div {
+  margin: 10px 0 10px;
+}
+.lesson-info .lesson-info-details span:not(.tag-pill) {
+  padding: 5px;
+  background-color: #e1e1e1;
+  border-radius: 10px;
+  margin-right: 10px;
 }
 
+.previewer-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.file-wrapper-container {
+  background-color: #e2e0dc;
+  padding: 15px;
+}
+
+.file-wrapper {
+  height: 300px;
+  min-height: min-content;
+  margin-bottom: 15px;
+}
+
+@media (min-width: 1000px) {
+  .lesson-container {
+    display: flex;
+    margin: 15px;
+    justify-content: center;
+  }
+
+  .file-wrapper-container {
+    margin: 0 15px 15px 0;
+    flex-grow: 1;
+  }
+
+  .lesson-info {
+    min-width: 450px;
+    margin: 0 15px 15px 0;
+  }
+}
+@media (max-width: 999px) {
+  .file-wrapper {
+    width: 100%;
+  }
+
+  .file-wrapper-container {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+}
 .Content {
   height: calc(100vh - 50px);
   padding: 0;

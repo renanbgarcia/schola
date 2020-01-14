@@ -23,13 +23,14 @@ const PdfPreviewer = ({ src }) => {
 
       // Prepare canvas using PDF page dimensions
       const canvas = canvasRef.current;
-      const desiredWidth = canvas.parentNode.offsetWidth;
-      const viewport = page.getViewport({ scale: 1, });
-      const scale = desiredWidth / viewport.width;
+      canvas.height = canvas.parentNode.offsetHeight;
+
+      const scale = canvas.parentNode.scrollHeight / page.getViewport(1.0).height;
       const scaledViewport = page.getViewport({ scale: scale, });
       const context = canvas.getContext('2d');
-      canvas.height = viewport.height;
-      canvas.width = canvas.parentNode.offsetWidth;
+      console.log(canvas.parentNode.offsetHeight)
+      // canvas.width = canvas.parentNode.offsetWidth;
+ 
 
       // Render PDF page into canvas context
       const renderContext = {
@@ -45,23 +46,16 @@ const PdfPreviewer = ({ src }) => {
   }, [src]);
 
   return (
-    <a href={src}>
-    <canvas
+    <canvas 
       ref={canvasRef}
-      width={window.innerWidth}
+      // width={window.innerWidth}
       height={window.innerHeight}
     />
-    </a>
-
   );
 }
 
 PdfPreviewer.propTypes = {
   src: PropTypes.string
-};
-
-PdfPreviewer.defaultProps = {
-  src: `${process.env.PUBLIC_URL}/helloworld.pdf`
 };
 
 export default PdfPreviewer;
