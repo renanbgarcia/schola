@@ -25,16 +25,35 @@ class LessonsFolder extends React.Component {
         this.search = this.search.bind(this);
         this.goToNextResult = this.goToNextResult.bind(this);
         this.toggleSearchBar = this.toggleSearchBar.bind(this);
+        this.findView = this.findView.bind(this);
+        console.log(props.data)
+        this.state = {
+            breadcrumbs: [],
+            _breadcrumbs:[],
+            // actualView: [],
+            // parents: [{title: 'root', children: []}],
+            actualView: props.data,
+            parents: [{title: 'root', children: props.data}],
+            showSearchBar: false,
+            searchTerm: '',
+            actualResults: [],
+            resultElemIdx: 0,
+            isLoading: false
+        }
     }
 
-    componentWillReceiveProps(next) {
-        console.log(next)
-        this.setState({
-            actualView: next.data,
-            parents: [{title: 'categorias', children: next.data}],
-            breadcrumbs: [],
-            _breadcrumbs: []
-        })
+    // getDerivedStateFromProps(next) {
+
+    //     this.setState({
+    //         actualView: this.findView(next.data)
+    //     })
+
+        // this.setState({
+        //     actualView: next.data,
+        //     parents: [{title: 'categorias', children: next.data}],
+        //     breadcrumbs: [],
+        //     _breadcrumbs: []
+        // })
         // const ref = firebase.firestore().collection('lessons').get();
         // const ref = firebase.firestore().collection('courses').get();
         // const ref = firebase.firestore().collection('lessons').where('course_id', 'array-contains', 'jeTHbFK4pJMJk4P8QKbH' ).get();
@@ -47,33 +66,66 @@ class LessonsFolder extends React.Component {
         // batch.commit().then(console.log('tudo foi atualizado'))
         // }
         // )
-    }
-
-    state = {
-        breadcrumbs: [],
-        _breadcrumbs:[],
-        actualView: this.props.data,
-        parents: [{title: 'categorias', children: []}],
-        showSearchBar: false,
-        searchTerm: '',
-        actualResults: [],
-        resultElemIdx: 0,
-        isLoading: true
-    }
+    // }
 
     componentDidUpdate() {
-        localStorage.setItem('folderState', JSON.stringify(this.state));
-        if (this.state.isLoading === true) {
-            this.setState({isLoading: false})
+        // if (this.state.isLoading === true) {
+        //     this.setState({isLoading: false})
+        // }
+        let newView = this.findView(this.props.foldersData);
+        console.log(newView)
+        if (this.state.actualView !== newView) {
+            this.setState({actualView:  newView.children})
         }
     }
 
-    UNSAFE_componentWillMount() {
-        if (localStorage.getItem('folderState') !== null) {
-            this.setState({
-                ...JSON.parse(localStorage.getItem('folderState'))
-            })
+    componentDidMount() {
+        // if (this.state.isLoading === true) {
+        //     this.setState({isLoading: false})
+        // }
+    }
+
+    componentWillMount() {
+        // if (this.state.isLoading === true) {
+        //     this.setState({isLoading: false})
+        // }
+        // let newView = this.findView(this.props.data);
+        // if (this.state.actualView !== newView) {
+        //     this.setState({actualView:  this.findView(this.props.data)})
+        // }
+    }
+    
+    findView(upData) {
+        const crumbs = this.state._breadcrumbs;
+        let viewData = [];
+        if (crumbs.length === 0) {
+            return upData;
         }
+        upData.map(disc => {
+            if (disc.name === crumbs[0]) {
+                viewData = disc;
+                if (crumbs[1]) {
+                    viewData.children.map(course => {
+                        if (course.id === crumbs[1]) {
+                            viewData = course;
+                            if (crumbs[2]) {
+                                viewData.children.map(cat => {
+                                    if (cat.name === crumbs[2]) {
+                                        viewData = cat
+                                    }
+                                })
+                            } else {
+                                return viewData
+                            }
+                        }
+                    })
+                } else {
+                    return viewData
+                }
+            }
+        })
+
+        return viewData
     }
 
     renderFolders() {
@@ -91,7 +143,10 @@ class LessonsFolder extends React.Component {
                 <div className="lessons-folder-item lessons-folder-item-button" onClick={this.props.showCLmodal}>Criar Lição</div>
             )
         }
-
+        console.log(this.state.actualView)
+        // if (!this.state.actualView.hasOwnProperty('forEach')) {
+        //     return <div className="lessons-folder-spinner"><FontAwesomeIcon icon={faSpinner} size="5x" spin /></div>
+        // }
         this.state.actualView.forEach(folder => 
             foldersArray.push(
                 <Folder folder={folder}
@@ -263,7 +318,8 @@ class LessonsFolder extends React.Component {
     }
 
     render() {
-        console.log(_history)
+        
+        console.log(this.state.parents)
         return (
             <div className="tree-view-wrapper">
                 <div className="lessons-folder-toolbar">
@@ -294,11 +350,11 @@ class LessonsFolder extends React.Component {
     }
 }
 
-// const mapStateToProps = (store) => ({
+const mapStateToProps = (store) => ({
     // isCreateLessonOpen: store.modalReducer.isCLOpen,
     // isCreateCourseOpen: store.modalReducer.isCCOpen,
-    // foldersData: store.foldersDataReducer.categories
-// })
+    foldersData: store.foldersDataReducer.categories
+})
 
 const mapDispatchToProps = (dispatch) => ({
     showCLmodal: () => dispatch(showCreateLessonModal()),
@@ -307,4 +363,4 @@ const mapDispatchToProps = (dispatch) => ({
     hideCCModal: () => dispatch(hideCreateCourseModal()),
 });
 
-export default connect(null, mapDispatchToProps)(LessonsFolder);
+export default connect(mapStateToProps, mapDispatchToProps)(LessonsFolder);

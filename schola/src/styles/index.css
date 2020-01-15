@@ -88,14 +88,14 @@ blockquote *:last-child {
  * Copyright (c) 2017 CJ Patoilo
  * Licensed under the MIT license
  */
-.button,
+.button, .button-secondary,
 button,
 input[type=button],
 input[type=reset],
 input[type=submit] {
-  background-color: #727272;
+  background-color: #8c8c8c;
   border: 0.1rem solid #727272;
-  border-radius: 0.4rem;
+  border-radius: 1.9rem;
   color: #fff;
   cursor: pointer;
   display: inline-block;
@@ -110,7 +110,7 @@ input[type=submit] {
   text-transform: uppercase;
   white-space: nowrap;
 }
-.button:focus, .button:hover,
+.button:focus, .button-secondary:focus, .button:hover, .button-secondary:hover,
 button:focus,
 button:hover,
 input[type=button]:focus,
@@ -124,7 +124,7 @@ input[type=submit]:hover {
   color: #fff;
   outline: 0;
 }
-.button[disabled],
+.button[disabled], [disabled].button-secondary,
 button[disabled],
 input[type=button][disabled],
 input[type=reset][disabled],
@@ -132,7 +132,7 @@ input[type=submit][disabled] {
   cursor: default;
   opacity: 0.5;
 }
-.button[disabled]:focus, .button[disabled]:hover,
+.button[disabled]:focus, [disabled].button-secondary:focus, .button[disabled]:hover, [disabled].button-secondary:hover,
 button[disabled]:focus,
 button[disabled]:hover,
 input[type=button][disabled]:focus,
@@ -144,7 +144,7 @@ input[type=submit][disabled]:hover {
   background-color: #727272;
   border-color: #727272;
 }
-.button.button-outline,
+.button.button-outline, .button-outline.button-secondary,
 button.button-outline,
 input[type=button].button-outline,
 input[type=reset].button-outline,
@@ -152,7 +152,7 @@ input[type=submit].button-outline {
   background-color: transparent;
   color: #727272;
 }
-.button.button-outline:focus, .button.button-outline:hover,
+.button.button-outline:focus, .button-outline.button-secondary:focus, .button.button-outline:hover, .button-outline.button-secondary:hover,
 button.button-outline:focus,
 button.button-outline:hover,
 input[type=button].button-outline:focus,
@@ -165,7 +165,7 @@ input[type=submit].button-outline:hover {
   border-color: #646464;
   color: #646464;
 }
-.button.button-outline[disabled]:focus, .button.button-outline[disabled]:hover,
+.button.button-outline[disabled]:focus, .button-outline[disabled].button-secondary:focus, .button.button-outline[disabled]:hover, .button-outline[disabled].button-secondary:hover,
 button.button-outline[disabled]:focus,
 button.button-outline[disabled]:hover,
 input[type=button].button-outline[disabled]:focus,
@@ -177,7 +177,7 @@ input[type=submit].button-outline[disabled]:hover {
   border-color: inherit;
   color: #727272;
 }
-.button.button-clear,
+.button.button-clear, .button-clear.button-secondary,
 button.button-clear,
 input[type=button].button-clear,
 input[type=reset].button-clear,
@@ -186,7 +186,7 @@ input[type=submit].button-clear {
   border-color: transparent;
   color: #727272;
 }
-.button.button-clear:focus, .button.button-clear:hover,
+.button.button-clear:focus, .button-clear.button-secondary:focus, .button.button-clear:hover, .button-clear.button-secondary:hover,
 button.button-clear:focus,
 button.button-clear:hover,
 input[type=button].button-clear:focus,
@@ -199,7 +199,7 @@ input[type=submit].button-clear:hover {
   border-color: transparent;
   color: #646464;
 }
-.button.button-clear[disabled]:focus, .button.button-clear[disabled]:hover,
+.button.button-clear[disabled]:focus, .button-clear[disabled].button-secondary:focus, .button.button-clear[disabled]:hover, .button-clear[disabled].button-secondary:hover,
 button.button-clear[disabled]:focus,
 button.button-clear[disabled]:hover,
 input[type=button].button-clear[disabled]:focus,
@@ -209,6 +209,17 @@ input[type=reset].button-clear[disabled]:hover,
 input[type=submit].button-clear[disabled]:focus,
 input[type=submit].button-clear[disabled]:hover {
   color: #727272;
+}
+
+.button-secondary {
+  background-color: #b1b1b1;
+  border: none;
+  font-weight: 400;
+  font-size: 1rem;
+  height: 3em;
+  line-height: 3em;
+  vertical-align: middle;
+  padding: 0px 10px;
 }
 
 /*!
@@ -584,7 +595,7 @@ ul {
  * Copyright (c) 2017 CJ Patoilo
  * Licensed under the MIT license
  */
-.button,
+.button, .button-secondary,
 button,
 dd,
 dt {
@@ -1689,7 +1700,8 @@ nav .nav-wrapper ul li {
   align-items: center;
   width: 100%;
   padding: 20px;
-  border-radius: 15px;
+  border-radius: 0.5rem;
+  border: solid 1px #bdbdbd;
   background-color: #fff;
 }
 
@@ -1787,6 +1799,10 @@ input, textarea, select {
   border-radius: 15px;
   padding: 3px 8px;
   margin: 2px 4px;
+}
+.tag-pill svg {
+  margin-left: 5px;
+  cursor: pointer;
 }
 
 .tags-wrapper {
@@ -2232,7 +2248,7 @@ input[type=file] {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(90, 90, 90, 0.699);
+  background-color: rgba(231, 231, 231, 0.699);
   backdrop-filter: blur(2px);
   z-index: 999;
 }
@@ -2353,26 +2369,39 @@ input[type=file] {
   margin-right: 5px;
 }
 
+.float-right-top {
+  float: right;
+  margin-left: 5px;
+}
+
 .lesson-info {
   padding: 15px;
   background-color: #d1d1d1;
   margin: 15px 0;
 }
+.lesson-info h3 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .lesson-info p {
   text-align: left;
+  word-wrap: break-word;
 }
 .lesson-info .lesson-info-details {
   border: solid #fff 1px;
   margin-top: 15px;
+  padding: 10px;
 }
 .lesson-info .lesson-info-details div {
   margin: 10px 0 10px;
 }
 .lesson-info .lesson-info-details span:not(.tag-pill) {
-  padding: 5px;
+  padding: 5px 10px;
+  color: #727272;
   background-color: #e1e1e1;
-  border-radius: 10px;
+  border-radius: 1em;
   margin-right: 10px;
+  white-space: nowrap;
 }
 
 .previewer-wrapper {
@@ -2409,6 +2438,10 @@ input[type=file] {
   }
 }
 @media (max-width: 999px) {
+  .lesson-container {
+    padding-bottom: 50px;
+  }
+
   .file-wrapper {
     width: 100%;
   }

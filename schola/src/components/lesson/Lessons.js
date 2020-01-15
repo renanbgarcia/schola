@@ -31,6 +31,7 @@ class Lessons extends React.Component {
         this.showLessonEdit = this.showLessonEdit.bind(this);
         this.showCourseEdit = this.showCourseEdit.bind(this);
         this.handleCreateLesson = this.handleCreateLesson.bind(this);
+        this.handleModalSubmit = this.handleModalSubmit.bind(this);
     }
 
     state = {
@@ -54,7 +55,14 @@ class Lessons extends React.Component {
     ]
 
     UNSAFE_componentWillMount() {
-        this.retrieveFoldersData();
+        
+        if (!this.props.treeData) {
+            this.retrieveFoldersData();
+        } else {
+            console.log('ja tinha treedata')
+            console.log(this.props.treeData)
+        }
+
     }
 
     /**
@@ -119,7 +127,6 @@ class Lessons extends React.Component {
                             for (let cat of innerCategories) {
                                 cat.children = []
                                 for (let lesson of snapshot.docs) {
-                                    console.log(lesson.data())
                                     if (lesson.data().category === cat.name) {
                                         console.log(lesson.data())
                                         cat.children.push({
@@ -210,13 +217,18 @@ class Lessons extends React.Component {
             </>
     }
 
+    handleModalSubmit() {
+        this.hideEditLesson()
+        this.retrieveFoldersData();
+    }
+
     render() {
         console.log(this.props.popMenuTarget)
         let ageArray = Array.apply(null, Array(18));
         return (
             <div className="home-container">
                 <Modal isOpen={this.state.isEditLessonOpen} hideFunc={this.hideEditLesson} componentName="EditLesson">
-                    <EditLesson lessonId={this.props.popMenuTarget.id} updateData={this.retrieveFoldersData}/>
+                    <EditLesson lessonId={this.props.popMenuTarget.id} updateData={this.handleModalSubmit}/>
                 </Modal>
                 <Modal isOpen={this.state.isEditCourseOpen} hideFunc={this.hideEditCourse} componentName="EditCourse">
                     <EditCourse courseId={this.props.popMenuTarget.id} updateData={this.retrieveFoldersData}/>

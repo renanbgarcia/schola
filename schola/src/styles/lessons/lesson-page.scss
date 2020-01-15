@@ -1,26 +1,41 @@
+.float-right-top {
+    // position: absolute;
+    // right: 2px;
+    // top: 10px;
+    float: right;
+    margin-left: 5px;
+}
+
 .lesson-info {
     padding: 15px;
     background-color: $color-quaternary;
     margin: 15px 0;
+    h3 {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
     p {
         text-align: left;
+        word-wrap: break-word;
     }
     .lesson-info-details {
         border: solid $color-initial 1px;
         margin-top: 15px;
+        padding: 10px;
+        
         div {
             margin: 10px 0 10px;
         }
         span:not(.tag-pill){
-            padding: 5px;
+            padding: 5px 10px;
+            color: $color-primary;
             background-color: $color-quinary;
-            border-radius: 10px;
+            border-radius: 1em;
             margin-right: 10px;
+            white-space: nowrap;
         }
     }
 }
-
-
 
 .previewer-wrapper {
     display: flex;
@@ -57,6 +72,9 @@
 }
 
 @media (max-width: 999px) {
+    .lesson-container {
+        padding-bottom: 50px;
+    }
     .file-wrapper {
         width: 100%;
     }

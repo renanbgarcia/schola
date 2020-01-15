@@ -1,10 +1,15 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import firebase from '../../firebase';
 import FilePreviewer from '../utils/previewers/FilePreviewer';
 import axios from 'axios';
+import { _history } from '../../App';
 import { categories, getMaterias } from '../utils/variables';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faWindowClose} from '@fortawesome/free-solid-svg-icons';
+import Modal from '../utils/modal';
+import EditLesson from '../lesson/editLesson';
+import { deleteLesson } from '../lesson/folderPopMenu';
 
 class LessonPage extends React.Component {
 
@@ -15,13 +20,18 @@ class LessonPage extends React.Component {
         this.downloadResource = this.downloadResource.bind(this);
         this.translateCategoryName = this.translateCategoryName.bind(this);
         this.translateDisciplineName = this.translateDisciplineName.bind(this);
+        this.showEditLesson = this.showEditLesson.bind(this);
+        this.hideEditLesson = this.hideEditLesson.bind(this);
+        this.handleOnDeleteLesson = this.handleOnDeleteLesson.bind(this);
+        this.handleSubmitModal = this.handleSubmitModal.bind(this);
     }
 
     state = {
         title: 'Loading',
         description: 'Loading',
         tags: [],
-        filesURLs: []
+        filesURLs: [],
+        isEditLessonOpen: false
     }
 
     UNSAFE_componentWillMount() {
@@ -60,7 +70,7 @@ class LessonPage extends React.Component {
     }
 
     renderFiles() {
-        if (this.state.filesURLs.length === 0) {
+        if (this.state.filesURLs  === undefined) {
             return null;
         } else {
         return <div className="previewer-wrapper">
@@ -95,23 +105,45 @@ class LessonPage extends React.Component {
         }
     }
 
+    showEditLesson() {
+        this.setState({isEditLessonOpen: true});
+    }
+
+    hideEditLesson() {
+        this.setState({isEditLessonOpen: false});
+    }
+
+    handleOnDeleteLesson() {
+        deleteLesson(this.props.match.params.id);
+        _history.push('/lessons');
+    }
+
+    handleSubmitModal() {
+        this.getLessonInfo();
+        this.hideEditLesson();
+    }
+
     render() {
         console.log(this.state)
         return (
             <div className="home-container">
+                <Modal isOpen={this.state.isEditLessonOpen} hideFunc={this.hideEditLesson} componentName="EditLesson">
+                    <EditLesson lessonId={this.props.match.params.id} updateData={this.handleSubmitModal}/>
+                </Modal>
                 <div className="lesson-container">
                     <div className="lesson-info">
-                        <h3>{ this.state.title }</h3>
+                        <button className="button-secondary float-right-top" onClick={this.showEditLesson}>Editar</button>
+                        <button className="button-secondary float-right-top" onClick={this.handleOnDeleteLesson}>Excluir</button>
+                        <h3>{ this.state.title } </h3>                                
                         <p>{ this.state.description }</p>
                         <div className="lesson-info-details">
                             <div>
                                 <span>{ this.translateDisciplineName(this.state.discipline) }</span>
                                 <span>{ this.translateCategoryName(this.state.category) }</span>
                                 <span>{ this.state.targetAge } anos</span>
-                                <FontAwesomeIcon icon={faEdit}/>
-                                <FontAwesomeIcon icon={faWindowClose}/>
+
                             </div>
-                            <div>
+                            <div className="tags-wrapper">
                                 {this.state.tags.map(tag => <span className="tag-pill">{tag}</span>)}
                             </div>
                         </div>

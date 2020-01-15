@@ -294,7 +294,7 @@ class EditLesson extends React.Component {
     }
 
     handleSubmit() {
-        if (this.state.coursesInput.length === 0) {
+        if (this.state.courses.length === 0) {
             alertbox.show('Você escolheu uma disciplina que não possui cursos.\nCrie um curso para essa dsiciplina antes de criar um material.');
             return
         }
@@ -311,14 +311,14 @@ class EditLesson extends React.Component {
             }
             alertbox.show('Lição atualizada!');
             this.props.hidePopMenu();
-            this.props.updateData()
+            this.props.updateData();
         } else {
             alertbox.show('Preencha todos os campos corretamente.')
         }
     }
 
     render() {
-
+        console.log(this.state)
         return (
         <div className="create-lesson-container">
         <div className="row">
@@ -399,11 +399,15 @@ class EditLesson extends React.Component {
                                 <legend>Cursos: </legend>
                                 <div className="create-lesson-checkbox-wrapper">
                                     {/* { this.renderCoursesCheckboxes(this.state.courses) } */}
-                                    { this.state.courses.map((course) => {
-                                        return <div className="checkbox-elem-wrapper">
-                                                    <input type="checkbox" value={ course.id }/><div title={ course.title }>{ course.title }</div>
-                                                </div>
-                                    })}
+                                    {   this.state.courses.length === 0?
+                                            <h5>Não há cursos dessa disciplina!</h5>
+                                        :
+                                            this.state.courses.map((course) => {
+                                            return <div className="checkbox-elem-wrapper">
+                                                        <input type="checkbox" value={ course.id }/><div title={ course.title }>{ course.title }</div>
+                                                    </div>
+                                            })
+                                    }
                                 </div>
                             </div>
                         </div>

@@ -7,14 +7,16 @@ class Modal extends React.Component {
     constructor(props) {
         super(props);
         this.dismissModal = this.dismissModal.bind(this);
+        this.state = { isOpen: false }
     }
 
-    state = {
-        isOpen: false
-    }
+    // state = {
+    //     isOpen: false
+    // }
 
-    UNSAFE_componentWillReceiveProps(next) {
-        console.log(next)
+    static getDerivedStateFromProps(next, state) {
+        console.log(next, state)
+
         switch (this.props.componentName) {
             case "CreateLesson":
                 this.setState({isOpen: next.isCreateLessonOpen});
@@ -33,6 +35,26 @@ class Modal extends React.Component {
                 break;
         }
     }
+    // UNSAFE_componentWillReceiveProps(next) {
+    //     console.log(next)
+    //     switch (this.props.componentName) {
+    //         case "CreateLesson":
+    //             this.setState({isOpen: next.isCreateLessonOpen});
+    //             break;
+    //         case "CreateCourse":
+    //             this.setState({isOpen: next.isCreateCourseOpen});
+    //             break;
+    //         case "EditLesson":
+    //             this.setState({isOpen: next.isOpen});
+    //             break;
+    //         case "EditCourse":
+    //             this.setState({isOpen: next.isOpen});
+    //             break;
+    //         default:
+    //             console.log('No component will be rendered')
+    //             break;
+    //     }
+    // }
 
     dismissModal(e) {
         if (e.target.id === "wrapper") {

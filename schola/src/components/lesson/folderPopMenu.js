@@ -25,3 +25,20 @@ export const deleteFolder = (folder) => {
         throw err;
     }
 }
+
+
+export const deleteLesson = (id) => {
+    const db = firebase.firestore();
+    try {
+            db.collection('lessons').doc(id).delete();
+            db.collection('events')
+                .where('lesson_id', '==', id)
+                .get()
+                .then(snap => {
+                    snap.docs.forEach(doc => db.collection('events').doc(doc.data().id).delete());
+                })
+    } catch (err) {
+        console.log(err.messsage)
+        throw err;
+    }
+}
