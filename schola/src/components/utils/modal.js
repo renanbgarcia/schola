@@ -15,24 +15,20 @@ class Modal extends React.Component {
     // }
 
     static getDerivedStateFromProps(next, state) {
-        console.log(next, state)
+        // console.log(next, state)
 
-        switch (this.props.componentName) {
+        switch (next.componentName) {
             case "CreateLesson":
-                this.setState({isOpen: next.isCreateLessonOpen});
-                break;
+                return {isOpen: next.isCreateLessonOpen};
             case "CreateCourse":
-                this.setState({isOpen: next.isCreateCourseOpen});
-                break;
+                return {isOpen: next.isCreateCourseOpen};
             case "EditLesson":
-                this.setState({isOpen: next.isOpen});
-                break;
+                return {isOpen: next.isOpen};
             case "EditCourse":
-                this.setState({isOpen: next.isOpen});
-                break;
+                return {isOpen: next.isOpen};
             default:
                 console.log('No component will be rendered')
-                break;
+                return null
         }
     }
     // UNSAFE_componentWillReceiveProps(next) {

@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux'
 import firebase from '../../firebase';
 import { alertbox } from '../utils/alert';
+import { hideCreateCourseModal } from '../../actions/modalActions';
 
 class CreateCourses extends React.Component {
 
@@ -68,6 +69,7 @@ class CreateCourses extends React.Component {
                 rating: '--'
             }).then(() => {
                 this.props.updateData();
+                this.props.closeModal();
                 alertbox.show("Curso criado com sucesso!")
             });
         } catch(err) {
@@ -101,8 +103,12 @@ class CreateCourses extends React.Component {
     }
 }
 
+const mapDispatchToProps = (dispatch) => ({
+    closeModal: () => dispatch(hideCreateCourseModal())
+})
+
 const mapStateToProps = (store) => ({
     user: store.authReducer.user
 });
 
-export default connect(mapStateToProps)(CreateCourses);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateCourses);

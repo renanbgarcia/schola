@@ -10,7 +10,7 @@ import { showCreateLessonModal,
          showCreateCourseModal,
          hideCreateLessonModal,
          hideCreateCourseModal } from '../../actions/modalActions';
-import { updateFoldersData } from '../../actions/foldersDataAction';
+import { updateFoldersData, requestFoldersData, invalidateFoldersData } from '../../actions/foldersDataAction';
 import Modal from '../utils/modal';
 import { alertbox } from '../utils/alert';
 import CreateLesson from '../lesson/CreateLesson';
@@ -31,7 +31,8 @@ class Lessons extends React.Component {
         this.showLessonEdit = this.showLessonEdit.bind(this);
         this.showCourseEdit = this.showCourseEdit.bind(this);
         this.handleCreateLesson = this.handleCreateLesson.bind(this);
-        this.handleModalSubmit = this.handleModalSubmit.bind(this);
+        this.handleEditLessonSubmit = this.handleEditLessonSubmit.bind(this);
+        this.handleEditCourseSubmit = this.handleEditCourseSubmit.bind(this);
     }
 
     state = {
@@ -47,23 +48,23 @@ class Lessons extends React.Component {
     }
 
     optionItems = [
-        {title: 'Deletar', onClick: () => {deleteFolder(this.props.popMenuTarget); this.retrieveFoldersData()}},
+        {title: 'Deletar', onClick: () => {deleteFolder(this.props.popMenuTarget).then(this.retrieveFoldersData())}},
         {title: 'Editar', onClick: () => {
             this.props.popMenuTarget.type === 'lesson' ?
             this.showLessonEdit() : this.showCourseEdit()
         }}
     ]
 
-    UNSAFE_componentWillMount() {
+    // UNSAFE_componentWillMount() {
         
-        if (!this.props.treeData) {
-            this.retrieveFoldersData();
-        } else {
-            console.log('ja tinha treedata')
-            console.log(this.props.treeData)
-        }
+    //     if (!this.props.treeData) {
+    //         this.retrieveFoldersData();
+    //     } else {
+    //         console.log('ja tinha treedata')
+    //         console.log(this.props.treeData)
+    //     }
 
-    }
+    // }
 
     /**
      * Função a ser passada para um modal para que feche o modal de edição de lição
@@ -106,6 +107,8 @@ class Lessons extends React.Component {
 
     retrieveFoldersData() {
         this.resetLocalSorage();
+        this.props.requestFoldersData();
+        // let _materias = getMaterias();
         const db = firebase.firestore();
         const courseQ = db.collection('courses').where('author_id', '==', this.props.userObject.uid ).get();
         courseQ.then(snapshot => {
@@ -148,7 +151,7 @@ class Lessons extends React.Component {
                             return snapshot.size
                         })
                         .then((count) => {
-                            // console.log(_materias)
+                            console.log(_materias)
                             materia.children.push({
                                 title: doc.data().title,
                                 id: doc.data().course_id,
@@ -161,11 +164,14 @@ class Lessons extends React.Component {
                                 type: 'course'
                             })
                         })
-                        .then(() => this.props.setFoldersData(_materias))
+                        console.log(_materias)
+                        .then(() => {this.props.setFoldersData(_materias)})
                     }
                 }
             }
+            this.props.setFoldersData(_materias)
         })
+        return
     }
 
     handleDisciplineFilter(e) {
@@ -217,8 +223,13 @@ class Lessons extends React.Component {
             </>
     }
 
-    handleModalSubmit() {
+    handleEditLessonSubmit() {
         this.hideEditLesson()
+        this.retrieveFoldersData();
+    }
+
+    handleEditCourseSubmit() {
+        this.hideEditCourse()
         this.retrieveFoldersData();
     }
 
@@ -228,10 +239,10 @@ class Lessons extends React.Component {
         return (
             <div className="home-container">
                 <Modal isOpen={this.state.isEditLessonOpen} hideFunc={this.hideEditLesson} componentName="EditLesson">
-                    <EditLesson lessonId={this.props.popMenuTarget.id} updateData={this.handleModalSubmit}/>
+                    <EditLesson lessonId={this.props.popMenuTarget.id} updateData={this.handleEditLessonSubmit}/>
                 </Modal>
                 <Modal isOpen={this.state.isEditCourseOpen} hideFunc={this.hideEditCourse} componentName="EditCourse">
-                    <EditCourse courseId={this.props.popMenuTarget.id} updateData={this.retrieveFoldersData}/>
+                    <EditCourse courseId={this.props.popMenuTarget.id} updateData={this.handleEditCourseSubmit}/>
                 </Modal>
                 <div className="choose-view-bar">
                     <span onClick={() => this.setState({view: 'tree'})}><FontAwesomeIcon icon={faTree}/></span>
@@ -266,6 +277,8 @@ const mapStateToProps = (store) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     setFoldersData: (data) => dispatch(updateFoldersData(data)),
+    requestFoldersData: () => dispatch(requestFoldersData()),
+    invalidateFoldersData: () => dispatch(updateFoldersData()),
     hidePopMenu: () => dispatch(hidePopMenu()),
     showPopMenu: () => dispatch(showPopMenu()),
 });

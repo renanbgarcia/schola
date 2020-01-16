@@ -5,7 +5,7 @@ export const optionItems = [
     {title: 'Editar', onClick: () => alert('edita')}
 ]
 
-export const deleteFolder = (folder) => {
+export const deleteFolder = async (folder) => {
     const db = firebase.firestore();
     try {
         if (folder.hasOwnProperty('type')) {
@@ -24,6 +24,8 @@ export const deleteFolder = (folder) => {
         console.log(err.messsage)
         throw err;
     }
+
+    return
 }
 
 

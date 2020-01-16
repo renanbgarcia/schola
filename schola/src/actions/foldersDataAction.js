@@ -1,8 +1,16 @@
-import { UPDATE_FOLDERS_DATA, UPDATE_ACTUAL_VIEW } from "./types";
+import { UPDATE_FOLDERS_DATA, UPDATE_ACTUAL_VIEW, INVALIDATE_FOLDERS_DATA, REQUEST_FOLDERS_DATA } from "./types";
 
 export const updateFoldersData = (data) => ({
     type: UPDATE_FOLDERS_DATA,
-    categories: data
+    items: data
+});
+
+export const invalidateFoldersData = () => ({
+    type: INVALIDATE_FOLDERS_DATA,
+});
+
+export const requestFoldersData = () => ({
+    type: REQUEST_FOLDERS_DATA,
 });
 
 export const updateActualView = (data) => ({

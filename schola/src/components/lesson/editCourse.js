@@ -90,13 +90,13 @@ class EditCourse extends React.Component {
                 targetAge: this.state.ageInput,
             }).then(() => {
                 alertbox.show("Curso atualizado com sucesso!")
+                this.props.updateData();
             });
         } catch(err) {
             console.log(err)
             alertbox.show("Ocorreu um erro :(")
             throw err
         }
-        this.props.updateData();
     }
 
     render() {

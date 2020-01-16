@@ -9,15 +9,16 @@ import { hideCreateLessonModal } from '../../actions/modalActions';
 import { showCreateCourseModal } from '../../actions/modalActions';
 import { hideCreateCourseModal } from '../../actions/modalActions';
 import Folder from './folder';
+import FoldersTable from './lessonsfolder/foldersTable';
 import Modal from '../utils/modal';
 import CreateLesson from '../lesson/CreateLesson';
 import CreateCourses from '../lesson/CreateCourses';
 
-class LessonsFolder extends React.Component {
+class LessonsFolder extends React.PureComponent {
 
     constructor(props) {
         super(props);
-        this.renderFolders = this.renderFolders.bind(this);
+        // this.renderFolders = this.renderFolders.bind(this);
         this.goToFolder = this.goToFolder.bind(this);
         this.addCrumb = this.addCrumb.bind(this);
         this.goBack =this.goBack.bind(this);
@@ -26,14 +27,17 @@ class LessonsFolder extends React.Component {
         this.goToNextResult = this.goToNextResult.bind(this);
         this.toggleSearchBar = this.toggleSearchBar.bind(this);
         this.findView = this.findView.bind(this);
+
         console.log(props.data)
         this.state = {
             breadcrumbs: [],
             _breadcrumbs:[],
             // actualView: [],
             // parents: [{title: 'root', children: []}],
-            actualView: props.data,
+            actualView: {title: 'root', children: props.data},
             parents: [{title: 'root', children: props.data}],
+            // actualView: props.data,
+            // parents: [{title: 'root', children: props.data}],
             showSearchBar: false,
             searchTerm: '',
             actualResults: [],
@@ -68,22 +72,59 @@ class LessonsFolder extends React.Component {
         // )
     // }
 
-    componentDidUpdate() {
+    // static getDerivedStateFromProps(props, state) {
+    //     console.log(props.data)
+    //     if (props.data !== state.testeFolderData) {
+    //         console.log(props.data, 'dentro')
+    //         return {testeFolderData: props.data}
+    //     } else {
+    //         return state
+    //     }
+    // }
+
+    componentDidUpdate(prevProps, prevState) {
         // if (this.state.isLoading === true) {
         //     this.setState({isLoading: false})
         // }
+
         let newView = this.findView(this.props.foldersData);
-        console.log(newView)
-        if (this.state.actualView !== newView) {
-            this.setState({actualView:  newView.children})
+        console.log(this.props.foldersData)
+        console.log(prevState.actualView)
+        console.log(this.state.actualView, newView)
+        console.log(this.state.actualView === newView)
+        console.log(this.state.actualView === prevState.actualView)
+        // debugger;
+        if (this.state.actualView !== newView && this.state.actualView.title !== 'root') {
+            console.log('atualizando com foldersdata')
+            this.setState({actualView:  newView })
         }
+
+        // if ( prevState._breadcrumbs !== this.state._breadcrumbs || this.state.actualView.title === 'root') {
+        //     let newView = this.findView(this.props.foldersData);
+        //     console.log(this.state.actualView)
+        //     if (this.state.actualView !== newView && this.state.actualView.title !== 'root') {
+        //         console.log('atualizando com foldersdata')
+        //         this.setState({actualView:  newView })
+        //     } else if (this.state.actualView.title === 'root' && this.state.actualView.children !== this.props.foldersData) {
+        //         console.log('ta no root update')
+        //         this.setState({actualView:  {title: 'root', children: this.props.foldersData}})
+        //     }
+        // }
     }
 
     componentDidMount() {
-        // if (this.state.isLoading === true) {
-        //     this.setState({isLoading: false})
-        // }
+        if (this.props.isLoading === true) {
+            this.props.retrieveFoldersData();
+        }
     }
+
+    // shouldComponentUpdate() {
+    //     if (this.props.isLoading === true) {
+    //         return false
+    //     } else {
+    //         return true
+    //     }
+    // }
 
     componentWillMount() {
         // if (this.state.isLoading === true) {
@@ -128,36 +169,34 @@ class LessonsFolder extends React.Component {
         return viewData
     }
 
-    renderFolders() {
-        if (this.state.isLoading === true) {
-            return <div className="lessons-folder-spinner"><FontAwesomeIcon icon={faSpinner} size="5x" spin /></div>
-        }
+    // renderFolders() {
+    //     if (this.state.isLoading === true) {
+    //         return <div className="lessons-folder-spinner"><FontAwesomeIcon icon={faSpinner} size="5x" spin /></div>
+    //     }
 
-        let foldersArray = [];
-        if (this.state.parents.length > 1 && this.state.parents[this.state.parents.length - 1].type === 'discipline') {
-            foldersArray.push(
-                <div className="lessons-folder-item lessons-folder-item-button" onClick={this.props.showCCmodal}>Criar curso</div>
-            )
-        } else if (this.state.parents.length > 1 && this.state.parents[this.state.parents.length - 1].type === 'category') {
-            foldersArray.push(
-                <div className="lessons-folder-item lessons-folder-item-button" onClick={this.props.showCLmodal}>Criar Lição</div>
-            )
-        }
-        console.log(this.state.actualView)
-        // if (!this.state.actualView.hasOwnProperty('forEach')) {
-        //     return <div className="lessons-folder-spinner"><FontAwesomeIcon icon={faSpinner} size="5x" spin /></div>
-        // }
-        this.state.actualView.forEach(folder => 
-            foldersArray.push(
-                <Folder folder={folder}
-                        onClick={() => {
-                            folder.type === 'lesson'? _history.push(`/lessonpage/${folder.id}`) : this.goToFolder(folder)
-                        } }/>
-            )
-        )
+    //     let foldersArray = [];
+    //     if (this.state.parents.length > 1 && this.state.parents[this.state.parents.length - 1].type === 'discipline') {
+    //         foldersArray.push(
+    //             <div className="lessons-folder-item lessons-folder-item-button" onClick={this.props.showCCmodal}>Criar curso</div>
+    //         )
+    //     } else if (this.state.parents.length > 1 && this.state.parents[this.state.parents.length - 1].type === 'category') {
+    //         foldersArray.push(
+    //             <div className="lessons-folder-item lessons-folder-item-button" onClick={this.props.showCLmodal}>Criar Lição</div>
+    //         )
+    //     }
+    //     console.log(this.state.actualView)
 
-        return foldersArray
-    }
+    //     this.state.actualView.children.forEach(folder => 
+    //         foldersArray.push(
+    //             <Folder folder={folder}
+    //                     onClick={() => {
+    //                         folder.type === 'lesson'? _history.push(`/lessonpage/${folder.id}`) : this.goToFolder(folder)
+    //                     } }/>
+    //         )
+    //     )
+
+    //     return foldersArray
+    // }
 
     goToFolder(folder) {
         console.log(folder)
@@ -165,7 +204,8 @@ class LessonsFolder extends React.Component {
         if (folder.hasOwnProperty('children')) {
             this.addCrumb(folder);
             this.setState({
-                actualView: folder.children,
+                actualView: folder,
+                // actualView: folder.children,
                 parents: [...this.state.parents, folder]
             });
         }
@@ -248,11 +288,19 @@ class LessonsFolder extends React.Component {
         if (newView.length > 1) {
             newView.pop();
             this.removeCrumbs();
-            console.log(newView[newView.length - 1].children)
+            console.log(newView[newView.length - 1])
             this.setState({
-                actualView: newView[newView.length - 1].children
+                actualView: newView[newView.length - 1]
             });
         }
+        // if (newView.length > 1) {
+        //     newView.pop();
+        //     this.removeCrumbs();
+        //     console.log(newView[newView.length - 1].children)
+        //     this.setState({
+        //         actualView: newView[newView.length - 1].children
+        //     });
+        // }
     }
 
     search() {
@@ -320,6 +368,7 @@ class LessonsFolder extends React.Component {
     render() {
         
         console.log(this.state.parents)
+        let data = this.props.data;
         return (
             <div className="tree-view-wrapper">
                 <div className="lessons-folder-toolbar">
@@ -335,7 +384,14 @@ class LessonsFolder extends React.Component {
                     {this.renderSearchBar()}
                 </div>
                 <div className="lessons-folder-items-wrapper">
-                    {this.renderFolders()}
+                    {/* {this.renderFolders()} */}
+                    { this.props.isLoading ? 
+                    <div className="lessons-folder-spinner"><FontAwesomeIcon icon={faSpinner} size="5x" spin /></div>
+                    :
+                    <FoldersTable actualView={this.state.actualView} parents={this.state.parents} showCCModal={this.props.showCCModal} showCLmodal={this.props.showCLmodal} goToFolder={this.goToFolder}/>
+                    }
+                    {data.map(d => d.children.map(c => <p>{c.title}</p>))}
+                    {/* {this.state.testeFolderData.map(d => d.children.map(c => <p>-{c.title}-</p>))} */}
                 </div>
                 <Modal hideFunc={this.props.hideCLModal}
                        componentName="CreateLesson">
@@ -353,7 +409,8 @@ class LessonsFolder extends React.Component {
 const mapStateToProps = (store) => ({
     // isCreateLessonOpen: store.modalReducer.isCLOpen,
     // isCreateCourseOpen: store.modalReducer.isCCOpen,
-    foldersData: store.foldersDataReducer.categories
+    foldersData: store.foldersDataReducer.categories,
+    isLoading: store.foldersDataReducer.isFetching
 })
 
 const mapDispatchToProps = (dispatch) => ({
