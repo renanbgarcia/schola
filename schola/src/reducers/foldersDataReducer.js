@@ -21,7 +21,8 @@ function foldersDataReducer(state = initialState, action) {
         console.log('begin fetch')
         return Object.assign({}, state, {
             isFetching: true,
-            didInvalidate: false
+            didInvalidate: false,
+            categories: state.categories
           })
     }
     if (action.type === INVALIDATE_FOLDERS_DATA) {

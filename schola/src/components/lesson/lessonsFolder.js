@@ -8,13 +8,14 @@ import { showCreateLessonModal } from '../../actions/modalActions';
 import { hideCreateLessonModal } from '../../actions/modalActions';
 import { showCreateCourseModal } from '../../actions/modalActions';
 import { hideCreateCourseModal } from '../../actions/modalActions';
+import { updateFoldersData } from '../../actions/foldersDataAction';
 import Folder from './folder';
 import FoldersTable from './lessonsfolder/foldersTable';
 import Modal from '../utils/modal';
 import CreateLesson from '../lesson/CreateLesson';
 import CreateCourses from '../lesson/CreateCourses';
 
-class LessonsFolder extends React.PureComponent {
+class LessonsFolder extends React.Component {
 
     constructor(props) {
         super(props);
@@ -34,7 +35,7 @@ class LessonsFolder extends React.PureComponent {
             _breadcrumbs:[],
             // actualView: [],
             // parents: [{title: 'root', children: []}],
-            actualView: {title: 'root', children: props.data},
+            actualView: {title: 'root', children: [{title: "Loading", children: [{title: "Loading"},{title: "Loading"},{title: "Loading"}]}]},
             parents: [{title: 'root', children: props.data}],
             // actualView: props.data,
             // parents: [{title: 'root', children: props.data}],
@@ -86,17 +87,14 @@ class LessonsFolder extends React.PureComponent {
         // if (this.state.isLoading === true) {
         //     this.setState({isLoading: false})
         // }
-
-        let newView = this.findView(this.props.foldersData);
-        console.log(this.props.foldersData)
-        console.log(prevState.actualView)
-        console.log(this.state.actualView, newView)
-        console.log(this.state.actualView === newView)
-        console.log(this.state.actualView === prevState.actualView)
         // debugger;
-        if (this.state.actualView !== newView && this.state.actualView.title !== 'root') {
-            console.log('atualizando com foldersdata')
-            this.setState({actualView:  newView })
+        // if (this.state.actualView !== newView && this.state.actualView.title !== 'root') {
+        //     console.log('atualizando com foldersdata')
+        //     this.setState({actualView:  newView })
+        // }
+        console.log(prevProps.foldersData !== this.props.foldersData)
+        if (prevProps.foldersData !== this.props.foldersData) {
+            this.forceUpdate()
         }
 
         // if ( prevState._breadcrumbs !== this.state._breadcrumbs || this.state.actualView.title === 'root') {
@@ -113,9 +111,11 @@ class LessonsFolder extends React.PureComponent {
     }
 
     componentDidMount() {
-        if (this.props.isLoading === true) {
-            this.props.retrieveFoldersData();
-        }
+        // if (this.props.isLoading === true) {
+            debugger;
+            this.props.retrieveFoldersData().then((data) => {console.log(data);data().then((res) => {console.log(res); Promise.resolve(res).then((fd => {this.props.setFoldersData(fd)}))})});
+            // this.props.retrieveFoldersData().then((data) => {console.log(data);this.setState({actualView: this.findView(data)})});
+        // }
     }
 
     // shouldComponentUpdate() {
@@ -366,9 +366,10 @@ class LessonsFolder extends React.PureComponent {
     }
 
     render() {
-        
-        console.log(this.state.parents)
-        let data = this.props.data;
+        debugger
+        console.log('rendered', this.props.foldersData)
+        // let data = this.props.data;
+        let actualView = this.state._breadcrumbs.length === 0 ? { title: "root", children: this.findView(this.props.foldersData) } : this.findView(this.props.foldersData);
         return (
             <div className="tree-view-wrapper">
                 <div className="lessons-folder-toolbar">
@@ -388,9 +389,10 @@ class LessonsFolder extends React.PureComponent {
                     { this.props.isLoading ? 
                     <div className="lessons-folder-spinner"><FontAwesomeIcon icon={faSpinner} size="5x" spin /></div>
                     :
-                    <FoldersTable actualView={this.state.actualView} parents={this.state.parents} showCCModal={this.props.showCCModal} showCLmodal={this.props.showCLmodal} goToFolder={this.goToFolder}/>
+                    // <p>{ JSON.stringify(this.props.data) }</p>
+                    <FoldersTable actualView={actualView} parents={this.state.parents} showCCModal={this.props.showCCModal} showCLmodal={this.props.showCLmodal} goToFolder={this.goToFolder}/>
                     }
-                    {data.map(d => d.children.map(c => <p>{c.title}</p>))}
+                    {/* {actualView.map(d => d.children.map(c => <p>{c.title}</p>))} */}
                     {/* {this.state.testeFolderData.map(d => d.children.map(c => <p>-{c.title}-</p>))} */}
                 </div>
                 <Modal hideFunc={this.props.hideCLModal}
@@ -418,6 +420,7 @@ const mapDispatchToProps = (dispatch) => ({
     showCCmodal: () => dispatch(showCreateCourseModal()),
     hideCLModal: () => dispatch(hideCreateLessonModal()),
     hideCCModal: () => dispatch(hideCreateCourseModal()),
+    setFoldersData: (data) => dispatch(updateFoldersData(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LessonsFolder);

@@ -44,7 +44,8 @@ class Lessons extends React.Component {
         treeData: [{ title: 'Loading', children: [categories] }],
         isEditLessonOpen: false,
         isEditCourseOpen: false,
-        lessonTarget: ''
+        lessonTarget: '',
+        materias: getMaterias()
     }
 
     optionItems = [
@@ -101,78 +102,174 @@ class Lessons extends React.Component {
     /**
      * Necessário para que o o estado dos folder seja atualizado
      */
-    resetLocalSorage() {
-        localStorage.removeItem('folderState');
-    }
+    // resetLocalSorage() {
+    //     localStorage.removeItem('folderState');
+    // }
 
-    retrieveFoldersData() {
-        this.resetLocalSorage();
+    
+    async retrieveFoldersData() {
+        // this.resetLocalSorage();
         this.props.requestFoldersData();
         // let _materias = getMaterias();
         const db = firebase.firestore();
-        const courseQ = db.collection('courses').where('author_id', '==', this.props.userObject.uid ).get();
-        courseQ.then(snapshot => {
-            console.log('atualizando', this.props.userObject.uid, snapshot)
-            let _materias = getMaterias();
-            if (snapshot.size === 0) {
-                this.props.setFoldersData(_materias);
-                alertbox.show('Você ainda não possui material. Crie um curso para começar.')
-                return
-            }
-            for(let doc of snapshot.docs) {
-                for( let materia of _materias ) {
-                    if (doc.data().discipline === materia.name) {
-                        let courseChildren = [];
-                        materia.lessonCount = materia.lessonCount + 1
-                        const childLessonsQ = db.collection('lessons').where('author_id', '==', this.props.userObject.uid).where('course_id', 'array-contains', doc.data().course_id).get();
-                        childLessonsQ.then(snapshot => {
-                            let innerCategories = categories;
-                            for (let cat of innerCategories) {
-                                cat.children = []
-                                for (let lesson of snapshot.docs) {
-                                    if (lesson.data().category === cat.name) {
-                                        console.log(lesson.data())
-                                        cat.children.push({
-                                            title: lesson.data().title,
-                                            description: lesson.data().desc,
-                                            rating: lesson.data().rating,
-                                            dueDate: lesson.data().scheduled,
-                                            id: lesson.data().lesson_id,
-                                            category: cat.name,
-                                            discipline: materia.name,
-                                            type: 'lesson'
-                                        });                                    
-                                    }
-                                }
-                                if (courseChildren.map(categ => categ.title === cat.title).indexOf(true) === -1) {
-                                    courseChildren.push({ title: cat.title, children: cat.children, lessonCount: cat.children.length, name: cat.name, type: 'category' });
-                                }
-                            }
-                            return snapshot.size
-                        })
-                        .then((count) => {
+        const courseQ = await db.collection('courses').where('author_id', '==', this.props.userObject.uid ).get()
+        .then(snapshot => async () => {
+            return await this.loopCourses(snapshot);
+        })
+        return courseQ
+    }
+
+    async loopCourses(snapshot) {
+        console.log('atualizando', this.props.userObject.uid, snapshot)
+        let _materias = getMaterias();
+        if (snapshot.size === 0) {
+            this.props.setFoldersData(_materias);
+            alertbox.show('Você ainda não possui material. Crie um curso para começar.')
+            return
+        }
+        for await (let doc of snapshot.docs) {
+            for await ( let materia of _materias ) {
+                if (doc.data().discipline === materia.name) {
+                    let courseChildren = [];
+                    materia.lessonCount = materia.lessonCount + 1
+                    await this.getLessons(materia, courseChildren, doc)
+                    .then((res) => {
+                        res().then((data) => {
                             console.log(_materias)
+                            console.log(res)
+                            debugger
+                            console.log(doc.data())
+                            console.log(data)
                             materia.children.push({
                                 title: doc.data().title,
                                 id: doc.data().course_id,
                                 description: doc.data().desc,
                                 targetAge: doc.data().targetAge,
-                                children: courseChildren,
-                                lessonCount: count,
+                                children: data.courseChildren,
+                                lessonCount: data.count,
                                 rating: doc.data().rating,
-                                discipline: materia.name,
+                                discipline: data.materia.name,
                                 type: 'course'
                             })
                         })
-                        console.log(_materias)
-                        .then(() => {this.props.setFoldersData(_materias)})
-                    }
+                        // materia.children.push({
+                        //     title: doc.data().title,
+                        //     id: doc.data().course_id,
+                        //     description: doc.data().desc,
+                        //     targetAge: doc.data().targetAge,
+                        //     children: res.courseChildren,
+                        //     lessonCount: res.count,
+                        //     rating: doc.data().rating,
+                        //     discipline: materia.name,
+                        //     type: 'course'
+                        // })
+                    })
+                    // .then(() => {this.props.setFoldersData(_materias)})
                 }
             }
-            this.props.setFoldersData(_materias)
-        })
-        return
+        }
+        // this.props.setFoldersData(_materias)
+        return _materias
     }
+
+    async getLessons(materia, courseChildren, doc) {
+        const db = firebase.firestore();
+        const childLessonsQ = db.collection('lessons').where('author_id', '==', this.props.userObject.uid).where('course_id', 'array-contains', doc.data().course_id).get()
+        .then(snapshot => async () => {
+            let innerCategories = categories;
+            for await (let cat of innerCategories) {
+                cat.children = []
+                for await (let lesson of snapshot.docs) {
+                    if (lesson.data().category === cat.name) {
+                        console.log(lesson.data())
+                        cat.children.push({
+                            title: lesson.data().title,
+                            description: lesson.data().desc,
+                            rating: lesson.data().rating,
+                            dueDate: lesson.data().scheduled,
+                            id: lesson.data().lesson_id,
+                            category: cat.name,
+                            discipline: materia.name,
+                            type: 'lesson'
+                        });                                    
+                    }
+                }
+                if (courseChildren.map(categ => categ.title === cat.title).indexOf(true) === -1) {
+                    courseChildren.push({ title: cat.title, children: cat.children, lessonCount: cat.children.length, name: cat.name, type: 'category' });
+                }
+            }
+            return {count: snapshot.size, materia: materia, courseChildren: courseChildren}
+        })
+        return childLessonsQ
+    }
+
+    // retrieveFoldersData() {
+    //     this.resetLocalSorage();
+    //     this.props.requestFoldersData();
+    //     // let _materias = getMaterias();
+    //     const db = firebase.firestore();
+    //     const courseQ = db.collection('courses').where('author_id', '==', this.props.userObject.uid ).get();
+    //     courseQ.then(snapshot => {
+    //         console.log('atualizando', this.props.userObject.uid, snapshot)
+    //         let _materias = getMaterias();
+    //         if (snapshot.size === 0) {
+    //             this.props.setFoldersData(_materias);
+    //             alertbox.show('Você ainda não possui material. Crie um curso para começar.')
+    //             return
+    //         }
+    //         for(let doc of snapshot.docs) {
+    //             for( let materia of _materias ) {
+    //                 if (doc.data().discipline === materia.name) {
+    //                     let courseChildren = [];
+    //                     materia.lessonCount = materia.lessonCount + 1
+    //                     const childLessonsQ = db.collection('lessons').where('author_id', '==', this.props.userObject.uid).where('course_id', 'array-contains', doc.data().course_id).get();
+    //                     childLessonsQ.then(snapshot => {
+    //                         let innerCategories = categories;
+    //                         for (let cat of innerCategories) {
+    //                             cat.children = []
+    //                             for (let lesson of snapshot.docs) {
+    //                                 if (lesson.data().category === cat.name) {
+    //                                     console.log(lesson.data())
+    //                                     cat.children.push({
+    //                                         title: lesson.data().title,
+    //                                         description: lesson.data().desc,
+    //                                         rating: lesson.data().rating,
+    //                                         dueDate: lesson.data().scheduled,
+    //                                         id: lesson.data().lesson_id,
+    //                                         category: cat.name,
+    //                                         discipline: materia.name,
+    //                                         type: 'lesson'
+    //                                     });                                    
+    //                                 }
+    //                             }
+    //                             if (courseChildren.map(categ => categ.title === cat.title).indexOf(true) === -1) {
+    //                                 courseChildren.push({ title: cat.title, children: cat.children, lessonCount: cat.children.length, name: cat.name, type: 'category' });
+    //                             }
+    //                         }
+    //                         return snapshot.size
+    //                     })
+    //                     .then((count) => {
+    //                         console.log(_materias)
+    //                         materia.children.push({
+    //                             title: doc.data().title,
+    //                             id: doc.data().course_id,
+    //                             description: doc.data().desc,
+    //                             targetAge: doc.data().targetAge,
+    //                             children: courseChildren,
+    //                             lessonCount: count,
+    //                             rating: doc.data().rating,
+    //                             discipline: materia.name,
+    //                             type: 'course'
+    //                         })
+    //                     })
+    //                     .then(() => {this.props.setFoldersData(_materias)})
+    //                 }
+    //             }
+    //         }
+    //         // this.props.setFoldersData(_materias)
+    //     })
+    //     return
+    // }
 
     handleDisciplineFilter(e) {
         this.setState({
@@ -230,7 +327,9 @@ class Lessons extends React.Component {
 
     handleEditCourseSubmit() {
         this.hideEditCourse()
-        this.retrieveFoldersData();
+        // this.retrieveFoldersData();
+        this.retrieveFoldersData().then((data) => {console.log(data);data().then((res) => {Promise.resolve(res).then((fd => {this.props.setFoldersData(fd)}))})});
+
     }
 
     render() {
@@ -278,7 +377,7 @@ const mapStateToProps = (store) => ({
 const mapDispatchToProps = (dispatch) => ({
     setFoldersData: (data) => dispatch(updateFoldersData(data)),
     requestFoldersData: () => dispatch(requestFoldersData()),
-    invalidateFoldersData: () => dispatch(updateFoldersData()),
+    invalidateFoldersData: () => dispatch(invalidateFoldersData()),
     hidePopMenu: () => dispatch(hidePopMenu()),
     showPopMenu: () => dispatch(showPopMenu()),
 });
