@@ -49,7 +49,7 @@ class Lessons extends React.Component {
     }
 
     optionItems = [
-        {title: 'Deletar', onClick: () => {deleteFolder(this.props.popMenuTarget).then(this.retrieveFoldersData())}},
+        {title: 'Deletar', onClick: () => {deleteFolder(this.props.popMenuTarget).then(this.props.requestFoldersData())}},
         {title: 'Editar', onClick: () => {
             this.props.popMenuTarget.type === 'lesson' ?
             this.showLessonEdit() : this.showCourseEdit()
@@ -137,7 +137,7 @@ class Lessons extends React.Component {
                         res().then((data) => {
                             console.log(_materias)
                             console.log(res)
-                            debugger
+                            // debugger
                             console.log(doc.data())
                             console.log(data)
                             materia.children.push({
@@ -322,13 +322,14 @@ class Lessons extends React.Component {
 
     handleEditLessonSubmit() {
         this.hideEditLesson()
-        this.retrieveFoldersData();
+        // this.retrieveFoldersData();
     }
 
     handleEditCourseSubmit() {
         this.hideEditCourse()
+        this.props.requestFoldersData();
         // this.retrieveFoldersData();
-        this.retrieveFoldersData().then((data) => {console.log(data);data().then((res) => {Promise.resolve(res).then((fd => {this.props.setFoldersData(fd)}))})});
+        // this.retrieveFoldersData().then((data) => {console.log(data);data().then((res) => {Promise.resolve(res).then((fd => {this.props.setFoldersData(fd)}))})});
 
     }
 

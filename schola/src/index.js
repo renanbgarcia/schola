@@ -11,7 +11,9 @@ import * as serviceWorker from './serviceWorker';
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware, compose} from 'redux';
 import { persistStore, persistReducer } from 'redux-persist'
-import reduxThunk from 'redux-thunk';
+// import reduxThunk from 'redux-thunk';
+import createSagaMiddleware from 'redux-saga';
+import rootSaga from './sagas/rootSaga';
 import reducers from './reducers/reducers';
 
 import { reactReduxFirebase } from "react-redux-firebase";
@@ -30,11 +32,15 @@ const createStoreWithFirebase = compose(reactReduxFirebase(firebase))(
   createStore
 );
 
+const sagaMiddleware = createSagaMiddleware();
+
 const store = createStoreWithFirebase(
   persistedReducer,
   { isLogged: false },
-  applyMiddleware(reduxThunk)
+  applyMiddleware(sagaMiddleware)
 );
+
+sagaMiddleware.run(rootSaga);
 
 let persistor = persistStore(store)
 

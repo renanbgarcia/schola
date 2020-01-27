@@ -93,6 +93,8 @@ class LessonsFolder extends React.Component {
         //     this.setState({actualView:  newView })
         // }
         console.log(prevProps.foldersData !== this.props.foldersData)
+        console.log(prevProps, this.props)
+        debugger
         if (prevProps.foldersData !== this.props.foldersData) {
             this.forceUpdate()
         }
@@ -366,7 +368,7 @@ class LessonsFolder extends React.Component {
     }
 
     render() {
-        debugger
+        // debugger
         console.log('rendered', this.props.foldersData)
         // let data = this.props.data;
         let actualView = this.state._breadcrumbs.length === 0 ? { title: "root", children: this.findView(this.props.foldersData) } : this.findView(this.props.foldersData);
