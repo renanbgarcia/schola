@@ -34,10 +34,12 @@ const createStoreWithFirebase = compose(reactReduxFirebase(firebase))(
 
 const sagaMiddleware = createSagaMiddleware();
 
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
 const store = createStoreWithFirebase(
   persistedReducer,
   { isLogged: false },
-  applyMiddleware(sagaMiddleware)
+  composeEnhancers(applyMiddleware(sagaMiddleware))
 );
 
 sagaMiddleware.run(rootSaga);

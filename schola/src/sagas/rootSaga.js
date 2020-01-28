@@ -1,10 +1,10 @@
-import { fork, take, takeLatest } from 'redux-saga/effects';
+import { fork, take, takeLatest, call, all } from 'redux-saga/effects';
 import foldersSaga from './foldersSaga';
 
 function* rootSaga() {
-    yield[
-        fork(foldersSaga)
-    ];
+    yield all([
+        foldersSaga()
+    ]);
   }
 
 export default rootSaga;

@@ -313,9 +313,10 @@ class CreateLesson extends React.Component {
             } catch(err) {
                 console.log(err);
             }
+            this.hideParentModal();
             alertbox.show('Lição cadastrada!');
             this.props.updateData();
-            this.hideParentModal();
+
         } else {
             alertbox.show('Preencha todos os campos corretamente.')
         }

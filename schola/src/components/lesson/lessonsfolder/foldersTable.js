@@ -5,13 +5,13 @@ import { faArrowLeft, faSearch, faSpinner } from '@fortawesome/free-solid-svg-ic
 import { _history } from '../../../App';
 
 
-export default class FoldersTable extends Component {
+class FoldersTable extends Component {
 
     addButtons() {
         let elem = '';
 
         if (this.props.parents.length > 1 && this.props.parents[this.props.parents.length - 1].type === 'discipline') {
-            elem = <div className="lessons-folder-item lessons-folder-item-button" onClick={this.props.showCCmodal}>Criar curso</div>
+            elem = <div className="lessons-folder-item lessons-folder-item-button" onClick={this.props.showCCmodal}>Criar Curso</div>
         } else if (this.props.parents.length > 1 && this.props.parents[this.props.parents.length - 1].type === 'category') {
             elem = <div className="lessons-folder-item lessons-folder-item-button" onClick={this.props.showCLmodal}>Criar Lição</div>
         }
@@ -37,3 +37,5 @@ export default class FoldersTable extends Component {
         )
     }
 }
+
+export default FoldersTable
