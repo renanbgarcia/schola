@@ -34,6 +34,11 @@ class SuperList extends React.Component {
     componentDidMount() {
         window.addEventListener('resize', this.onResize);
         window.addEventListener('scroll', this.cache.clearAll());
+        document.addEventListener('DOMContentLoaded', () => {this.cache.clearAll(); console.log('window loaded')});
+        this.cache.clearAll();
+    }
+
+    componentDidUpdate() {
         this.cache.clearAll();
     }
 

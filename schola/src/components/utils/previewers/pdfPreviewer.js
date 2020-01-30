@@ -23,23 +23,24 @@ const PdfPreviewer = ({ src }) => {
 
       // Prepare canvas using PDF page dimensions
       const canvas = canvasRef.current;
-      canvas.height = canvas.parentNode.offsetHeight;
+      if (canvas) {
+        canvas.height = canvas.parentNode.offsetHeight;
 
-      const scale = canvas.parentNode.scrollHeight / page.getViewport(1.0).height;
-      const scaledViewport = page.getViewport({ scale: scale, });
-      const context = canvas.getContext('2d');
-      console.log(canvas.parentNode.offsetHeight)
-      // canvas.width = canvas.parentNode.offsetWidth;
- 
+        const scale = canvas.parentNode.scrollHeight / page.getViewport(1.0).height;
+        const scaledViewport = page.getViewport({ scale: scale, });
+        const context = canvas.getContext('2d');
+        console.log(canvas.parentNode.offsetHeight)
+        // canvas.width = canvas.parentNode.offsetWidth;
 
-      // Render PDF page into canvas context
-      const renderContext = {
-        canvasContext: context,
-        viewport: scaledViewport
-      };
-      const renderTask = page.render(renderContext);
+        // Render PDF page into canvas context
+        const renderContext = {
+          canvasContext: context,
+          viewport: scaledViewport
+        };
+        const renderTask = page.render(renderContext);
 
-      await renderTask.promise;
+        await renderTask.promise;
+      }
     };
 
     fetchPdf();
@@ -49,7 +50,8 @@ const PdfPreviewer = ({ src }) => {
     <canvas 
       ref={canvasRef}
       // width={window.innerWidth}
-      height={window.innerHeight}
+      height={300}
+      // height={window.innerHeight}
     />
   );
 }

@@ -49,7 +49,8 @@ class CreateLesson extends React.Component {
         dateInput: '',
         timeInput: '',
         courses: [],
-        courseInput: []
+        courseInput: [],
+        isUploadFinished: true
     }
 
     UNSAFE_componentWillMount() {
@@ -150,6 +151,7 @@ class CreateLesson extends React.Component {
      uploadFiles(id) {
         const self = this;
         let db = firebase.firestore();
+        this.setState({isUploadFinished: false})
         // let docRef = db.collection(`users/${this.props.userObject.uid}/lessons`).doc(id);
         let docRef = db.collection(`lessons`).doc(id);
         for (let file of this.state.fileList) {
@@ -158,7 +160,9 @@ class CreateLesson extends React.Component {
             uploadTask.on('state_changed', function(snapshot){
                 let progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
                 //Render a informação no item da lista
-                document.getElementById(file.name).innerHTML = `Progresso: ${progress}%`;
+                if (document.getElementById(file.name)) {
+                    document.getElementById(file.name).innerHTML = `Progresso: ${progress}%`;
+                }
             }, function(error) {
                 console.log("Ocorreu um erro: " + error);
                 alertbox.show('Ocorreu um erro :(')
@@ -170,7 +174,7 @@ class CreateLesson extends React.Component {
                     let updatedArray = firebase.firestore.FieldValue.arrayUnion({url: downloadURL, name: file.name})
                     docRef.update({
                         filesURLs: updatedArray
-                    })
+                    }).then(self.setState({isUploadFinished: true}))
                     self.deleteListItem();
                 });
             });
@@ -323,7 +327,7 @@ class CreateLesson extends React.Component {
     }
 
     hideParentModal() {
-        if (this.props.hideModal) {
+        if (this.props.hideModal && this.state.isUploadFinished === true) {
             this.props.hideModal();
         }
     }

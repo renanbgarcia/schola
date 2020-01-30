@@ -2025,8 +2025,11 @@ input[type=file] {
 }
 
 .listView-item-container {
+  position: relative;
   display: flex;
+  flex-wrap: wrap;
   padding: 5px;
+  padding-bottom: 20px;
 }
 .listView-item-container td {
   flex: 1;
@@ -2036,6 +2039,28 @@ input[type=file] {
 }
 .listView-item-container .discipline {
   flex: 3;
+}
+.listView-item-container .listview-content-wrapper {
+  width: 100%;
+  border: solid #727272 1px;
+}
+
+.listview-description {
+  max-height: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.listview-bar {
+  bottom: 0;
+  width: 100%;
+  height: 40px;
+  max-height: 40px;
+  padding: 10px;
+  background-color: #e1e1e1;
+  color: #727272;
+  font-size: 0.8em;
 }
 
 .list-table {
@@ -2064,9 +2089,8 @@ input[type=file] {
 .list {
   display: flex;
   width: 100%;
-  height: 100%;
+  height: fit-content;
   align-items: flex-start;
-  box-shadow: #00000071 0px 0px 7px;
   padding: 10px;
   overflow: hidden;
 }
@@ -2105,7 +2129,8 @@ input[type=file] {
 
 .list-image {
   width: 100%;
-  max-width: 300px;
+  max-width: 100%;
+  min-height: 40px;
   margin: 5px;
 }
 
@@ -2415,8 +2440,6 @@ input[type=file] {
 }
 
 .file-wrapper {
-  height: 300px;
-  min-height: min-content;
   margin-bottom: 15px;
 }
 

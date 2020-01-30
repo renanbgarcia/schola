@@ -1,5 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import FilePreviewer from '../utils/previewers/FilePreviewer';
+import {_history} from '../../App';
+
 // import firebase from '../../firebase';
 
 class HomeLessonItem  extends React.Component {
@@ -9,14 +12,6 @@ class HomeLessonItem  extends React.Component {
         this.previewFiles = this.previewFiles.bind(this);
     }
 
-    // state = {
-    //     authorPhoto: ''
-    // }
-
-    // UNSAFE_componentWillReceiveProps() {
-    //     firebase.firestore().collection('users').doc(this.props.list[this.props.index].author_id).get().then(doc => this.setState({authorPhoto: doc.data().photoURL}))
-    // }
-
     previewFiles = (content, index) => {
         if (content.filesURLs) {
             let className;
@@ -25,12 +20,34 @@ class HomeLessonItem  extends React.Component {
             } else {
                 className = 'list-image';
             }
-    
-            let elem = content.filesURLs.slice(0, 3).map(src => <img key={(index + 1) * Math.random()} className={className} src={src} alt={content.title}/>);
+
+            let elem = <div className="previewer-wrapper">
+                        { content.filesURLs.slice(0, 3).map(file => {
+                            if (!file.url) {
+                                return null
+                            }
+                            return <div className={className}>   
+                                        <a href={file.url}>
+                                            <div className="file-wrapper">
+                                                <FilePreviewer files={[file]}/>
+                                            </div>
+                                        </a>
+                                   </div>
+                        }) }
+                    </div>
+            // }
+
             if (content.filesURLs.length > 3) {
                 elem.push(<Link href={'#'} className="and-more">... e mais</Link>);
             }
+
             return elem
+    
+        // let elem = content.filesURLs.slice(0, 3).map(src => {console.log(src); return <img key={(index + 1) * Math.random()} className={className} src={src.url} alt={src.name}/>});
+        //     if (content.filesURLs.length > 3) {
+        //         elem.push(<Link href={'#'} className="and-more">... e mais</Link>);
+        //     }
+        //     return elem
         }
     }
 
@@ -44,18 +61,25 @@ class HomeLessonItem  extends React.Component {
         const title = content.title;
         const description = content.desc;
         const style = this.props.style;
+        console.log(content, 'content')
         return (
                 <div style={style} className="listView-item-container observed">
-                    <div id={'sel' + index} className="list" >
-                        <div className="list-author-photo-wrapper">
-                            <img src={photo} alt="" title={content.author} className="list-author-photo"/>
-                        </div>
-                        <div className="listview-content-container">
-                            <p><strong><span className="list-title">{title}</span></strong></p>
-                            <p>{description}</p>
-                            <div className="files-preview-container">
-                                {this.previewFiles(content, index)}
+                    <div className="listview-content-wrapper">
+                        <div id={'sel' + index} className="list" >
+                            <div className="list-author-photo-wrapper">
+                                <img src={photo} alt="" title={content.author} className="list-author-photo"/>
                             </div>
+                            <div className="listview-content-container">
+                                <p><strong><span className="list-title">{title}</span></strong></p>
+                                <div className="listview-description">{description}</div>
+                                <div className="files-preview-container">
+                                    {this.previewFiles(content, index)}
+                                </div>
+                            </div>
+
+                        </div>
+                        <div className="listview-bar">
+                            <Link to={'/lessonpage/' + content.lesson_id}>Ver</Link>
                         </div>
                     </div>
                 </div>
@@ -64,49 +88,3 @@ class HomeLessonItem  extends React.Component {
 }
 
 export default HomeLessonItem
-
-// const HomeLessonItem = (props) => {
-//     let index = props.index;
-//     let content = props.list[index];
-//     if (!content) {
-//         return <div>Nada</div>
-//     }
-//     console.log(content)
-//     firebase.firestore().collection('users').doc(content.author_id).get().then(snap => )
-//     const photo = content.authorPhoto
-//     const title = content.title;
-//     const description = content.desc;
-//     const style = props.style;
-//     let item = <div style={style} className="listView-item-container observed">
-//                     <div id={'sel' + index} className="list" >
-//                         <img src={photo} title={content.author} className="list-author-photo"/>
-//                         <div className="listview-content-container">
-//                             <p><strong><span className="list-title">{title}</span></strong></p>
-//                             <p>{description}</p>
-//                             <div className="files-preview-container">
-//                                 {previewFiles(content, index)}
-//                             </div>
-//                         </div>
-//                     </div>
-//                 </div>
-//     return (
-//         <>{item}</>
-//     )
-// }
-
-// const previewFiles = (content, index) => {
-//     if (content.filesURLs) {
-//         let className;
-//         if (content.filesURLs.length > 1) {
-//             className = 'list-image list-image-multiple';
-//         } else {
-//             className = 'list-image';
-//         }
-
-//         let elem = content.filesURLs.slice(0, 3).map(src => <img key={(index + 1) * Math.random()} className={className} src={src} alt={content.title}/>);
-//         if (content.filesURLs.length > 3) {
-//             elem.push(<Link href={'#'} className="and-more">... e mais</Link>);
-//         }
-//         return elem
-//     }
-// }
